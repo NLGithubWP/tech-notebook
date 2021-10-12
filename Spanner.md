@@ -146,6 +146,8 @@ Two phase: assign a timestamp **s_read** and then execute the read as **snapshot
 
 ## Details
 
+asdf
+
 
 
 
