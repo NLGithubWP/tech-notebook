@@ -134,6 +134,22 @@ When a timestamp is assigned to a transaction, S_max is updated.
 
 Each replica tracks a value - safe time T_safe, which is maximum timestamp at which a replica is up-to-date. (It promises T_safe is up-to-date). Replica can satisfy if t <= T_safe
 
+T_safe = min(T_safe_Paxos,  T_safe_TM)
+
+**T_safe_Paxos:** Timestamp of highest applied Paxos write
+
+**T_safe_TM:** = min_i(s_i_g_prepare-1) (if there are many uncommitd txs in each server, the server will pick the smallest value of s_i_prepare-1, where s_i_prepare is provided by participant leader for group g)
+
+### Assign Timestamp to read only Tx
+
+Two phase: assign a timestamp **s_read** and then execute the read as **snapshot read** at s_read, which can run at any sufficiently up-to-date replica.
+
+## Details
+
+
+
+
+
 
 
 
