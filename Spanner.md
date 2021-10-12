@@ -34,9 +34,9 @@ If only use **one** **Paxos** **group**, **it bypass the transaction manage**r b
 
 ![image-20211012135203429](imgs/image-20211012135203429.png)
 
-**Directory:** a set of contiguous keys with same prefix. 
+**Directory:** **a set** of contiguous **keys** with same prefix. 
 
-​	it enable user to control locality of their data more carefully.
+​	It enable user to control locality of their data more carefully.
 
 ​	All data in same diectory has same replication configuration
 
@@ -56,15 +56,21 @@ Spanner will shard a directory into multiple *fragments* if it grows too large. 
 
 ## Data model 
 
+![image-20211012164442833](imgs/image-20211012164442833.png)
+
 Spanner exposes chematized semi-relational tables, query languages, and general purpose transactions.
 
-Running 2pc over Paxos mitigates the availability problems.
+Running 2pc over Paxos mitigates the availability problems.(<u>why</u>?)
+
+Each dataset must be partitioned by clients into one ore more hierarchies of tables. The table at the **top of it is directory table**. 
+
+**directory = Each row in directory table with key K + rows in descendant tables which starts with K**.
+
+# 3. True Time
+
+## Asdf
 
 
-
-
-
-# 
 
 
 
