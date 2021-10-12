@@ -1,3 +1,5 @@
+2021-10-01 [NSDI-2012] Spanner Google’s Globally distributed database
+
 # Abstract
 
 # 1. Introduction
