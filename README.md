@@ -1,1 +1,1 @@
-paper notes
+This is some paper notes
