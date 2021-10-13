@@ -118,7 +118,7 @@ When a timestamp is assigned to a transaction, S_max is updated.
 
 **e_server:** transaction is sent to coordinator leader (server )
 
-<img src="imgs/image-20211012232357062.png" alt="image-20211012232357062" style="zoom:100%;" />
+![image-20211012232357062](imgs/image-20211012232357062.png)
 
 1. **start**
 
@@ -128,7 +128,7 @@ When a timestamp is assigned to a transaction, S_max is updated.
 
    other tx cannot see T_i's update until TT.after(S_i) = true. (if the true time is definitely  greater than commit time of T_i, other tx can see it.)
 
-<img src="imgs/image-20211012234129177.png" alt="image-20211012234129177" style="zoom:100%;" />
+![image-20211012234129177](imgs/image-20211012234129177.png)
 
 ### Serving Reads at a Timestamp
 
