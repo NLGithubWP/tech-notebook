@@ -16,6 +16,18 @@
 
 # 1. Introduction
 
+Mysql: shard data is complex and requires efforts in business logic. Resharding is costly. 
+
+Nosql system: no transactional semantics
+
+BigTable: difficult to use for applications requires complex, evolving schemas, or those that want strong consistency in the presence of wide-area replication.
+
+Spanner provides:
+
+1. replication configurations can be controlled,eg which data to replicate, how far data is from user etc
+2. Provides **externally consitent** read and writes **in global scale**
+3. Provides **global consistent reads acorss database at a timestamp.** 
+
 # 2. Implementation
 
 **Universe**: a spanner depliyment 
