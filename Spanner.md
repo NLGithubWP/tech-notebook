@@ -14,6 +14,12 @@
 
    **This is contradict with 4.1.2!!!**
 
+# **some resoures**
+
+https://cloud.tencent.com/developer/article/1442909
+
+https://zhuanlan.zhihu.com/p/47870235
+
 # 1. Introduction
 
 Mysql: shard data is complex and requires efforts in business logic. Resharding is costly. 
