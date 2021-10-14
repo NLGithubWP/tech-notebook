@@ -27,7 +27,7 @@ Spanner provides:
 1. replication configurations can be controlled,eg which data to replicate, how far data is from user etc
 2. Provides **externally consitent** read and writes **in global scale**
 3. Provides **global consistent reads acorss database at a timestamp.** 
-4. Upgrade 2pc to make it more efficient
+4. Upgrade **2PC** to make it more efficient
 
 ![image-20211014101536635](imgs/image-20211014101536635.png)
 
