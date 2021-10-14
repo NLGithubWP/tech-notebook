@@ -1,6 +1,5 @@
 git checkout master
 git add .
-git commit -m "sync"
-git push
+git push origin master
 git checkout weekly-report
 # gitbook serve
