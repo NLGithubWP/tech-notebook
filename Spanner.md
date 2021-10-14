@@ -27,8 +27,13 @@ Spanner provides:
 1. replication configurations can be controlled,eg which data to replicate, how far data is from user etc
 2. Provides **externally consitent** read and writes **in global scale**
 3. Provides **global consistent reads acorss database at a timestamp.** 
+4. Upgrade 2pc to make it more efficient
+
+![image-20211014101536635](imgs/image-20211014101536635.png)
 
 # 2. Implementation
+
+in tegration of concurrency control, replication, and 2pc.
 
 **Universe**: a spanner depliyment 
 
@@ -146,7 +151,7 @@ When a timestamp is assigned to a transaction, S_max is updated.
 
 **External consistency invariant**: If **start of T2** occurs after **commit of T1,** then **commit timestamp of T2** must be greater than **commit timestamp of T1**.
 
-**Proof:**
+**Proof of External consistency :** (trueTime, start, commit-wait)
 
 **e_start:**  transaction is started, probably counted on client side.
 
@@ -158,7 +163,7 @@ When a timestamp is assigned to a transaction, S_max is updated.
 
 1. **start**
 
-   The coordinator leader for a write tx T_i will assign a **commit timestamp** >= *TT.now().latest* and >= e_server
+   The coordinator leader for a write tx T_i will assign a **commit timestamp >= *TT.now().latest* and so >= e_server**
 
 2. **commit wait**
 
@@ -190,6 +195,10 @@ For simple, s_read = TT.now().latest. But this may block because t_safe could le
 
 Spanner executes a set of *reads* and writes atomically at a single logical point in time.
 
+![image-20211013224229147](imgs/image-20211013224229147.png)
+
+![image-20211013224632848](imgs/image-20211013224632848.png)
+
 ![image-20211013153301380](imgs/image-20211013153301380.png)
 
 **Client**, **Transaction Coordiantor** and **Transaction Participants**
@@ -220,7 +229,7 @@ After client finish all read and **buffer all write at client side**, it can sta
 4. choose a **timestamp for the entire transaction s**, 
 
    1. s >= All prepare timestamps (to make sure each TP can calculate T_safe more precisely , T_safe = min(T_prepare-1))
-   2. *s > TT.now*().*latest*, (both TC and TP will receive the same commit message, and get TT.now(). TT.now().latest is the same for all TC and TP. if s>TT.now().latest, then s > time of receiving the commit message from client for all TMs. )
+   2. *s > TT.now*().*latest* (commit time > time of receving the request at server side. )
    3. s > Any timestamps the leader has assigned to previous transactions (to preserve monotonicity)
 
 5. wait until ***TT.after(s)*=True**, (commit-wait rules)
@@ -298,3 +307,4 @@ from the systems community,
 1. scalability, automatic sharding, 
 2. **fault tolerance, consistent replication**,wide-area distribution (raft)
 3. external consistency, (truetime and timestamp)
+
