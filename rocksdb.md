@@ -119,29 +119,33 @@ Users can enable direct I/O so that RocksDB takes full control to the I/O and ca
 
 In-memory data structure serving both read and write. 
 
-
-
 ### Pluggable 
 
-The default implementation of the memtable for RocksDB is a skiplist. The skiplist is a sorted set, which is a necessary construct when the workload interleaves writes with range-scans. but it's useless if there are no range-scan. 
+The default implementation of the memtable for RocksDB is a **skiplist**. The skiplist is a sorted set, which is a necessary construct when the workload interleaves writes with range-scans. but it's useless if there are no range-scan. 
 
-Three memtables are part of the library: a skiplist memtable, a vector memtable and a prefix-hash memtable
+**Three memtables** are part of the library: a skiplist memtable, a vector memtable and a prefix-hash memtable
 
 ​	**A skiplist memtable**: 
 
 ​	**A vector memtable** is appropriate for bulk-loading data into the database
 
-​	**A prefix-hash memtable** allows efficient processing of gets, puts and scans-within-a-key-prefix. 
+​	**A prefix-hash memtable** allows efficient processing of gets, puts and scans-within-a-key-prefix.
+
+![image-20211017175413873](imgs/image-20211017175413873.png) 
 
 ### Memtable pipelining
 
 RocksDB supports configuring an arbitrary number of memtables for a database. 
 
 When a memtable is full   => 
-		add to flush pipeline => 
-		background thread flush all the pipelined immutable memtables to storage.
+		Add to flush pipeline => 
+		Background thread flush all the pipelined immutable memtables to storage.
 
 ### Garbage Collection during Memtable Flush:
+
+**Flush triggered:**
+
+Memtable size, total 
 
 Inline compactionprocess is executed when memtable is flushed to the storage,  make sure after flushing, there are no duplicated key in the sstable. 
 
@@ -155,7 +159,9 @@ When a compaction process encounters a Merge record, it invokes an application-s
 
 It make read-modify-write operations to avoid read .
 
+## Write ahead log
 
+In the event of a failure, write ahead logs can be used to completely recover the data in the memtable, which is necessary to restore the database to the original state
 
 
 
