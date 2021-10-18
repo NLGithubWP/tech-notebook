@@ -1,0 +1,173 @@
+# RocksDB
+
+**Movivation:** Mainly focus on storing small to medium size key-values on fast storage -- flash devices or in-memory.
+
+**Storage:** RocksDB is a storage engine with key/value interface. It uses a Log Structured Database Engine for storage and supports various compression algorithms.
+
+**Performance:** Support efficient point lookups, range scans and different types of ACID guarantees.
+
+# High Level Architecture
+
+![image-20211014141909023](imgs/image-20211014141909023.png)
+
+RocksDB organizes all data in sorted order and the common operations are `Get(key)`, `NewIterator()`, `Put(key, val)`, `Delete(key)`, and `SingleDelete(key)`.
+
+The three basic constructs of RocksDB are **memtable**, **sstfile** and **logfile**. The [**memtable**](https://github.com/facebook/rocksdb/wiki/MemTable) is an in-memory data structure - new writes are inserted into the *memtable* and are optionally written to the [**logfile** (aka. Write Ahead Log(WAL))](https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log). The logfile is a sequentially-written file on storage. When the memtable fills up, it is flushed to a [**sstfile**](https://github.com/facebook/rocksdb/wiki/Rocksdb-BlockBasedTable-Format) on storage and the corresponding logfile can be safely deleted. The data in an sstfile is sorted to facilitate easy lookup of keys.
+
+# Features overview
+
+All **data** in the **database** is logically arranged **in sorted order**
+
+## Column Families
+
+partitioning a database instance into multiple column families
+
+RocksDB guarantees users a consistent view across column families, including after crash recovery when WAL is enabled or atomic flush is enabled.
+
+ It also supports atomic cross-column family operations via the `WriteBatch` API.
+
+## Update
+
+**Put**: update a single
+
+**Write**: update batch of data
+
+## Gets, Iterators and Snapshots
+
+**get**: single key
+
+**multiGet**: many kv pairs
+
+**Iterator**: range scan on the database. Seek to a specified key and then the application can start scanning one key at a time from that point
+
+**Snapshots:** create a point-in-time view of a database
+
+Short-lived/foreground scans are best done via an iterator while long-running/background scans are better done via a snapshot.
+
+An `Iterator` keeps a reference count on all underlying files that correspond to that point-in-time-view of the database - these files are not deleted until the `Iterator` is released. A `Snapshot`, on the other hand, does not prevent file deletions; instead the compaction process understands the existence of `Snapshots` and promises never to delete a key that is visible in any existing `Snapshot`.
+
+`Snapshots` are not persisted across database restarts: a reload of the RocksDB library (via a server restart) releases all pre-existing `Snapshots`.
+
+## Transactions
+
+multi-operational transactions. It supports both of optimistic and pessimistic mode
+
+## Prefix Iterators
+
+Options.prefix_extractor` is set, a hash of the prefix is also added to the Bloom. An `Iterator` that specifies a key-prefix (in `ReadOptions`) will use the [Bloom Filter](https://github.com/facebook/rocksdb/wiki/RocksDB-Bloom-Filter) to avoid looking into data files that do not contain keys with the specified key-prefix
+
+## Persistence
+
+RocksDB has a [Write Ahead Log](https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log) (WAL). All write operations (`Put`, `Delete` and `Merge`) are stored in an in-memory buffer called the memtable as well as **optionally** inserted into WAL. On restart, it re-processes all the transactions that were recorded in the log.
+
+WAL can be configured to be stored in a directory different from the directory where the SST files are stored
+
+## Data Checksuming
+
+RocksDB uses a checksum to detect corruptions in storage. These checksums are for each SST file block (typically between `4K` to `128K` in size). A block, once written to storage, is never modified.
+
+## Multi-Threaded Compactions
+
+It is observed that sustained write rates may increase by as much as a factor of 10 with multi-threaded compaction when the database is on SSDs, as compared to single-threaded compactions
+
+## Compaction sytles
+
+Support:
+
+1. Level Style Compaction.
+2. Universal Style Compaction
+3. FIFO Style Compaction
+4. Customer compaction 
+
+## metadata storage
+
+A manifest log file is used to record all the database state changes. Add/delete files etc.
+
+## Avoiding Stalls
+
+keep a small set of threads explicitly reserved for the sole purpose of flushing *memtable* to storage.
+
+## Compaction Filter
+
+Can drop a key or modify the value of key as part of compaction process
+
+## ReadOnly Mode
+
+much higher read performance because oft-traversed code paths avoid locks completely.
+
+## Data Compression
+
+supports lz4, zstd, snappy, zlib, and lz4_hc compression
+
+## Full Backups and Replication
+
+RocksDB itself is not a replicated, but it provides some helper functions to enable users to implement their replication system on top of RocksDB
+
+## Block Cache -- Compressed and Uncompressed Data
+
+RocksDB uses a [LRU cache for blocks](https://github.com/facebook/rocksdb/wiki/Block-Cache) to serve reads. The block cache is partitioned into two individual caches: the first caches uncompressed blocks and the second caches compressed blocks in RAM. If a compressed block cache is configured, users may wish to enable direct I/O to prevent redundant caching of the same data in OS page cache.
+
+## Table Cache
+
+The Table Cache is a construct that caches open file descriptors. These file descriptors are for **sstfiles**. An application can specify the maximum size of the Table Cache, or configure RocksDB to **always keep all files open**, to achieve better performance.
+
+## I/O Control
+
+Users can enable direct I/O so that RocksDB takes full control to the I/O and caching
+
+## Memtables:
+
+In-memory data structure serving both read and write. 
+
+### Pluggable 
+
+The default implementation of the memtable for RocksDB is a **skiplist**. The skiplist is a sorted set, which is a necessary construct when the workload interleaves writes with range-scans. but it's useless if there are no range-scan. 
+
+**Three memtables** are part of the library: a skiplist memtable, a vector memtable and a prefix-hash memtable
+
+​	**A skiplist memtable**: 
+
+​	**A vector memtable** is appropriate for bulk-loading data into the database
+
+​	**A prefix-hash memtable** allows efficient processing of gets, puts and scans-within-a-key-prefix.
+
+![image-20211017175413873](imgs/image-20211017175413873.png) 
+
+### Memtable pipelining
+
+RocksDB supports configuring an arbitrary number of memtables for a database. 
+
+When a memtable is full   => 
+		Add to flush pipeline => 
+		Background thread flush all the pipelined immutable memtables to storage.
+
+### Garbage Collection during Memtable Flush:
+
+**Flush triggered:**
+
+Memtable size, total 
+
+Inline compactionprocess is executed when memtable is flushed to the storage,  make sure after flushing, there are no duplicated key in the sstable. 
+
+This feature reduces the size of data on storage and write amplification greatly, for some workloads.
+
+## Merge Operator
+
+RocksDB natively supports three types of records, a `Put` record, a `Delete` record and a `Merge` record. 
+
+When a compaction process encounters a Merge record, it invokes an application-specified method called the Merge Operator. The Merge can combine multiple Put and Merge records into a single one. 
+
+It make read-modify-write operations to avoid read .
+
+## Write ahead log
+
+In the event of a failure, write ahead logs can be used to completely recover the data in the memtable, which is necessary to restore the database to the original state
+
+
+
+
+
+ 
+
+
+
