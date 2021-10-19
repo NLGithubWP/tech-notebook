@@ -167,6 +167,26 @@ In the event of a failure, write ahead logs can be used to completely recover th
 
 
 
+mangodb, cardraeesnal, hbase. 
+
+1. why rocksdb?
+
+Embedded application architecture.  where the database is a part of application server
+
+berkeleyDB, SQLite, Kyoto TreeDB, levelDB. 
+
+no transaciton log, fixed size keys, h
+
+levelDB, low write rates, only one cpu
+
+
+
+
+
+
+
+
+
  
 
 
