@@ -62,7 +62,7 @@ RocksDB has a [Write Ahead Log](https://github.com/facebook/rocksdb/wiki/Write-A
 
 WAL can be configured to be stored in a directory different from the directory where the SST files are stored
 
-## Data Checksuming
+## Data CheckSuming
 
 RocksDB uses a checksum to detect corruptions in storage. These checksums are for each SST file block (typically between `4K` to `128K` in size). A block, once written to storage, is never modified.
 
