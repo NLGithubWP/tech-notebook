@@ -1,4 +1,4 @@
 git add .
 git commit -m "sync"
-git push origin weekly-report
+git push origin master
 # gitbook serve
