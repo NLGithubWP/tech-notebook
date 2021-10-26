@@ -20,8 +20,7 @@ Introduce calendar queue abstraction, which is fit for scheduling algorithms whi
 ## Reconfigurable switches
 
 Assume that the **programmable** **scheduling** is used in conjunction with a reconfigurable switch. eg Reconfigurable Match Table (RMT) model:
-qq
-q
+
 1. Package arrives at the switch
 2. Header fileds are extracted via **user-defined programmable** parser
 3. Header fileds are passed into pipeline of user-defined **programmable** M+A stages. 
