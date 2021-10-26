@@ -62,13 +62,55 @@ PIFOs enable programmable scheduling by using a programmable **priority queue** 
 
 # Packet Scheduling using Programmable Calendar Queues
 
-## Calendar Queues
-
-### Drawbacks of existing priority queue schemes:
+## Drawbacks of existing priority queue schemes:
 
 Many scheduling algorithms cannot be realized using fine-grained priority queuing schemes if the computed rank needs to fall within a finite range. eg fair queue, or earliest deadline first (EDF)
 
+## Programmable Calendar Queues (PCQs)
 
+![image-20211026221338708](imgs/image-20211026221338708.png)
+
+Calendar Queue abstraction has a fixed number of buckets or FIFO queues, each of which stores packets scheduled for next N periods.
+
+scheduling algorithms using CQ will do the following:
+
+1. choose a future period from [0, N-1] to enqueue the packet into.
+2. periodically decide when a period is over and move onto the next period.
+3. when the CQ advances to the next period, the pipeline state has to be suitably modified to ensure the **appropriate computation of ranks for incoming packets**.
+
+Interface methods
+
+1. CQ.enqueue(n): Used by the ingress pipeline to schedule the current packet *n* periods into the future.
+2. CQ.dequeue(): Used by the egress pipeline to obtain a buffered packet, if any, for the current period.
+3. CQ.rotate(): Used by the pipelines to advance the CQ so that it can start transmitting packets for the next period.
+
+## Programmable Scheduling using PCQs
+
+various scheduling algorithms can be realized using Calendar Queues in conjunction with a pro- grammable packet processing pipeline
+
+### Weighted Fair Queueing
+
+### Earliest Deadline First
+
+### Leaky Bucket Filter
+
+## Implementing PCQs in Hardware
+
+Calendar Queues can be implemented on programmable switches using mutable switch state, multiple FIFO queues, the ability to create and recirculate packets selectively, and the ability to pause/resume queues or alter queue priorities directly in the data plane.
+
+### Implementation overview:
+
+
+
+### Implementation details:
+
+![image-20211026225624032](imgs/image-20211026225624032.png)
+
+1.  Initiate Rotation
+
+   
+
+2. 
 
 
 
