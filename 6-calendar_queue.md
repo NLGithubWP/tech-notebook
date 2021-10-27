@@ -122,13 +122,13 @@ The queue corresponding to the next period has a lower priority level and is **a
 
    **when**:  When a rotation begins, we recirculate a special rotate packet to the ingress pipeline so that it stops enqueuing packets in the head queue and begins draining it. and it also ensures that the head queue is completely drained, and no more packets are enqueued into it till the rotation finishes.
 
-   **How: ** the ingress enqueues a special **marker** packet into the head queue **after updating** the head of the calendar queue
+   **How**:  the ingress enqueues a special **marker** packet into the head queue **after updating** the head of the calendar queue
 
 3. Finish Rotation
 
    **when**: **marker** packet is the last packet to be enqueued into the head queue, and its arrival at the egress pipeline means the queue is completely drained.
 
-   **How:**  
+   **How** :
 
    1. The marker packet is recirculated back to the ingress pipeline, and this informs the ingress pipeline that it is safe to reuse the queue for future periods
    2. The ingress changes the priority of the just emptied queue to lowest and also pauses it, essentially pushing the queue to the end of the CQ.
@@ -157,3 +157,10 @@ evaluate the practical feasibility, expressiveness, and per- formance of Calenda
 
 ![image-20211027142027559](imgs/image-20211027142027559.png)
 
+# Conclusion
+
+Programmable Calendar Queues enables the efficient realization of several classical scheduling algorithms
+
+It is implemented efficiently on today’s programmable switches by dynamically changing the priority of queues.
+
+PCQs can be used to realize interesting variants of LSTF, Fair Queueing, and pFabric to provide stronger delay guarantees, burst-friendly fairness, and starvation-free prioritization of short flows, respectively
