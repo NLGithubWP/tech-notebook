@@ -100,7 +100,13 @@ Calendar Queues can be implemented on programmable switches using mutable switch
 
 ### Implementation overview:
 
+Each *period* in the CQ is mapped to a single FIFO queue within a set of queues associated with the outgoing port
 
+The ingress pipeline computes which *pe- riod* or queue each incoming packet is enqueued into
+
+The queue corresponding to the **current period has the highest priority level**, this queue as the head queue
+
+The queue corresponding to the next period has a lower priority level and is **active/unpaused**. 
 
 ### Implementation details:
 
@@ -108,9 +114,31 @@ Calendar Queues can be implemented on programmable switches using mutable switch
 
 1.  Initiate Rotation
 
-   
+   **When:** initiate rotation when the head queue is empty.
 
-2. 
+   **How:** check the queue id from which the packet was dequeued to infer whether the head queue is empty
+
+2. Drain queue 
+
+   **when**:  When a rotation begins, we recirculate a special rotate packet to the ingress pipeline so that it stops enqueuing packets in the head queue and begins draining it. and it also ensures that the head queue is completely drained, and no more packets are enqueued into it till the rotation finishes.
+
+   **How: ** the ingress enqueues a special **marker** packet into the head queue **after updating** the head of the calendar queue
+
+3. Finish Rotation
+
+   **when**: **marker** packet is the last packet to be enqueued into the head queue, and its arrival at the egress pipeline means the queue is completely drained.
+
+   **How:**  
+
+   1. The marker packet is recirculated back to the ingress pipeline, and this informs the ingress pipeline that it is safe to reuse the queue for future periods
+
+   2. The ingress changes the priority of the just emptied queue to lowest and also pauses it, essentially pushing the queue to the end of the CQ.
+
+      
+
+   The **marker packet is recirculated back to the ingress pipeline**, and this informs the ingress pipeline that it is safe to reuse the queue for future periods.
+
+   The ingress changes the priority of the just emptied queue to lowest and also pauses it,
 
 
 
