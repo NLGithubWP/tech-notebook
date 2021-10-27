@@ -131,24 +131,29 @@ The queue corresponding to the next period has a lower priority level and is **a
    **How:**  
 
    1. The marker packet is recirculated back to the ingress pipeline, and this informs the ingress pipeline that it is safe to reuse the queue for future periods
-
    2. The ingress changes the priority of the just emptied queue to lowest and also pauses it, essentially pushing the queue to the end of the CQ.
 
-      
+### Analysis 
 
-   The **marker packet is recirculated back to the ingress pipeline**, and this informs the ingress pipeline that it is safe to reuse the queue for future periods.
+First, CQs maintain state at the granularity of physical switch queues instead of individual packets or flows.
 
-   The ingress changes the priority of the just emptied queue to lowest and also pauses it,
+At any given point in time, there is a designated head queue that is responsible for providing the packets that are to be transmitted.
 
+the rotation operation involves changing just the metadata of queue and that too of at most three queues. This combination of factors allows us to bolt-on the PCQ abstraction on to a traditional TM.
 
+## Extensions
 
-
+![image-20211027141118965](imgs/image-20211027141118965.png)
 
 # Evaluation
 
+evaluate the practical feasibility, expressiveness, and per- formance of Calendar Queues by implementing them on a **programmable Barefoot Tofino switch** and realizing two clas- sical scheduling algorithms using CQs.
 
+![image-20211027141908456](imgs/image-20211027141908456.png)
 
+![image-20211027141923029](imgs/image-20211027141923029.png)
 
+![image-20211027142006637](imgs/image-20211027142006637.png)
 
-
+![image-20211027142027559](imgs/image-20211027142027559.png)
 
