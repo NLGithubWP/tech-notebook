@@ -211,7 +211,7 @@ Spanner executes a set of *reads* and writes atomically at a single logical poin
 
 #### For Read:
 
-client issues reads to leader replica of a Paxos group, whihc acquires a **read locks**. Client send keepalive message to prevent participant leader from timing out the transaciton. 
+client issues reads to leader replica of a Paxos group, which acquires a **read locks**. Client send keepalive message to prevent participant leader from timing out the transaciton. 
 
 #### For Write
 
