@@ -1,0 +1,98 @@
+Enabling SQL-based Training Data Debugging for Federated Learning
+
+# Abstract
+
+## background
+
+The SQL-based training data debugging framework has proved effective to fix logistical regression model bugs in a non-federated learning setting.
+
+1. Remove the label errors from training data, such that unexpected behaviour disappear in retrained model.
+
+The paper try to enable such framework for federated learning
+
+## Challenge
+
+develop a security protocol for FL debugging which is proved to be **secure, efficient and accurate.**
+
+## Solutions
+
+1. FedRain is extended from Rain, the state-of-art SQL based training data debugging framework. Is falls short in terms of both efficient and security. 
+2. They propose novel sql based training data debugging framework called FROG, which is more secure, more accurate, and more effcient than FedRain.
+
+# Introduction
+
+## Problems
+
+When a biased or inaccurate federated learning model mispredicts in a way that affects downstream analysis results, how to automatically identify the training examples that most contributed to the downstream error in a way that **retains federated learning's security guarantees**.
+
+But in federated learning, training data errors can come from any of data sources.
+
+## Solutions
+
+Identify erroneous training records that directly affect errors in the query results. 
+
+And then remove the subset of training data and retrain the model. 
+
+![image-20211222154431133](imgs/image-20211222154431133.png)
+
+1. Model Loss:
+
+   It removes the training examples from highest too lowest training loss until complaint is resolved.
+
+   The losss can be obtained during federated inference.
+
+   The method is secure, but the model loss is independent of the complaint and it likely remove many irreleveant training records. 
+
+2. Influence Function
+
+   Allow instance-based complaint (expose the instance to both party. )
+
+   Quickly approximates the infuence of removing each training example on the misprediction.
+
+   And then iteratively ranks and removes training records until complaint is resolved.
+
+   This is not secure.
+
+3. Rain
+
+   Allow to expose why the prediction is not accurate and what it shoude be.
+
+   Company A can directly complain that why the ratio is too high and it should be zero.
+
+   Rain iteratively ranks and removes training records that most increased the ratio until the complaint is resolved. Unfortunately, Rain is not secure.
+
+4. The paper presents a secure debugging framework which provides Rain-style complaints.
+
+FedRain needs to limit the number of stochastic gradient descent iterations to less than the number of features in order to ensure security. However, this is typically far lower than the iterations needed for logistic regression to converge. Thus, FedRain often cannot reach high model accuracy without breaking the security guarantee
+
+## Contributions
+
+1. Enable SQL based training data debugging for FL
+2. Propose FedRain,  a security guaranteed version of Rain
+3. Porpose Frog, a novel FL debugging framework
+4. Conduct experiments. Result shows Frog is better in terms of efficiency and accuracy.
+
+# Problem definition
+
+Our goal is to identify the **minimum number** of training examples such that if they were removed, and the model was retrained, the updated model would lead to a new query result  that satisfes the complaint .
+
+# Background
+
+## Rain:SQL-based training
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
