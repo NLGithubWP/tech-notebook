@@ -78,7 +78,49 @@ Our goal is to identify the **minimum number** of training examples such that if
 
 # Background
 
-## Rain:SQL-based training
+## Rain:SQL-based training framework
+
+### Overall
+
+Rain then takes the complaint as input and produces a ranked list of the training examples based on **how much each training example contributes to the complaint.**
+
+1. Generate the ranked list;
+2. Remove the top-k training examples from the ranked list; 
+3. Retrain an ML model on the new training set;
+4. Set = Repeat (1)-(4) until < 0.
+
+### main contributition
+
+1. How to effciently compute the **effect** on the query result for **deleting** each **training** **example**.
+2. How to make the SQL query **differentiable** with respect to the model parameters so that continuous optimization techniques can be applied for solving the challenge 1.
+
+### Solutions
+
+1. convert SQL query into a formula
+
+   ![image-20211223114137239](imgs/image-20211223114137239.png)
+
+2. Relax into continuous variables so it become differentiable
+
+   ![image-20211223114204174](imgs/image-20211223114204174.png)
+
+3. Compare score for each training examples
+
+![image-20211223114336148](imgs/image-20211223114336148.png)
+
+# FedRain: Federated Rain
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
