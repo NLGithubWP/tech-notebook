@@ -14,13 +14,3 @@ If only use TPHE, it does not support some operations (e.g., comparison)
 
 So, we design our basic protocol using a hybrid framework of TPHE and MPC for vertical tree training. The basic idea is that each client executes as many local computations (e.g., computing split statistics) as possible with the help of TPHE and uses MPC only **when TPHE is insufficient (e.g., deciding the best split).**
 
-
-
-
-
-
-
-
-
-
-
