@@ -7,9 +7,13 @@
 
 * [2020-01-22 [arXiv-2022] AI Technical Considerations: Data Storage, Cloud usage and AI Pipeline](17.md)
 
-* 
+* [2020-01-23 [arXiv-2022] Unifying and Boosting Gradient-Based Training-Free Neural Architecture Search](18.md)
 
-* 
+* [2020-01-23 [JMLR-2019] Neural Architecture Search: A Survey](19.md)
+
+* [2020-01-25 [TPAMI-2020] Auto-PyTorch Tabular: Multi-Fidelity MetaLearning for Efficient and Robust AutoDL]()
+
+* [2020-01-28 [ICLR-2020] NAS-BENCH-201: EXTENDING THE SCOPE OF REPRODUCIBLE NEURAL ARCHITECTURE SEARCH]()
 
   
 
