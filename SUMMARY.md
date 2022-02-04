@@ -9,26 +9,7 @@
 * [2020-01-28 [distributed-system][SIGOPS-2010] The design of a practical system for fault-tolerant virtual machines](21.md)
 
 * [2020-01-31 [TPAMI-2020] Auto-PyTorch Tabular: Multi-Fidelity MetaLearning for Efficient and Robust AutoDL]()
-
 * [2020-02-03 [ICLR-2020] NAS-BENCH-201: EXTENDING THE SCOPE OF REPRODUCIBLE NEURAL ARCHITECTURE SEARCH]()
-
-  
-
-```java
-class A{
-    static int num = 1;
-}
-
-Public class Test{
-    public static void main(String[] args){
-        A a = new A();
-        a.num++;
-        
-        A b = new A();
-        System.out.println(b.num); // this is 2
-    }
-}
-```
 
 <!-- * [2020-01-15 [OSDI-2021] A Unified Architecture for Accelerating Distributed DNN Training in Heterogeneous GPU/CPU Clusters](14.md) -->
 
