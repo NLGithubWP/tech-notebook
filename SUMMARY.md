@@ -15,11 +15,18 @@
   
 
 ```java
-Class A{
-  public static void main([]String args){
-    return 0;
-  }
- 
+class A{
+    static int num = 1;
+}
+
+Public class Test{
+    public static void main(String[] args){
+        A a = new A();
+        a.num++;
+        
+        A b = new A();
+        System.out.println(b.num); // this is 2
+    }
 }
 ```
 
