@@ -30,7 +30,5 @@ Public class Test{
 }
 ```
 
-* 
-
 <!-- * [2020-01-15 [OSDI-2021] A Unified Architecture for Accelerating Distributed DNN Training in Heterogeneous GPU/CPU Clusters](14.md) -->
 
