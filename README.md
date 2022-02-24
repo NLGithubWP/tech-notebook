@@ -1,4 +1,3 @@
-Hello World
 * [2020-01-15 [distributed-system] Time, Clocks, and the Ordering of Events in a Distributed System](14.md)
 * [2020-01-17 [distributed-system] Distributed Snapshots: Determining Global States of Distributed Systems](15.md)
 * [2020-01-19 [distributed-system] The Role of Distributed State](16.md)
@@ -8,3 +7,5 @@ Hello World
 * [2020-02-09 [distributed-system][OSDI-2004] Chain Replication for Supporting High Throughput and Availability](22.md)
 * [2020-02-22 [VLDB-2020] Spitz: A Verifiable Database System](23.md)
 * [2020-02-23 [ICDE-2020] Cool: a COhort OnLine analytical processing system](24.md)
+* [2020-02-24 [distributed-system] paxos-simple](25.md)
+
