@@ -8,5 +8,5 @@
 * [2020-02-22 [VLDB-2020] Spitz: A Verifiable Database System](23.md)
 * [2020-02-23 [ICDE-2020] Cool: a COhort OnLine analytical processing system](24.md)
 * [2020-02-24 [distributed-system] paxos-simple](25.md)
-* [2020-02-25 [distributed-system] IntegriDB: Verifiable SQL for Outsourced Databases](26.md)
+* [2020-02-25 [SIGSAC-2015] IntegriDB: Verifiable SQL for Outsourced Databases](26.md)
 
