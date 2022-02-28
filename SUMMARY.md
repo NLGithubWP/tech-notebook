@@ -15,7 +15,7 @@
 
 [2020-01-25 [Blog-2019] Understanding the Neural Tangent Kernel](20.md)
 
-* [2020-01-31 [TPAMI-2020] Auto-PyTorch Tabular: Multi-Fidelity MetaLearning for Efficient and Robust AutoDL](24.md)
+* [2020-01-31 [TPAMI-2020] Auto-PyTorch Tabular: Multi-Fidelity Meta Learning for Efficient and Robust AutoDL](24.md)
 * [2020-02-03 [ICLR-2020] NAS-BENCH-201: EXTENDING THE SCOPE OF REPRODUCIBLE NEURAL ARCHITECTURE SEARCH](24.md)
 * [2020-02-05 [arXiv-2022] Unifying and Boosting Gradient-Based Training-Free Neural Architecture Search](18.md) -->
 
