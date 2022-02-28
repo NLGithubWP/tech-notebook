@@ -21,3 +21,7 @@
 
 <!-- * [2020-01-15 [OSDI-2021] A Unified Architecture for Accelerating Distributed DNN Training in Heterogeneous GPU/CPU Clusters](14.md) -->
 
+
+
+[2020-02-25 [SIGMOD-2020] A TRANSACTIONAL PERSPECTIVE ON EXECUTE-ORDER-VALIDATE BLOCKCHAINS](27.md)
+
