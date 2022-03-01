@@ -20,6 +20,8 @@
 
 * [2020-02-25 [SIGSAC-2015] IntegriDB: Verifiable SQL for Outsourced Databases](26.md)
 
+* [2020-03-01 [distributed-system] Viewstamped Replication Revisited](27.md)
+
   
 
   
