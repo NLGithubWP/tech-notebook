@@ -2,7 +2,7 @@
 
 1. (a):
 
-Lamport Clock could incur some unnecessary clock logic, in this problem, I suppose we don't consider the Lamport clock but only consider Partial Ordering. We have following.
+Lamport Clock could incur some unnecessary clock logic, in this problem, I suppose we don't consider the Lamport clock but only consider Partial Ordering. We have the following.
 
 ​	Happens before E: (A, D)
 
@@ -123,3 +123,24 @@ This doesn't satisfy linearizability, because r(b) must between w(a) and r(a).
 
 # Solutions of 5
 
+No, it's not correct for proposer to send accept to any majority set of accetpros. Proposer can only send accept request to those who has received previous prepare request.
+
+Because in phase2, acceptor can still accept proposal with small proposal number after it receives proposal with a bigger proposal number. 
+
+![image-20220301192906568](imgs/image-20220301192906568.png)
+
+As shown in the graph. Assume it's correct for proposer to send accept to any majority set of accetpers.
+
+- Stage1: Proposer 1 send prepare request to acceptor 1 and 2
+
+- Stage2: Proposer 2 send prepare request to acceptor 1 and 2
+
+- Stage3: Proposer 2 send accept request to acceptor 1,3 and acceptor 1 and 3 accept it, now the proposal (2,B) is chosen. 
+
+- Stage4: Proposer 1 send accept request to acceptor 1,3. Acceptor 1 refuse it since acceptor 1 response to a prepare request with bigger proposal number,
+
+  But acceptor 3 accept it, acceptor 3 did't receive any prepare request and it didn't give a promise that he will reject acceptors with small proposal number. 
+
+  Now the situation is (1, A) is accepted after (2, B) is chosen, which is violate with rule P2.
+
+So this is not correct. 
