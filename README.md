@@ -26,7 +26,7 @@
 
 * [2020-03-03 [distributed-system] The Chubby lock service for loosely-coupled distributed systems](29.md)
 
-* 
+* [2020-03-03 [distributed-system] Paxos Made Moderately Complex](30.md)
 
   
 
