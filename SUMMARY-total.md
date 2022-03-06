@@ -34,3 +34,11 @@
 * [2020-02-24 [distributed-system] paxos-simple](25.md)
 * [2020-02-25 [SIGSAC-2015] IntegriDB: Verifiable SQL for Outsourced Databases](26.md)
 
+* [2020-03-01 [distributed-system] Viewstamped Replication Revisited](27.md)
+* [2020-03-02 [ATC-2021][Best Paper] INFaaS: Automated Model-Less Inference Serving](28.md)
+* [2020-03-03 [distributed-system] The Chubby lock service for loosely-coupled distributed systems](29.md)
+
+* [2020-03-03 [distributed-system] Paxos Made Moderately Complex](30.md)
+
+  
+
