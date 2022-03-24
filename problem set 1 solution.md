@@ -59,7 +59,7 @@ Lamport Clock could incur some unnecessary clock logic, in this problem, I suppo
 
 3. (a)
 
-This is not sequential consistency, in order to satisfy P2, Write(a) must scheduled after Write(b), but P3 requires read(a) and then read(b). This is contradict
+This is not sequential consistency, in order to satisfy P2, Write(a) must be scheduled after Write(b), but P3 requires read(a) and then read(b). This is contradict
 
 3. (b)
 
@@ -102,7 +102,7 @@ This doesn't satisfy linearizability, because r(b) must between w(a) and r(a).
 
    - Assume when proposal number = 1, only A1 accepts it and others didn't receive the message.
    - Assume when proposal number = 2, only A2 accepts it and others didn't receive the message.
-   - Now A3 back to the line.
+   - Now, A3 is back to the line.
    - According to `Paxos P2c.(b),` the majority(A1, A3) has the situation where A1 accept (1, a) and A3 accept nothing, and the highest-numbered proposal accepted by acceptor in this majority is (1, a), value is a. 
    - Proposal issues `Prepare request to A1 and A3`
    - proposer issues `Accept request` to A1 and A3 with a new proposal with (3, a).
@@ -123,13 +123,13 @@ This doesn't satisfy linearizability, because r(b) must between w(a) and r(a).
 
 # Solutions of 5
 
-No, it's not correct for proposer to send accept to any majority set of accetpros. Proposer can only send accept request to those who has received previous prepare request.
+No, it's not correct for the proposer to send accept to any majority set of acceptors. Proposer can only send accept the request to those who have received previous prepare request.
 
-Because in phase2, acceptor can still accept proposal with small proposal number after it receives proposal with a bigger proposal number. 
+Because in phase2, the acceptor can still accept a proposal with a small proposal number after it receives a proposal with a bigger proposal number. 
 
 ![image-20220301192906568](imgs/image-20220301192906568.png)
 
-As shown in the graph. Assume it's correct for proposer to send accept to any majority set of accetpers.
+As shown in the graph. Assume it's correct for the proposer to send acceptance to any majority set of acceptors.
 
 - Stage1: Proposer 1 send prepare request to acceptor 1 and 2
 
@@ -141,6 +141,6 @@ As shown in the graph. Assume it's correct for proposer to send accept to any ma
 
   But acceptor 3 accept it, acceptor 3 did't receive any prepare request and it didn't give a promise that he will reject acceptors with small proposal number. 
 
-  Now the situation is (1, A) is accepted after (2, B) is chosen, which is violate with rule P2.
+  Now the situation is (1, A) is accepted after (2, B) is chosen, which violates rule P2.
 
 So this is not correct. 
