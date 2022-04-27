@@ -12,3 +12,5 @@
 * [2020-03-02 [ATC-2021][Best Paper] INFaaS: Automated Model-Less Inference Serving](28.md)
 * [2020-03-03 [distributed-system] Paxos Made Moderately Complex](30.md)
 * [2020-04-18 [OSDI-2020] Retiarii: A Deep Learning Exploratory-Training Framework](31.md)
+* [2020-04-27 [ICLR-2019] DARTS: DIFFERENTIABLE ARCHITECTURE SEARCH](32.md)
+

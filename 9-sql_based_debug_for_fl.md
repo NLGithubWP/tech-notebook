@@ -6,18 +6,18 @@ Enabling SQL-based Training Data Debugging for Federated Learning
 
 The SQL-based training data debugging framework has proved effective to fix logistical regression model bugs in a non-federated learning setting.
 
-1. Remove the label errors from training data, such that unexpected behaviour disappear in retrained model.
+1. Remove the label errors from training data, such that unexpected behavior disappear in the retrained model.
 
-The paper try to enable such framework for federated learning
+The paper tries to enable such a framework for federated learning
 
 ## Challenge
 
-develop a security protocol for FL debugging which is proved to be **secure, efficient and accurate.**
+develop a security protocol for FL debugging which is proved to be **secure, efficient, and accurate.**
 
 ## Solutions
 
-1. FedRain is extended from Rain, the state-of-art SQL based training data debugging framework. Is falls short in terms of both efficient and security. 
-2. They propose novel sql based training data debugging framework called FROG, which is more secure, more accurate, and more effcient than FedRain.
+1. FedRain is extended from Rain, the state-of-art SQL-based training data debugging framework. It falls short in terms of both efficiency and security. 
+2. They propose novel SQL-based training data debugging framework called FROG, which is more secure, more accurate, and more efficient than FedRain.
 
 # Introduction
 
