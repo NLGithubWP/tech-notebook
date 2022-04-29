@@ -11,8 +11,3 @@ Current problems:
 2. redundant storage consumption and transformation cost can be easily incurred once the processors for the two queries have incompatible input/output format and resort to different storage layouts.
 
 Contribution:
-
-
-
-
-
