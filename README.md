@@ -13,5 +13,7 @@
 * [2020-03-03 [distributed-system] Paxos Made Moderately Complex](30.md)
 * [2020-04-18 [OSDI-2020] Retiarii: A Deep Learning Exploratory-Training Framework](31.md)
 * [2020-04-27 [ICLR-2019] DARTS: DIFFERENTIABLE ARCHITECTURE SEARCH](32.md)
-* [2020-04-27 [CVPR-2018] Learning Transferable Architectures for Scalable Image Recognition](33.md)
+* [2020-04-28 [CVPR-2018] Learning Transferable Architectures for Scalable Image Recognition](33.md)
+* [2020-04-29 [ECCV-2018] Progressive Neural Architecture Search](34.md)
+* [2020-04-29 [ICML-2018] Efficient Neural Architecture Search via Parameter Sharing](35.md)
 
