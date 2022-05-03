@@ -15,7 +15,8 @@
 * [2020-04-27 [ICLR-2019] DARTS: DIFFERENTIABLE ARCHITECTURE SEARCH](32.md)
 * [2020-04-28 [CVPR-2018] Learning Transferable Architectures for Scalable Image Recognition](33.md)
 * [2020-04-29 [ECCV-2018] Progressive Neural Architecture Search](34.md)
-* [2020-04-29 [ICML-2018] Efficient Neural Architecture Search via Parameter Sharing](35.md)
-* [2020-04-30 [ICDE-2019] ServeDB: Secure, Verifiable, and Efficient Range Queries on Outsourced Database](36.md)
-* 
+* [2020-04-30 [ICML-2018] Efficient Neural Architecture Search via Parameter Sharing](35.md)
+* [2020-05-1 [ICDE-2019] ServeDB: Secure, Verifiable, and Efficient Range Queries on Outsourced Database](36.md)
+* [2020-05-2 [distributed-system] ZooKeeper: Wait-free coordination for Internet-scale systems](37.md)
+* [2020-05-3 [ICLR-2022] NAS-BENCH-SUITE: NAS EVALUATION IS (NOW) SURPRISINGLY EASY](38.md)
 

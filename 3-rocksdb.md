@@ -1,10 +1,10 @@
 # RocksDB
 
-**Movivation:** Mainly focus on storing small to medium size key-values on fast storage -- flash devices or in-memory.
+**Motivation:** Mainly focus on storing small to medium size key-values on fast storage -- flash devices or in-memory.
 
-**Storage:** RocksDB is a storage engine with key/value interface. It uses a Log Structured Database Engine for storage and supports various compression algorithms.
+**Storage:** RocksDB is a storage engine with key/value interface. It uses a Log-Structured Database Engine for storage and supports various compression algorithms.
 
-**Performance:** Support efficient point lookups, range scans and different types of ACID guarantees.
+**Performance:** Support efficient point lookups, range scans, and different types of ACID guarantees.
 
 # High Level Architecture
 
