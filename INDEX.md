@@ -2,7 +2,7 @@
 
 
 * [2021-10-9 distributed system model](1-distributed-system-model.md)
-* [2021-10-11 [OSDI-2012] Spanner](2-spanner.md)
+* [2021-10-11 [OSDI-2012] Spanner](2.md)
 * [2021-10-14 facebook/RocksDB](3-rocksdb.md)
 * [2021-10-18 Load Balance](4-network-load-balancing.md)
 * [2021-10-22 [NSDI-2020] High-Speed Load-Balancer](5-nsdi_load_balancer.md)
@@ -39,8 +39,26 @@
 * [2020-04-29 [ECCV-2018] Progressive Neural Architecture Search](34.md)
 * [2020-04-30 [ICML-2018] Efficient Neural Architecture Search via Parameter Sharing](35.md)
 * [2020-05-1 [ICDE-2019] ServeDB: Secure, Verifiable, and Efficient Range Queries on Outsourced Database](36.md)
-* [2020-05-2 [distributed-system] ZooKeeper: Wait-free coordination for Internet-scale systems](37.md)
+* [2020-05-2 [PODS-2009] ZooKeeper: Wait-free coordination for Internet-scale systems](37.md)
 * [2020-05-3 [ICLR-2022] NAS-BENCH-SUITE: NAS EVALUATION IS (NOW) SURPRISINGLY EASY](38.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
