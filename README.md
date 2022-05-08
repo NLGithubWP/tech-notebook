@@ -6,5 +6,6 @@
 * [2020-05-1 [ICDE-2019] ServeDB: Secure, Verifiable, and Efficient Range Queries on Outsourced Database](36.md)
 * [2020-05-2 [distributed-system] ZooKeeper: Wait-free coordination for Internet-scale systems](37.md)
 * [2020-05-3 [ICLR-2022] NAS-BENCH-SUITE: NAS EVALUATION IS (NOW) SURPRISINGLY EASY](38.md)
-* [2020-05-6 [ICLR-2022] NAS-BENCH-SUITE: NAS EVALUATION IS (NOW) SURPRISINGLY EASY](38.md)
+* [2020-05-6 [SIGMOD-2021] Towards Demystifying Serverless Machine Learning Training](39.md)
+* [2020-05-8 [MLSys-2021] MODULARNAS: TOWARDS MODULARIZED AND REUSABLE NEURAL ARCHITECTURE SEARCH](40.md)
 
