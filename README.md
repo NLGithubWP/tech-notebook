@@ -9,5 +9,6 @@
 * [2022-05-6 [SIGMOD-2021] Towards Demystifying Serverless Machine Learning Training](39.md)
 * [2022-05-6 [MLSys-2021] MODULARNAS: TOWARDS MODULARIZED AND REUSABLE NEURAL ARCHITECTURE SEARCH](40.md)
 * [2022-05-8 [WWW-2022][BestPaper] PaSca: a Graph Neural Architecture Search System under the Scalable Paradigm](41.md)
-* [2022-05-9 [arxiv] A Gentle Introduction to Graph Neural Networks](42.md)
+* [2022-05-9 [Distill] A Gentle Introduction to Graph Neural Networks](42.md)
+* [2022-05-10 [arxiv] Graph neural networks: A review of methods and applications](42.md)
 
