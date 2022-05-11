@@ -10,5 +10,8 @@
 * [2022-05-6 [MLSys-2021] MODULARNAS: TOWARDS MODULARIZED AND REUSABLE NEURAL ARCHITECTURE SEARCH](40.md)
 * [2022-05-8 [WWW-2022][BestPaper] PaSca: a Graph Neural Architecture Search System under the Scalable Paradigm](41.md)
 * [2022-05-9 [Distill] A Gentle Introduction to Graph Neural Networks](42.md)
-* [2022-05-10 [arxiv] Graph neural networks: A review of methods and applications](42.md)
+* [2022-05-10 [arxiv] Graph neural networks: A review of methods and applications](43.md)
+* [2022-05-11 [InterSpeech-2019] Improving Keyword Spotting and Language Identification via Neural Architecture Search at Scale](44.md)
+* [2022-05-11 [TPAMI-2021] Auto-Pytorch: Multi-Fidelity MetaLearning for Efficient and Robust AutoDL](45.md)
+* [2022-05-11 [KDD-2017] Google Vizier: A Service for Black-Box Optimization](46.md)
 
