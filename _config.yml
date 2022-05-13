@@ -1,7 +1,7 @@
 # Site settings
-title: PHOTORAMA
+title: WHY IS THIS HAPPENING ?
 email: ""
-description: "Photo Journal"
+description: "It's the niceties that make the difference fate gives us the hand, and we play the cards."
 url: "https://nlgithubwp.github.io"
 baseurl: "/tech-notebook"
 facebook_username: ""
@@ -14,11 +14,6 @@ discus_shortname: ""
 share: true
 
 # Owner/author information
-owner:
-  name:   photorama
-  avatar: avatar.png
-  favicon: favicon.ico
-  info: photography website template
 
 # Settings for comments helper
 # Set 'provider' to the comment provider you want to use. (i.e.  Disqus, Intense Debate, livefyre, or Facebook Comments)
