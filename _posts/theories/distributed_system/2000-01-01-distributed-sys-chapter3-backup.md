@@ -16,7 +16,7 @@ Does the primary need to forward reads to backups? or can we do fast reads in pr
 it is not linearizable but it is sequentially consistent. 
 
 
-![image-20220204230112657]({{ site.baseurl }}/img/paper-img/image-20220209173603528.png)
+![image-20220204230112657]({{ site.baseurl }}/img/a_img_store/image-20220209173603528.png)
 
 
 `考虑如下情况，A连不上view server， B成了primary， client1 知道了这个结果，发送w到了B，但是client2还不知道，仍然发送R给了A， 如果A把读同步到B，B会发现当前的view和A的view不一致，所以拒绝，A收到拒绝后，让client retry，这样不会有错误的结果发生。`
@@ -43,7 +43,7 @@ After backup has saved ops, primary replies to client.
 
 ## View service (single point failure)
 
-   ![image-20220204230112657]({{ site.baseurl }}/img/paper-img/image-20220204203014472.png)
+   ![image-20220204230112657]({{ site.baseurl }}/img/a_img_store/image-20220204203014472.png)
 
 
 View server `detect failure`, `handle failure` and `manage servers`
@@ -99,12 +99,12 @@ In detail
 
    => `strong consistency`, during state transfer, the system is unavailabe
 
-   ![image-20220204230112657]({{ site.baseurl }}/img/paper-img/image-20220204224732085.png)
+   ![image-20220204230112657]({{ site.baseurl }}/img/a_img_store/image-20220204224732085.png)
 
 
 ### **Architecture**
 
-![image-20220204230112657]({{ site.baseurl }}/img/paper-img/image-20220204230112657.png)
+![image-20220204230112657]({{ site.baseurl }}/img/a_img_store/image-20220204230112657.png)
 
 # Project Design
 

@@ -23,7 +23,7 @@ Lamport Clock could incur some unnecessary clock logic, in this problem, I suppo
 
    WIth Lamport clock, we could define the total order of events. 
 
-<img src="{{ site.baseurl }}/img/paper-img/image-20220228211149799.png" alt="image-20220228211149799" style="zoom:50%;" />
+<img src="{{ site.baseurl }}/img/a_img_store/image-20220228211149799.png" alt="image-20220228211149799" style="zoom:50%;" />
 
 
 
@@ -33,7 +33,7 @@ Lamport Clock could incur some unnecessary clock logic, in this problem, I suppo
 
 1. (c):
 
-   <img src="{{ site.baseurl }}/img/paper-img/image-20220228214152153.png" alt="image-20220228214152153" style="zoom:50%;" />
+   <img src="{{ site.baseurl }}/img/a_img_store/image-20220228214152153.png" alt="image-20220228214152153" style="zoom:50%;" />
 
 ​	As shown in Figure, 
 
@@ -136,7 +136,7 @@ No, it's not correct for the proposer to send accept to any majority set of acce
 
 Because in phase2, the acceptor can still accept a proposal with a small proposal number after it receives a proposal with a bigger proposal number. 
 
-![image-20220301192906568]({{ site.baseurl }}/img/paper-img/image-20220301192906568.png)
+![image-20220301192906568]({{ site.baseurl }}/img/a_img_store/image-20220301192906568.png)
 
 As shown in the graph. Assume it's correct for the proposer to send acceptance to any majority set of acceptors.
 
