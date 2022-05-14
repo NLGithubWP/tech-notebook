@@ -1,6 +1,6 @@
 ---
 layout: "journal_by_category"
-category: "cat01"
-permalink: "/journal/category/cat01/"
+category: "A paper note"
+permalink: "/journal/category/A paper note/"
 header-img: "img/archive-bg.jpg"
 ---
