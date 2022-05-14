@@ -31,6 +31,7 @@ nav:
   - GALLERY: "https://nlgithubwp.github.io/tech-notebook/gallery/"
   - JOURNAL: "https://nlgithubwp.github.io/tech-notebook/journal/"
   - ABOUT: "https://nlgithubwp.github.io/tech-notebook/about/"
+  - CV: "https://nlgithubwp.github.io/tech-notebook/_resume/"
 
 # All translation keys
 translations:
