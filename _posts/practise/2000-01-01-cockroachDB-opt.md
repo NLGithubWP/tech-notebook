@@ -27,7 +27,7 @@ Make transactions smaller by operating on less data per transaction. This will o
 SHOW RANGES FROM TABLE users
 ```
 
-![image-20211028154031616]({{ site.baseurl }}/img/tech-book-img/image-20211028154031616.png)
+![image-20211028154031616]({{ site.baseurl }}/img/paper-img/image-20211028154031616.png)
 
 ## Table best practices
 
@@ -39,7 +39,7 @@ CREATE TABLE database_name.schema_name.table_name
 
 ### Create Columns:
 
-![image-20211028154306793]({{ site.baseurl }}/img/tech-book-img/image-20211028154306793.png)
+![image-20211028154306793]({{ site.baseurl }}/img/paper-img/image-20211028154306793.png)
 
 Values exceeding 1MB can lead to write amplification（写放大） and cause performance degradation
 
@@ -51,7 +51,7 @@ Values exceeding 1MB can lead to write amplification（写放大） and cause pe
 
 3. Use storing to store **hot data cols in index**, and also store join key.
 
-   ![image-20211028154437616]({{ site.baseurl }}/img/tech-book-img/image-20211028154437616.png)
+   ![image-20211028154437616]({{ site.baseurl }}/img/paper-img/image-20211028154437616.png)
 
 4. l Avoid **define pk over a single column of sequential data, eg. auto-incrementing INT or timestamp value**
 
@@ -59,9 +59,9 @@ Values exceeding 1MB can lead to write amplification（写放大） and cause pe
 
    Hash-sharded indexes distribute sequential traffic uniformly across ranges, eliminating single-range hotspots and improving write performance on sequentially-keyed indexes at a small cost to read performance.
 
-   ![image-20211028154505841]({{ site.baseurl }}/img/tech-book-img/image-20211028154505841.png)
+   ![image-20211028154505841]({{ site.baseurl }}/img/paper-img/image-20211028154505841.png)
 
-   ![image-20211028154513220]({{ site.baseurl }}/img/tech-book-img/image-20211028154513220.png)
+   ![image-20211028154513220]({{ site.baseurl }}/img/paper-img/image-20211028154513220.png)
 
 6. When possible, define primary key constraints over multiple columns (i.e., use composite primary keys).
 
@@ -71,11 +71,11 @@ Values exceeding 1MB can lead to write amplification（写放大） and cause pe
 
    **这个uuid无法用于查询，但是可以用于多个表的join**
 
-   <img src="{{ site.baseurl }}/img/tech-book-img/image-20211028154559441.png" alt="image-20211028154559441"  />
+   ![image-20211028154559441]({{ site.baseurl }}/img/paper-img/image-20211028154636919.png)
 
 Add proper column constraints
 
-![image-20211028154636919]({{ site.baseurl }}/img/tech-book-img/image-20211028154636919.png)
+![image-20211028154636919]({{ site.baseurl }}/img/paper-img/image-20211028154636919.png)
 
 Secondary index:
 
@@ -87,9 +87,9 @@ Secondary index:
 
 Useful when table is frequently sorted
 
-![image-20211028154732484]({{ site.baseurl }}/img/tech-book-img/image-20211028154732484.png)
+![image-20211028154732484]({{ site.baseurl }}/img/paper-img/image-20211028154732484.png)
 
-![image-20211028154736635]({{ site.baseurl }}/img/tech-book-img/image-20211028154736635.png)
+![image-20211028154736635]({{ site.baseurl }}/img/paper-img/image-20211028154736635.png)
 
 ### Column families
 
@@ -137,9 +137,9 @@ Requirements
 
 # 3. Manage Txs
 
-![image-20211028155026069]({{ site.baseurl }}/img/tech-book-img/image-20211028155026069.png)
+![image-20211028155026069]({{ site.baseurl }}/img/paper-img/image-20211028155026069.png)
 
-![image-20211028155032359]({{ site.baseurl }}/img/tech-book-img/image-20211028155032359.png)
+![image-20211028155032359]({{ site.baseurl }}/img/paper-img/image-20211028155032359.png)
 
 ## Retry:
 
@@ -151,7 +151,7 @@ System automatic retry
 
 Client side retry:
 
-![image-20211028155113030]({{ site.baseurl }}/img/tech-book-img/image-20211028155113030.png)
+![image-20211028155113030]({{ site.baseurl }}/img/paper-img/image-20211028155113030.png)
 
 ## Nested tx
 

@@ -1421,11 +1421,11 @@ slowest
 
 Cluster information
 
-![image-20211104210601420]({{ site.baseurl }}/img/tech-book-img/image-20211104210601420.png)
+![image-20211104210601420]({{ site.baseurl }}/img/paper-img/image-20211104210601420.png)
 
-![image-20211104210658298]({{ site.baseurl }}/img/tech-book-img/image-20211104210658298.png)
+![image-20211104210658298]({{ site.baseurl }}/img/paper-img/image-20211104210658298.png)
 
-![image-20211104210834426]({{ site.baseurl }}/img/tech-book-img/image-20211104210834426.png)
+![image-20211104210834426]({{ site.baseurl }}/img/paper-img/image-20211104210834426.png)
 
 ## workloadA experiment(district is splitted) why this is so slow?/
 
@@ -1518,11 +1518,11 @@ total time used: 4659.487995624542 second
 
 ## Compare
 
-![image-20211105112236084]({{ site.baseurl }}/img/tech-book-img/image-20211105112236084.png)
+![image-20211105112236084]({{ site.baseurl }}/img/paper-img/image-20211105112236084.png)
 
-![image-20211105112413638]({{ site.baseurl }}/img/tech-book-img/image-20211105112413638.png)
+![image-20211105112413638]({{ site.baseurl }}/img/paper-img/image-20211105112413638.png)
 
-![image-20211105112732164]({{ site.baseurl }}/img/tech-book-img/image-20211105112732164.png)
+![image-20211105112732164]({{ site.baseurl }}/img/paper-img/image-20211105112732164.png)
 
 
 
