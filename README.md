@@ -15,3 +15,5 @@
 * [2022-05-11 [KDD-2017] Google Vizier: A Service for Black-Box Optimization](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-11-45.md)
 * [2022-05-12 [TPAMI-2021] Auto-Pytorch: Multi-Fidelity MetaLearning for Efficient and Robust AutoDL](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-12-46.md)
 * [2022-05-16 [NIPS-2012] Practical Bayesian Optimization of Machine Learning Algorithms](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-15-47.md)
+* [2022-05-16 [ICLR-2017] HYPERBAND: BANDIT-BASED CONFIGURATION EVALUATION FOR HYPERPARAMETER OPTIMIZATION](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-15-48.md)
+* 
