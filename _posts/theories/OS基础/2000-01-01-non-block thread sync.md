@@ -55,7 +55,7 @@ Memory barrier 能够让 CPU 或编译器在内存访问上有序。一个 Memor
 1. 编译器 barrier
 2. CPU Memory barrier
 
-![image-20220504114649377]({{ site.baseurl }}/img/a_img_store/image-20220504114649377.png)
+![image-20220504114649377](https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220504114649377.png)
 
 # Algorithms
 

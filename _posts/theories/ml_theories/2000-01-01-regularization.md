@@ -9,7 +9,7 @@ categories: [machine learning basic]
 
 # Regularization
 
-![image-20220512212914872]({{ site.baseurl }}/img/a_img_store/image-20220512212914872.png)
+![image-20220512212914872](https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220512212914872.png)
 
 q 代表正则化程度，q = q 是 l1 正则 （Lasso）， q=2 是 l2 正则 （Ridge）。
 
@@ -23,6 +23,6 @@ q 代表正则化程度，q = q 是 l1 正则 （Lasso）， q=2 是 l2 正则 �
 
 
 
-![image-20220512213234157]({{ site.baseurl }}/img/a_img_store/image-20220512213234157.png)
+![image-20220512213234157](https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220512213234157.png)
 
-![image-20220512213253528]({{ site.baseurl }}/img/a_img_store/image-20220512213253528.png)
+![image-20220512213253528](https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220512213253528.png)

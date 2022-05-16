@@ -14,3 +14,4 @@
 * [2022-05-11 [InterSpeech-2019] Improving Keyword Spotting and Language Identification via Neural Architecture Search at Scale](https://nlgithubwp.github.io/tech-notebook/journal/44/)
 * [2022-05-11 [KDD-2017] Google Vizier: A Service for Black-Box Optimization](https://nlgithubwp.github.io/tech-notebook/journal/45/)
 * [2022-05-12 [TPAMI-2021] Auto-Pytorch: Multi-Fidelity MetaLearning for Efficient and Robust AutoDL](https://nlgithubwp.github.io/tech-notebook/journal/46/)
+* [2022-05-12 [NIPS-2012] Practical Bayesian Optimization of Machine Learning Algorithms](https://nlgithubwp.github.io/tech-notebook/journal/47/)
