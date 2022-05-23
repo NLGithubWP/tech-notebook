@@ -14,8 +14,6 @@
 
 * [2022-05-3 [ICLR-2022] NAS-BENCH-SUITE: NAS EVALUATION IS (NOW) SURPRISINGLY EASY](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-3-38.md)
 
-* [2022-05-6 [SIGMOD-2021] Towards Demystifying Serverless Machine Learning Training](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-6-39.md)
-
 * [2022-05-6 [MLSys-2021] MODULARNAS: TOWARDS MODULARIZED AND REUSABLE NEURAL ARCHITECTURE SEARCH](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-6-40.md)
 
 * [2022-05-8 [WWW-2022][BestPaper] PaSca: a Graph Neural Architecture Search System under the Scalable Paradigm](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-8-41.md)
