@@ -59,6 +59,16 @@ git rm --cached file
 git reset --hard upstream/master
 ```
 
+## Git 克隆一个pr
+
+```bash
+git fetch origin refs/pull/PR_NUMBER/head:NEW_LOCAL_BRANCH
+eg:
+
+git fetch origin pull/611/head:pull_611
+git checkout pull_611
+```
+
 # Linux cmds
 
 ## 查询文件或文件夹大小
