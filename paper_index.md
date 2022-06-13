@@ -50,6 +50,18 @@ layout: home
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 """
 [2020-01-25 [Blog-2019] Understanding the Neural Tangent Kernel](20.md)
 
