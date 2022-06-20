@@ -47,6 +47,14 @@ layout: home
 * [2022-05-11 [InterSpeech-2019] Improving Keyword Spotting and Language Identification via Neural Architecture Search at Scale](2022-05-11-44.md)
 * [2022-05-11 [KDD-2017] Google Vizier: A Service for Black-Box Optimization](2022-05-11-45.md)
 * [2022-05-12 [TPAMI-2021] Auto-Pytorch: Multi-Fidelity MetaLearning for Efficient and Robust AutoDL](2022-05-12-46.md)
+* [2022-05-14 [NIPS-2012] Practical Bayesian Optimization of Machine Learning Algorithms](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-14-47.md)
+* [2022-05-15 [ICLR-2017] HYPERBAND: BANDIT-BASED CONFIGURATION EVALUATION FOR HYPERPARAMETER OPTIMIZATION](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-15-48.md)
+* [2022-05-17 [ICML-2018] BOHB: Robust and Efficient Hyperparameter Optimization at Scale](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-16-49.md)
+* [2022-05-26 [EuroSys-2015] Large-scale cluster management at Google with Borg](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-26-50.md)
+* [2022-05-29 [ICML-2019] NAS-Bench-101 Towards Reproducible Neural Architecture Search](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-29-51.md)
+* [2022-05-29 [ICLR-2020] NAS-BENCH-201: EXTENDING THE SCOPE OF REPRODUCIBLE NEURAL ARCHITECTURE SEARCH](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-31-53.md)
+* [2022-05-30 [distributed-system] The Google File System](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-31-52.md)
+* [2022-06-03 [distributed-system] The Google File System](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-31-52.md)
 
 
 
