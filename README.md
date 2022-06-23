@@ -9,3 +9,4 @@
 * [2022-06-14 [blog] Knative Serving overview](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-14-60.md)
 * [2022-06-17 [VLDB-2010] Dremel Interactive Analysis of WebScale Datasets](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-17-64.md)
 * [2022-06-17 [blob] Dremel made simple with Parquet](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-17-65.md)
+

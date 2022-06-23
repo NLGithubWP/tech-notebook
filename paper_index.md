@@ -56,6 +56,15 @@ layout: home
 * [2022-05-30 [distributed-system] The Google File System](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-31-52.md)
 * [2022-06-03 [distributed-system] The Google File System](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-05-31-52.md)
 
+* [2022-06-10 [SIGMOD-2021] Towards Demystifying Serverless Machine Learning Training](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-10-55.md)
+* [2022-06-10 [VLDB-2016] Cohort Query Processing](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-10-56.md)
+* [2022-06-11 [ATC-2018] SAND Towards High-Performance Serverless Computing](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-11-57.md)
+* [2022-06-12 [CIDR-2019] Serverless Computing One Step Forward Two Steps Back](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-12-58.md)
+* [2022-06-13 [ATC-2021] Faastlane Accelerating Function-as-a-Service Workflows](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-13-59.md)
+* [2022-06-14 [blog] Knative Serving overview](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-14-60.md)
+* [2022-06-17 [VLDB-2010] Dremel Interactive Analysis of WebScale Datasets](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-17-64.md)
+* [2022-06-17 [blob] Dremel made simple with Parquet](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-06-17-65.md)
+
 
 
 
