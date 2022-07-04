@@ -1,0 +1,112 @@
+I"�<h1 id="introduction">Introduction</h1>
+
+<h2 id="problem">Problem</h2>
+
+<p>The current search strategy has two categories:</p>
+
+<p><strong>Search from fully-specified graph structures:</strong></p>
+
+<ol>
+  <li>Evolutionary algorithms.
+    <ul>
+      <li>Each NN structure is encoded as a string</li>
+      <li>Random mutations and recombinations of strings are performed during the search process.</li>
+      <li>Sample string is a new architecture, and it is then trained and evaluated using SGD.</li>
+    </ul>
+  </li>
+  <li>Reinforcement learning-based algorithm.
+    <ul>
+      <li>RNN controller generates new architecture.</li>
+      <li>The new architecture is trained and evaluated,</li>
+      <li>The validation performance is returned as the reward, and it is used to update the RNN controller’s weight.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Search from heuristic search space. Search form simple to complex.</strong></p>
+
+<ol>
+  <li>Monto Carlo Tree Search: at each node in the search space, it randomly selects one to expand.</li>
+  <li>Sequential Model-Based Optimization: use a prediction model to decide which nodes to expand.</li>
+</ol>
+
+<p>Both are slow, For example, the RL method in trains and evaluates 20,000 neural networks across 500 P100 GPUs over 4 days</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430170126540.png" alt="image-20220430170126540" /></p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>The paper proposes a new algorithm for a sequential model-based optimization strategy. Which is <strong>5 times more efficient than RL and 8 times faster in terms of total compute.</strong></p>
+
+<h1 id="introduction-1">Introduction</h1>
+
+<h2 id="basic-idea">Basic idea</h2>
+
+<ol>
+  <li>List K’ candidates,</li>
+  <li>hire surrogate functions to predict the performance of the structure without needing to train all of them.</li>
+  <li>pick top K candidates. train and evaluate them,</li>
+  <li>continue until b = B.</li>
+</ol>
+
+<h1 id="architectuer-search-space">Architectuer Search Space</h1>
+
+<p><strong>The paper uses a heuristic search rather than a fully-specified model search space.</strong></p>
+
+<h2 id="cell-and-cnn-network">Cell And CNN Network</h2>
+
+<p>The cell is a fully convolutional network</p>
+
+<p>The cell can be represented by a DAG consisting of B blocks. Each block is a mapping from 2 input tensors to 1 output tensor.</p>
+
+<p>Each block b in cell c as a 5-tuple, (I1; I2; O1; O2; C),</p>
+
+<ul>
+  <li>
+    <p>Input I1 and I2 are chosen from the previous block in this cell + the output of the previous cell + the output of the previous-previous cell,</p>
+  </li>
+  <li>
+    <p>Operator:</p>
+
+    <p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430164645954.png" alt="image-20220430164645954" /></p>
+  </li>
+  <li>
+    <p>Combination:  both elementwise addition and concatenation.  (Only use )</p>
+  </li>
+</ul>
+
+<p>In 5 blocks, the total search space 10**14.</p>
+
+<p>But the total number of unique cells is 10**12.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430170211517.png" alt="image-20220430170211517" /></p>
+
+<h1 id="search-method">Search Method</h1>
+
+<h2 id="progressive-nn-search">Progressive NN search</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430170640426.png" alt="image-20220430170640426" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430172152012.png" alt="image-20220430172152012" /></p>
+
+<p>B1 is list of cells, each cell has only one block. The total unique block number is 2<em>2 * 8</em>8 = 256. So there are 256 cells.</p>
+
+<h2 id="cell-predictor">cell Predictor</h2>
+
+<p>Since it needs to handle variable-sized strings, so it mainly uses RNN,(LSTM) to do the prediction.</p>
+
+<ol>
+  <li>LSTM inputs: reads a sequence of length 4b &lt;I1, I2, O1,  O2 &gt; for each block. And the input at each step is a one-hot vector of size.</li>
+  <li>LSTM’s hidden state size and embedding size are both 100</li>
+</ol>
+
+<h1 id="experiments-and-results">Experiments and Results</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430173445251.png" alt="image-20220430173445251" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430173521858.png" alt="image-20220430173521858" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430173622167.png" alt="image-20220430173622167" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430173706940.png" alt="image-20220430173706940" /></p>
+:ET

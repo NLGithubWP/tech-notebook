@@ -1,0 +1,230 @@
+I"1<h1 id="questions">Questions</h1>
+
+<ol>
+  <li>does other server has pending queue?</li>
+  <li>other server 和head的hist 存的是什么</li>
+  <li>why can not read from backups</li>
+</ol>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p><code>Storage service</code> is the serice between file systems and database systems, eg,. as for information-intensive services, file system lacks rich semantics while database system is too expensive, so we can use storage service.</p>
+
+<p><code>Storage service</code> can</p>
+
+<ol>
+  <li>store objects</li>
+  <li>support query ops to return a value of object</li>
+  <li>support update ops to change a state of object</li>
+</ol>
+
+<p>Two challenges for implementing such service.</p>
+
+<ol>
+  <li>How to maintain high availability and high throughput <code>despite failures.</code></li>
+  <li>How to guarantee strong consistency.</li>
+</ol>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>The paper propose <code>chanin replication approach</code> to coordinating fail-stop servers, subjecting to support <code>high throughput, availability and strong consistency.</code></p>
+
+<p>Roughly</p>
+
+<ul>
+  <li>
+    <p><code>high throughput</code>: read request can return immediately without replication.</p>
+  </li>
+  <li>
+    <p><code>availability</code>: failure-recover mechanism.</p>
+  </li>
+  <li>
+    <p><code>strong consistency</code>: update request is confirmed by tail and reply by head.</p>
+
+    <h1 id="a-storage-service-interface">A storage service interface</h1>
+  </li>
+</ul>
+
+<p><img src="./imgs/image-20220209144049567.png" alt="image-20220209144049567" style="zoom: 33%;" /></p>
+
+<h1 id="chain-replicaiton-protocol">Chain replicaiton Protocol</h1>
+
+<h2 id="failure-model">Failure model</h2>
+
+<p>If an object is replicated at t servers, at most t-1 server can fail without compromising the availability.</p>
+
+<h2 id="protocol-details">Protocol Details</h2>
+
+<h3 id="basic-operations">Basic operations</h3>
+
+<p><strong>Query Processing</strong></p>
+
+<ol>
+  <li>Query request sent to the tail directly.</li>
+  <li>tail return to client directly.</li>
+</ol>
+
+<p><strong>Update Processing</strong></p>
+
+<ol>
+  <li>Update request sent to head directly.</li>
+  <li>head update local object and send result to <code>next server.</code></li>
+  <li>head wait for tail’s reply</li>
+  <li>head return to client.</li>
+</ol>
+
+<p><strong>Reply Generation</strong></p>
+
+<p>Tail sent back to head through all mid servers.</p>
+
+<h3 id="failure-handler">Failure handler</h3>
+
+<p><strong>master service do the following</strong></p>
+
+<ul>
+  <li>detect failure</li>
+  <li>Inform server with its predecessor and new successor.</li>
+  <li>Inform client which server is head or tail.</li>
+</ul>
+
+<p><strong>Head Failure</strong></p>
+
+<p>Removing H from chain and making the successor the new head.</p>
+
+<p><strong>Tail Failure</strong></p>
+
+<p>Remving tail T from chain and making predecessor T- the new tail.</p>
+
+<p><strong>Other server failure</strong></p>
+
+<p><img src="./imgs/image-20220209170311558.png" alt="image-20220209170311558" style="zoom: 25%;" /></p>
+
+<p><strong>Add new server to chain</strong></p>
+
+<ol>
+  <li>In practise, add new server to T+1 after the tail T.</li>
+  <li>set Sent queue(T+1) = empty</li>
+  <li>set Hist(T+1) = Hist(T)</li>
+  <li>T notified master that it is not tail</li>
+  <li>T begin to fill Sent queue and forward to T+1</li>
+  <li>Master notifed client to sent query to T+1</li>
+</ol>
+
+<h1 id="primarybackup-protocols">Primary/Backup Protocols</h1>
+
+<h2 id="operation-latency">Operation Latency</h2>
+
+<p>Compare with Primary/Backup approach where read reach the primary and primary waits ack from ups before replying to client, chain approach has lower latency because tail can return to client directly. (<code>reason behind is in primary/backup primary sync read requests to prevent stale read, but in chain appraoch, read always from tail server. </code>)</p>
+
+<p>Primary/Backup can boardcasts request to backups parallel, delay = max([d1, d2…])</p>
+
+<p>Chain approach sync request sequencelly, delay = sum(d1,d2…)</p>
+
+<p>(di is delay of backup i)</p>
+
+<h2 id="failure-recover-latency">Failure-Recover Latency</h2>
+
+<p><strong>Primary/backup</strong></p>
+
+<p>Primary Failure (5 message delay)</p>
+
+<ul>
+  <li>master detect failure and broadcasts to all backups</li>
+  <li>each backup replies to master</li>
+  <li>master broadcasts new primary’s id to all backups</li>
+  <li>new primary transfer state.</li>
+  <li>master broadcasts new primary’s id to clients.</li>
+</ul>
+
+<p>Backup Failure (1 message delay)</p>
+
+<ul>
+  <li>Pick idle to be backup and start state transfer</li>
+</ul>
+
+<p><strong>Chain replication</strong></p>
+
+<p>Head failure (2 message delay)</p>
+
+<ul>
+  <li>master broadcasts message to new head and it’s successor</li>
+  <li>master notify clients.</li>
+</ul>
+
+<p>Middle Server Failure (4 message delay)</p>
+
+<ul>
+  <li>as showen above</li>
+</ul>
+
+<p>Tail failure (2 msg delay)</p>
+
+<ul>
+  <li>master sends a msg to new tail</li>
+  <li>master notifies all clients.</li>
+</ul>
+
+<p><strong>Compare Conclusion</strong></p>
+
+<p>Transient outage of chain replication is shorter than primary/backups</p>
+
+<h1 id="simulation-experiments">Simulation Experiments</h1>
+
+<p>simulated network with infinite bandwidth but with latencies of 1ms per message.</p>
+
+<h2 id="single-chain-no-failures">Single chain, No Failures</h2>
+
+<p>Replication factor t = 2, 3, 10, 25 clients, measure throughput of:</p>
+
+<ul>
+  <li>chain: Chain replication. (strong consistency)</li>
+  <li>p/b: Primary/backup. (strong consistency)</li>
+  <li>weak-chain: Chain replication modified so query requests go to any random server.</li>
+  <li>weak-p/b: Primary/backup modified so query requests go to any random server.</li>
+</ul>
+
+<p><img src="./imgs/image-20220209211309340.png" alt="image-20220209211309340" /></p>
+
+<p>As for the weak-, the more server, the higher throughput because the random access.</p>
+
+<p>Chain has better performance than p/b.</p>
+
+<h2 id="multiple-chain-no-failures">Multiple chain, No Failures</h2>
+
+<p>Sharding objects to different chain. Each processor host multiple chains.</p>
+
+<p>Client send request to dispatcher, which load-balance the requests.</p>
+
+<p>Reply of server send to client directly.</p>
+
+<p><img src="./imgs/image-20220209214232322.png" alt="image-20220209214232322" style="zoom:50%;" /></p>
+
+<h2 id="effects-of-failures-on-throughput">Effects of Failures on Throughput</h2>
+
+<p>11 clients, storage service has following properities.</p>
+
+<p><img src="imgs/image-20220209215724899.png" alt="image-20220209215724899" style="zoom:50%;" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220209220240278.png" alt="image-20220209220240278" /></p>
+
+<p>For update, after failure happens fewer server attend updating process, so the latency is low.</p>
+
+<p>For query, load is no longer well-balanced among servers, and aggregate query throughput is lower.</p>
+
+<h2 id="large-scale-replication-of-critical-data">Large Scale Replication of Critical Data</h2>
+
+<p><img src="./imgs/image-20220209221339610.png" alt="image-20220209221339610" /></p>
+
+<p>t is the chain length.</p>
+
+<p>Ring: Volume(group of object) are placed using consistent hash.</p>
+
+<p>RndPar: Volume(group of object) are placed Randomly. (used in GFS)</p>
+
+<p>RndSeq: Replicas of volume are placed randomly</p>
+
+<p>#</p>
+
+:ET

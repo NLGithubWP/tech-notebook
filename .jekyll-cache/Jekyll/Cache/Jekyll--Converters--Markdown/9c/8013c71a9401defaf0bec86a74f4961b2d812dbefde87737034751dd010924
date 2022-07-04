@@ -1,0 +1,165 @@
+I"}<h1 id="introduction">Introduction</h1>
+
+<h2 id="current-problems--challenges">Current Problems &amp; Challenges</h2>
+
+<p>Existing work proposes some schema to support <strong>queries on encrypted data, and return encrypted results</strong></p>
+
+<ol>
+  <li>
+    <p>Most of them have limited functionality such as keyword search and single-dimensional range query.</p>
+
+    <p>They extended SSE to support one-dimensional queries by transforming data and queries into SSE codes and using the code to enable query processing.</p>
+
+    <p>Directly expends this method by querying on each dimension separately is not only time-consuming but also reveals more matched records than desired.</p>
+  </li>
+  <li>
+    <p>Most of them only assume cloud server is semi-honest</p>
+  </li>
+  <li>
+    <p><strong>Not many works focus on addressing multiple dimensional range queries.</strong></p>
+  </li>
+</ol>
+
+<p>Some challenges</p>
+
+<ol>
+  <li>Order preserving encryption can be used to encrypt Index structure in order to support multiple-dimensional range queries,  But the order and distribution information of data records will be revealed due to the weak security notion of OPE</li>
+  <li>Searchable symmetric encryption supports keyword search,</li>
+</ol>
+
+<h2 id="solutions">Solutions</h2>
+
+<ol>
+  <li>
+    <p>Propose a secure and scalable schema that supports multi-dimensional range queries. And provides the following:</p>
+
+    <ul>
+      <li>
+        <p>Privacy: server cannot learn the contents and data record the query touches.</p>
+      </li>
+      <li>
+        <p>Efficiency: achieve sublinear query time.</p>
+      </li>
+      <li>
+        <p>Verifiability: the schema allow the user to verify the <strong>correctness and completeness</strong> of the query results.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Use hierarchical cubes to encode the data and build a tree-structure index on top of the data encoded by cubes to support efficient query processing.</p>
+  </li>
+  <li>
+    <p>Add verification information in the tree structure without introducing a new structure.</p>
+  </li>
+  <li>
+    <p>Experiments show <strong>efficiency and scalability</strong>.</p>
+  </li>
+</ol>
+
+<h1 id="problem-statement-and-related-work">PROBLEM STATEMENT AND RELATED WORK</h1>
+
+<h2 id="system-model">System Model</h2>
+
+<h3 id="roles">Roles</h3>
+
+<p>Data owner, Data user, Cloud Server.</p>
+
+<p>Data Owner: Encrypts each record in dataset D into E and builds a secure index T on top of it. And then the owner can upload data to the cloud.</p>
+
+<p>Data users:</p>
+
+<ol>
+  <li>Apply secure keys from the data owner, encrypts the query, and send it to the server.</li>
+  <li>Verify correctness and completeness of results.</li>
+</ol>
+
+<p>Cloud Server:</p>
+
+<ol>
+  <li>store encrypted data, index.</li>
+  <li>Run encrypted query.</li>
+  <li>can be malicious.</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220501192500619.png" alt="image-20220501192500619" /></p>
+
+<h3 id="related-work">Related Work</h3>
+
+<ol>
+  <li>CryptDB use OPE, but leak the order of data.</li>
+  <li>Mulit-dimensional tree structures like kd-trees and R-trees. Used to achieve sub-linear multidimensional range privacy.</li>
+  <li><strong>Merkle Trees and accumulation trees are used in verfication</strong></li>
+</ol>
+
+<h1 id="scheme-overview">SCHEME OVERVIEW</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220501193908493.png" alt="image-20220501193908493" /></p>
+
+<h2 id="store">Store</h2>
+
+<p>Transform data ranges into discrete cube codes C. Range query is also encoded as Q.</p>
+
+<p>Compare data records and query range by comparing the cube codes. C and Q</p>
+
+<p>The comparison of C and Q is based on the index tree. But B-Tree and KD-tree dony consider security. So the paper introduces SVETree.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220501212331846.png" alt="image-20220501212331846" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220501212351863.png" alt="image-20220501212351863" /></p>
+
+<ol>
+  <li>Each non-leaf node stores a bloom filter.</li>
+  <li>Each leaf-node stores an encrypted data record.</li>
+</ol>
+
+<h2 id="query-processing">Query Processing.</h2>
+
+<p>Given a query Q, we can use the Bloom filter to check whether each node contains codes falling in the range.</p>
+
+<ol>
+  <li>
+    <p>Encode prepare range query Q into C using same CCS (encoding system in paper)</p>
+  </li>
+  <li>
+    <p>Fo reaches cube g_j in C, calculate r hash values T_j, And all cube’s hash values can form a matrix M = [T1…Tf ]</p>
+
+    <p>T_j is used when checking with the bloom filter stored in each node.</p>
+  </li>
+  <li>
+    <p>searching each non-leaf node and checking if there are some matches in this sub-branch tree.</p>
+  </li>
+  <li>
+    <p>After getting the result from the server, the user should verify it.</p>
+
+    <ul>
+      <li>Data correctness:
+        <ul>
+          <li>If in the range: decrypt the result and check if each data is in range.</li>
+          <li>If the data is from the data owner: calculate the hash value of the root, and check if it is equal to returned hash root value. ( Similar to Merkle Tree )</li>
+        </ul>
+      </li>
+      <li>Completeness: data users can use the query results R and proof information π to reproduce a correct query process.</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="experiments">Experiments</h1>
+
+<h2 id="setup">Setup</h2>
+
+<ol>
+  <li>Twitter dataset, 5 million tweets</li>
+  <li>Compare with
+    <ul>
+      <li>PBtree: only supported secure range query on single-dimensional data</li>
+      <li>R-tree</li>
+      <li>Scan searched each dimension based on ciphertext respectively and intersected the result sets on each dimension.</li>
+    </ul>
+  </li>
+  <li>Measure delay of querying and verifying.</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220501212909419.png" alt="image-20220501212909419" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220501213104282.png" alt="image-20220501213104282" /></p>
+:ET

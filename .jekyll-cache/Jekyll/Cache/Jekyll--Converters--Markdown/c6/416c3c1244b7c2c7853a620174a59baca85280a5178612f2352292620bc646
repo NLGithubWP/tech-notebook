@@ -1,0 +1,198 @@
+I"�!<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220513144529017.png" alt="image-20220513144529017" /></p>
+
+<p>AutoNet [12],</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>AutoML system should have both hyperparameter tuning, and NAS.</p>
+
+<ol>
+  <li>HyperParameter Tunning below cannot scale.
+    <ul>
+      <li>BlackBox Bayesian optimization</li>
+      <li>Evolutionary</li>
+      <li>reinforcement learning</li>
+    </ul>
+  </li>
+  <li>There is no multi-fidelity benchmark on learning curves for the joint optimization of architectures and hyperparameters</li>
+</ol>
+
+<h2 id="contribution">Contribution</h2>
+
+<ol>
+  <li>
+    <p>Propose a system with automatically-designed portfolios of architectures &amp; hyperparameters. ensembling.</p>
+
+    <ul>
+      <li>Auto-PyTorch Tabular performs <strong>multi-fidelity optimization</strong> on a joint search space of architectural parameters and training hyperparameters for neural nets.</li>
+      <li>It targeted tabular data</li>
+    </ul>
+
+    <p>The system combines state-of-the-art approaches from <strong>multi-fidelity optimization</strong>, ensemble learning, and meta-learning for a data-driven selection of initial configurations for warm starting Bayesian optimization.</p>
+  </li>
+  <li>
+    <p>Use <strong>multi-fidelity optimization</strong>: tasks on cheaper fidelities (training only for a few epochs)</p>
+  </li>
+  <li>
+    <p>Introduce a new benchmark LCBench for studying <strong>multi-fidelity optimization</strong></p>
+  </li>
+  <li>
+    <p>Experiment shows it is better than several other common AutoML frameworks: AutoKeras, AutoGluon, auto-learn, and hyperopic-learn.</p>
+  </li>
+</ol>
+
+<h1 id="some-notes-of-related-work">Some notes of Related Work</h1>
+
+<ol>
+  <li>The design space for the current NAS is over-engineered, leading to very simple optimization tasks where even random searches can perform well.</li>
+  <li>MetaLearning can be used for warm-starting.</li>
+  <li><strong>BOHB combines Bayesian optimization (BO) with Hyperband (HB) and has been shown to outperform BO and HB on many tasks. It speedups of up to 55x over Random Search</strong></li>
+</ol>
+
+<h1 id="auto-pytorch">Auto-Pytorch</h1>
+
+<p>The system implements and tunes the full DL pipeline, including data preprocessing, neural architecture, network training, and regularization.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516231614895.png" alt="image-20220516231614895" /></p>
+
+<h2 id="search-space">Search Space</h2>
+
+<p>A large number of hyperparameters</p>
+
+<ol>
+  <li>preprocessing options (e.g. encoding, imputation)</li>
+  <li>architectural hyperparameters (e.g. network type, number of layers)</li>
+  <li>training hyperparameters (e.g. learning rate, weight decay- p in regularization ).</li>
+</ol>
+
+<p>The system can study on either</p>
+
+<ol>
+  <li>Small-space: Funnel-shaped variant,  which contains only 2 search targets.
+    <ul>
+      <li>Requires a predefined number of layers.</li>
+      <li>A maximum number of units.</li>
+    </ul>
+  </li>
+  <li>Full-space: allow to achieve SOA performance.</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220513144502272.png" alt="image-20220513144502272" /></p>
+
+<h2 id="multi-fidelity-search">Multi-fidelity Search</h2>
+
+<p>It uses BOHB to find well-performing configurations. The key choice is to set up the budget type like runtime, the number of training epochs, and dataset subsamples.</p>
+
+<p>The paper use number of training epochs as the budget type, since it has good generality and interpretability.</p>
+
+<h3 id="parallelly">Parallelly</h3>
+
+<p>Since BOHB uses kernel density estimator (KDE) as a probabilistic model.</p>
+
+<p>So it is efficient scaling for parallel optimization.</p>
+
+<h3 id="evaluation">Evaluation</h3>
+
+<p>The system support hold-out protocol and cross-validation to determine the accuracy of an architecture.</p>
+
+<h3 id="warm-start">Warm-Start</h3>
+
+<p>BOHB starts from scratch for the new task and it’s not optimized.</p>
+
+<p>The paper learns the warm-starting from <strong>PoSH-Auto-Sklearn</strong>, and it starts BOHB’s first iteration with a set of complementary configurations that cover a set of meta-training datasets well; Afterwards, it transitions to BOHB’s conventional sampling.</p>
+
+<h2 id="enabling">Enabling</h2>
+
+<p>After finding the best model, the system uses ensembling to combine them.</p>
+
+<h1 id="lc-bench">LC-BENCH</h1>
+
+<p>The paper also conducts some experiments to investigate how to design multi-fidelity optimization for AutoDL from many perspectives.</p>
+
+<ol>
+  <li>How do the configurations relate to the datasets?
+    <ul>
+      <li>Are there configurations that perform well on several datasets?</li>
+      <li>Is it possible to cover most datasets based on a few complimentary configurations?</li>
+    </ul>
+  </li>
+  <li>How to choose budgets.</li>
+</ol>
+
+<h2 id="experiment">Experiment</h2>
+
+<p><strong>2000 configurations</strong> and <strong>evaluating each of them across 35 datasets</strong> and <strong>three budgets</strong>. Each evaluation is performed with three different seeds on Intel Xeon Gold 6242 CPUs with one core per evaluation, totaling 1 500 CPU hours.</p>
+
+<h3 id="datasets">Datasets</h3>
+
+<p>The used datasets are very diverse in the number of features (5 - 1637), data points (690- 581012), and classes (2-355)  and cover binary and multi-class classification, as well as strongly imbalanced tasks</p>
+
+<h3 id="budgets">Budgets</h3>
+
+<p>A number of epochs, and evaluate each cfg for 12, 25, and 50 epochs.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516214903808.png" alt="image-20220516214903808" /></p>
+
+<h2 id="foundings">Foundings:</h2>
+
+<ol>
+  <li>
+    <p>Transferring configurations to other datasets are very promising if the configuration is well selected</p>
+  </li>
+  <li>
+    <p>As expected, the adjacent budget pairs (12; 25) and (25; 50) exhibit a larger correlation than the more distant budget pair (12; 50)</p>
+  </li>
+  <li>
+    <p>The paper use fANOVA and Local Hyperparameter Importance (LPI) to quantify the importance of the hyperparameter importance. And it finds the number of layers (num layers) is the most important hyperparameter, even more important than learning rate or weight decay.</p>
+
+    <p>The maximum number of neurons (max units) is less important</p>
+  </li>
+</ol>
+
+<h1 id="evaluation-1">Evaluation</h1>
+
+<p>The system evaluates the system on tabular data from those perspectives isolated. And shows the system can also perform well on object recognition in NAS-Bench-201.</p>
+
+<ol>
+  <li>Configuration space</li>
+  <li>Multi-fidelity optimization</li>
+  <li>Ensembling</li>
+  <li>Warm-start with meta-learning.</li>
+</ol>
+
+<h2 id="warm-start-1">Warm-start</h2>
+
+<p>Ran the system on 100 meta datasets from OpenML. The system use search 300 BOHB iterations.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516221454719.png" alt="image-20220516221454719" /></p>
+
+<h2 id="bohb-search">BOHB Search</h2>
+
+<p>The architecture searched by BOHB is better than the one searched by BO</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516221715857.png" alt="image-20220516221715857" /></p>
+
+<h2 id="ensembling">Ensembling</h2>
+
+<p>Building ensembles from different DNNs and fidelities improve the performance in the long run, sometimes substantially</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516221554527.png" alt="image-20220516221554527" /></p>
+
+<h2 id="parallel">Parallel</h2>
+
+<p>speedups of 3x</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516221829931.png" alt="image-20220516221829931" /></p>
+
+<h2 id="compare-with-others">Compare with others</h2>
+
+<p>We compare Auto-PyTorch Tabular to several state-of-the-art AutoML frameworks, i.e. Auto-Keras, Auto-Sklearn, and hyperopic-sklearn, We also include the early version Auto-Net2.0</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516222146839.png" alt="image-20220516222146839" /></p>
+
+<p>The core component is also useful for other tasks.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516222246937.png" alt="image-20220516222246937" /></p>
+:ET

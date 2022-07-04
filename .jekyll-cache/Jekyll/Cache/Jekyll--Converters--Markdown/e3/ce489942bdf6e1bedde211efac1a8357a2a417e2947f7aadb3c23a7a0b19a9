@@ -1,0 +1,59 @@
+I"1
+<h1 id="introduction">Introduction</h1>
+
+<p>The paper presents file system interface design to support distributed applications, and also discusses many aspects of the design.</p>
+
+<p>The files system cluster has been used in:</p>
+
+<ol>
+  <li><strong>Hundreds of terabytes</strong> of storage</li>
+  <li>Across thousands of disks on <strong>thousand</strong> of machines.</li>
+  <li>Accessed by <strong>hundreds</strong> of clients.</li>
+</ol>
+
+<p>The GFS has good <strong>performance, scalability, reliability, and availability</strong>. And it is also designed based on the following points</p>
+
+<ol>
+  <li>Component <strong>failures are the norm</strong>.  Such as failure caused by application bugs, operating system bugs, human errors, etc.</li>
+  <li>Files are huge by traditional standards. <strong>Multi-GB files</strong> are common.</li>
+  <li>Most are <strong>append-only data</strong> rather than overwriting existing data.</li>
+  <li>Co-design the application and file system API to increase flexibility. Eg.
+    <ul>
+      <li>It relaxed GFS’ <strong>consistency</strong> model to simplify the file system without imposing a burden on the application.</li>
+      <li>Introduce <strong>atomic append operation.</strong> Multiple clients can append concurrently <strong>without extra synchronization</strong>.</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="design-overview">Design Overview</h1>
+
+<h2 id="assumptions">Assumptions</h2>
+
+<ol>
+  <li>The system is built on inexpensive machines which often fail.</li>
+  <li>Should store a modest number of large files, A few million files with 100 MB.</li>
+  <li>Supports workloads include
+    <ul>
+      <li>Large streaming reads: Each request reads <strong>hundreds of KBs</strong></li>
+      <li>Small random reads: Few KBs at the arbitrary offset.</li>
+    </ul>
+  </li>
+  <li>The system only focuses on sequential writes. While small writing is less efficient.</li>
+  <li>The system must efficiently support <strong>multiple clients concurrently append to the same file.</strong></li>
+  <li>High sustained bandwidth is more important than low latency. Most applications require processing data in bulk at a high rate. And they don’t require a fast response time.</li>
+</ol>
+
+<h2 id="interface">Interface</h2>
+
+<p>Supports create, delete, open, close, read, and write operations.</p>
+
+<p>Also has snapshot, and record appends operations.</p>
+
+<ol>
+  <li>Snapshot: creates a copy of a file or a directory tree at a low cost.</li>
+  <li>Record appends: Allows multiple clients to append data atomicity.</li>
+</ol>
+
+<h2 id="architecture">Architecture</h2>
+
+:ET

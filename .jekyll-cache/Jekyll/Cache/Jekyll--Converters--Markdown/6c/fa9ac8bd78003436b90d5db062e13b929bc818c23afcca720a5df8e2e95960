@@ -1,0 +1,420 @@
+I"j:<h1 id="valgrind工具包">Valgrind工具包</h1>
+
+<p>https://phenix3443.github.io/notebook/software-engineering/debug/valgrind-practices.html</p>
+
+<h1 id="常见错误">常见错误</h1>
+
+<h2 id="1-unordered_map">1. unordered_map</h2>
+
+<p>unordered_map 定义的key需要加一个template hash 方法，否则会报错：</p>
+
+<pre><code class="language-c++">implicit instantiation of undefined template 'std::__1::hash&lt;KID&gt;'
+</code></pre>
+
+<h1 id="cmake语法规则">Cmake语法规则</h1>
+
+<p>https://blog.csdn.net/DinnerHowe/article/details/80455172</p>
+
+<h2 id="file">file</h2>
+
+<p><strong>file(GLOB variable [RELATIVE path] [globbingexpressions]…)</strong></p>
+
+<p>GLOB 会产生一个由所有匹配globbing表达式的文件组成的列表，并将其保存到<strong>变量中</strong>。Globbing 表达式与正则表达式类似，但更简单。如果指定了RELATIVE 标记，返回的结果将是与指定的路径相对的路径构成的列表。 (通常不推荐使用GLOB命令来从源码树中收集源文件列表。</p>
+
+<p>原因是：如果CMakeLists.txt文件没有改变，即便在该源码树中添加或删除文件，产生的构建系统也不会知道何时该要求CMake重新产生构建文件。globbing 表达式包括：</p>
+
+<pre><code class="language-c++">  *.cxx   - match all files with extension cxx
+  *.vt?   - match all files with extension vta,...,vtz
+  f[3-5].txt - match files f3.txt,f4.txt, f5.txt
+</code></pre>
+
+<h2 id="add_custom_target">add_custom_target</h2>
+
+<p>添加一个目标，它没有输出；这样它就总是会被构建。</p>
+
+<pre><code class="language-c++">  add_custom_target(Name [ALL] [command1 [args1...]]
+                    [COMMAND command2 [args2...] ...]
+                    [DEPENDS depend depend depend ... ]
+                    [WORKING_DIRECTORY dir]
+                    [COMMENT comment] [VERBATIM]
+                    [SOURCES src1 [src2...]])
+</code></pre>
+
+<p>　　用Name选项给定的名字添加一个目标，这个目标会引发给定的那些命令。这个目标没有输出文件，并且总是被认为是过时的，即使那些命令试图去创建一个与该目标同名的文件。</p>
+
+<p>使用ADD_CUSTOM_COMMAND命令可以生成一个带有依赖性的文件。默认情况下，没有目标会依赖于自定义目标。使用ADD_DEPENDENCIES命令可以添加依赖于该目标或者被该目标依赖的目标。如果指定了ALL选项，这表明这个目标应该被添加到默认的构建目标中，这样它每次都会被构建（命令的名字不能是ALL）。命令和选项是可选的；如果它们没有被指定，将会产生一个空目标。如果设定了WORKING_DIRECTORY参数，该命令会在它指定的路径下执行。如果指定了COMMENT选项，后跟的参数将会在构件的时候，在命令执行之前，被显示出来。DEPENDS选项后面列出来的依赖目标可以引用add_custom_command命令在相同路径下（CMakeLists.txt）生成的输出和文件。</p>
+
+<h1 id="c知识点">C++知识点</h1>
+
+<h2 id="import包">import包</h2>
+
+<p>1，系统自带的头文件用尖括号括起来，这样编译器会在系统文件目录下查找。</p>
+
+<p>#include <xxx.h> 
+2， 用户自定义的文件用双引号括起来，编译器首先会在用户目录下查找，然后在到C++安装目录（比如VC中可以指定和修改库文件查找路径，Unix和Linux中可以通过环境变量来设定）中查找，最后在系统文件中查找。 
+#include “xxx.h”</xxx.h></p>
+
+<h2 id="传参数">传参数</h2>
+
+<ol>
+  <li>
+    <p>int, bool, float, double,</p>
+
+    <pre><code class="language-c++">value
+</code></pre>
+  </li>
+  <li>
+    <p>string, all others,</p>
+
+    <pre><code class="language-c++">const &amp;var_name;
+</code></pre>
+  </li>
+  <li>
+    <p>xiu gai</p>
+
+    <pre><code>*varname
+</code></pre>
+  </li>
+</ol>
+
+<h2 id="namespace">namespace</h2>
+
+<p>c++ 4层作用域，文件，函数，类，复合语句。</p>
+
+<p>如果不同文件定义了<strong>相同名字的类</strong>， 主函数include了2个文件后，调用类名会出错。引入namespace后，可以根据namespace: className:methodName 来调用。</p>
+
+<p>peopleA.h:</p>
+
+<pre><code class="language-c++">namespace peopleA
+  class Student {
+    public:
+    ...
+  }
+</code></pre>
+
+<p>peopleB.h:</p>
+
+<pre><code class="language-c++">namespace peopleB
+  class Student {
+    public:
+    ...
+  }
+</code></pre>
+
+<p>Main.cpp</p>
+
+<pre><code class="language-c++">#include "peopleA.h"
+#include "peopleB.h"
+int main(){
+  peopleA:Student stud1();
+  peopleB:Studnet stud2();
+  return 0;
+}
+</code></pre>
+
+<h2 id="stdmove">STD::move</h2>
+
+<pre><code class="language-c++">string str1("hello");
+string &amp;&amp;str2 = move(str1);
+string &amp;&amp;str3 = move(str1);
+cout &lt;&lt; "str1: " &lt;&lt; str1 &lt;&lt; endl; // hello
+cout &lt;&lt; "str2: " &lt;&lt; str2 &lt;&lt; endl; // hello
+cout &lt;&lt; "str3: " &lt;&lt; str3 &lt;&lt; endl; // hello
+
+string str4(move(str1));
+cout &lt;&lt; "str1: " &lt;&lt; str1 &lt;&lt; endl; // 
+cout &lt;&lt; "str4: " &lt;&lt; str4 &lt;&lt; endl; // hello
+</code></pre>
+
+<h2 id="explicit">explicit</h2>
+
+<p>explicit只能用于类内部的构造函数声明，加了后不允许隐式转换类型。这样可以在编译阶段给出错误，避免一些不必要的错误。</p>
+
+<p>类型转换可以是隐式转换类型也可以是显示类型转换，</p>
+
+<p>显式转换类型:</p>
+
+<pre><code class="language-c++">A a{1};
+# a 从类型A到类型B
+B b = static_cast&lt;B&gt;(a);
+</code></pre>
+
+<h2 id="enum">enum</h2>
+
+<p>枚举类型，一个类定义为枚举类型，那么他的值只能是当中取一个。</p>
+
+<pre><code class="language-c++">enum class TransactionState 
+{ GROWING, SHRINKING, COMMITTED, ABORTED };
+</code></pre>
+
+<h2 id="inline">inline</h2>
+
+<p>在系统下，栈空间（放置程序的局部数据， 也就是函数内数据， 的内存空间）是有限的，假如频繁大量的使用就会造成因栈空间不足而导致程序出错的问题，如，函数的死循环递归调用的最终结果就是导致栈内存空间枯竭。</p>
+
+<p>为了解决一些频繁调用的<strong>小函数</strong>大量消耗<strong>栈空间（</strong>栈内存）的问题，特别的引入了 <strong>inline</strong> 修饰符，表示为内联函数。</p>
+
+<p>在内部的工作就是在每个 <strong>for</strong> 循环的内部任何调用 <em><strong>callee(i)*</strong> 的地方都换成了 **</em>(i%2&gt;0)?1:2，这样就避免了频繁调用函数对栈内存重复开辟所带来的消耗。</p>
+
+<p>inline  只适合函数体内代码简单的函数使用，不能包含复杂的结构控制语句例如 while、switch，并且不能内联函数本身不能是直接递归函数。</p>
+
+<p><strong>inline 函数仅仅是一个对编译器的建议</strong>，所以最后能否真正内联，看编译器的意思，它如果认为函数不复杂，能在调用点展开，就会真正内联，并不是说声明了内联就会内联，声明内联只是一个建议而已。</p>
+
+<p><strong>建议 inline 函数的定义放在头文件中</strong></p>
+
+<p>内联是以<strong>代码膨胀（复制）</strong>为代价，仅仅省去了函数调用的开销，从而提高函数的执行效率。</p>
+
+<h2 id="atomic">atomic</h2>
+
+<p>可以实现不显示加锁，多线程互斥访问同一个变量的目的。</p>
+
+<h2 id="lambda表达式">Lambda表达式</h2>
+
+<p>格式</p>
+
+<pre><code class="language-c++">[capture list] (params list) mutable exception-&gt; return type { function body }
+capture list：捕获外部变量列表
+params list：形参列表
+mutable指示符：用来说用是否可以修改捕获的变量
+exception：异常设定
+return type：返回类型
+function body：函数体
+</code></pre>
+
+<p>examples:</p>
+
+<pre><code class="language-c++">[](int a, int b) -&gt; bool { return a &lt; b; }
+</code></pre>
+
+<pre><code class="language-c++">int a = 123;
+auto f = [a] { cout &lt;&lt; a &lt;&lt; endl; }; 
+f(); // 输出：123
+</code></pre>
+
+<pre><code class="language-c++">int a = 123;
+auto f = [=] { cout &lt;&lt; a &lt;&lt; endl; };    // 值捕获
+f(); // 输出：123
+</code></pre>
+
+<pre><code class="language-c++">int a = 123;
+auto f = [&amp;] { cout &lt;&lt; a &lt;&lt; endl; };    // 引用捕获
+a = 321;
+f(); // 输出：321
+</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">捕获形式</th>
+      <th style="text-align: center">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">[]</td>
+      <td style="text-align: center">不捕获任何外部变量</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[a,b,c..]</td>
+      <td style="text-align: center">默认以值得形式捕获指定的多个外部变量（用逗号分隔），如果引用捕获，需要显示声明（使用&amp;说明符）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[this]</td>
+      <td style="text-align: center">以值的形式捕获this指针</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[=]</td>
+      <td style="text-align: center">以值的形式捕获所有外部变量</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[&amp;]</td>
+      <td style="text-align: center">以引用形式捕获所有外部变量</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[=, &amp;x]</td>
+      <td style="text-align: center">变量x以引用形式捕获，其余变量以传值形式捕获</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">[&amp;, x]</td>
+      <td style="text-align: center">变量x以值的形式捕获，其余变量以引用形式捕获</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="mutex锁">Mutex锁</h2>
+
+<p>https://blog.csdn.net/faihung/article/details/88411839</p>
+
+<p>https://blog.csdn.net/ktigerhero3/article/details/78249266</p>
+
+<h2 id="unordered_map-和map用法">unordered_map 和map用法</h2>
+
+<p>https://blog.csdn.net/jingyi130705008/article/details/82633778</p>
+
+<p>Map:</p>
+
+<ol>
+  <li>红黑树，数据有序，查询，插入，删除 O(logn)</li>
+  <li>自定义的key需要实现operator &lt;</li>
+</ol>
+
+<pre><code class="language-c++">#include&lt;iostream&gt;
+#include&lt;map&gt;
+#include&lt;string&gt;
+using namespace std;
+int main()
+{
+	// 构造函数
+	map&lt;string, int&gt; dict;
+	
+	// 插入数据的三种方式
+	dict.insert(pair&lt;string,int&gt;("apple",2));
+	dict.insert(map&lt;string, int&gt;::value_type("orange",3));
+	dict["banana"] = 6;
+ 
+	// 判断是否有元素
+	if(dict.empty())
+		cout&lt;&lt;"该字典无元素"&lt;&lt;endl;
+	else
+		cout&lt;&lt;"该字典共有"&lt;&lt;dict.size()&lt;&lt;"个元素"&lt;&lt;endl;
+ 
+	// 遍历
+	map&lt;string, int&gt;::iterator iter;
+	for(iter=dict.begin();iter!=dict.end();iter++)
+		cout&lt;&lt;iter-&gt;first&lt;&lt;ends&lt;&lt;iter-&gt;second&lt;&lt;endl;
+ 
+	// 查找
+	if((iter=dict.find("banana"))!=dict.end()) //  返回一个迭代器指向键值为key的元素，如果没找到就返回end()
+		cout&lt;&lt;"已找到banana,其value为"&lt;&lt;iter-&gt;second&lt;&lt;"."&lt;&lt;endl;
+	else
+		cout&lt;&lt;"未找到banana."&lt;&lt;endl;
+ 
+	if(dict.count("watermelon")==0) // 返回键值等于key的元素的个数
+		cout&lt;&lt;"watermelon不存在"&lt;&lt;endl;
+	else
+		cout&lt;&lt;"watermelon存在"&lt;&lt;endl;
+	
+	pair&lt;map&lt;string, int&gt;::iterator, map&lt;string, int&gt;::iterator&gt; ret;
+	ret = dict.equal_range("banana"); // 查找键值等于 key 的元素区间为[start,end)，指示范围的两个迭代器以 pair 返回
+	cout&lt;&lt;ret.first-&gt;first&lt;&lt;ends&lt;&lt;ret.first-&gt;second&lt;&lt;endl;
+	cout&lt;&lt;ret.second-&gt;first&lt;&lt;ends&lt;&lt;ret.second-&gt;second&lt;&lt;endl;
+ 
+	iter = dict.lower_bound("boluo"); // 返回一个迭代器，指向键值&gt;=key的第一个元素。
+	cout&lt;&lt;iter-&gt;first&lt;&lt;endl;
+	iter = dict.upper_bound("boluo"); // 返回一个迭代器，指向值键值&gt;key的第一个元素。
+	cout&lt;&lt;iter-&gt;first&lt;&lt;endl;
+	return 0;
+}
+// 自定义key
+struct person  
+{  
+    string name;  
+    int age;  
+  
+    person(string name, int age)  
+    {  
+        this-&gt;name =  name;  
+        this-&gt;age = age;  
+    }  
+  
+    bool operator &lt; (const person&amp; p) const  
+    {  
+        return this-&gt;age &lt; p.age;   
+    }  
+};  
+  
+map&lt;person,int&gt; m;
+</code></pre>
+
+<p>Unordered_map:</p>
+
+<ol>
+  <li>哈希表（开链法), 时间复杂度为O(1)</li>
+  <li>key需要定义hash_value函数并且重载operator ==</li>
+</ol>
+
+<pre><code class="language-c++">#include&lt;string&gt;  
+#include&lt;iostream&gt;  
+#include&lt;unordered_map&gt;
+using namespace std;  
+  
+int main()
+{
+	unordered_map&lt;string, int&gt;  dict; // 声明unordered_map对象
+	
+	// 插入数据的三种方式
+	dict.insert(pair&lt;string,int&gt;("apple",2));
+	dict.insert(unordered_map&lt;string, int&gt;::value_type("orange",3));
+	dict["banana"] = 6;
+	
+	// 判断是否有元素
+	if(dict.empty())
+		cout&lt;&lt;"该字典无元素"&lt;&lt;endl;
+	else
+		cout&lt;&lt;"该字典共有"&lt;&lt;dict.size()&lt;&lt;"个元素"&lt;&lt;endl;
+	
+	// 遍历
+	unordered_map&lt;string, int&gt;::iterator iter;
+	for(iter=dict.begin();iter!=dict.end();iter++)
+		cout&lt;&lt;iter-&gt;first&lt;&lt;ends&lt;&lt;iter-&gt;second&lt;&lt;endl;
+	
+	// 查找
+	if(dict.count("boluo")==0)
+		cout&lt;&lt;"can't find boluo!"&lt;&lt;endl;
+	else
+		cout&lt;&lt;"find boluo!"&lt;&lt;endl;
+	
+	if((iter=dict.find("banana"))!=dict.end())
+		cout&lt;&lt;"banana="&lt;&lt;iter-&gt;second&lt;&lt;endl;
+	else
+		cout&lt;&lt;"can't find boluo!"&lt;&lt;endl;
+	
+	return 0;
+}
+</code></pre>
+
+<h2 id="condition_variable">condition_variable</h2>
+
+<pre><code class="language-c++">cv.wait(lock, [] { return ready; }); 相当于：while (!ready) { cv.wait(lock); }
+</code></pre>
+
+<pre><code class="language-c++">#include &lt;iostream&gt;                // std::cout
+#include &lt;thread&gt;                // std::thread, std::this_thread::yield
+#include &lt;mutex&gt;                // std::mutex, std::unique_lock
+#include &lt;condition_variable&gt;    // std::condition_variable
+
+std::mutex mtx;
+std::condition_variable cv;
+
+int cargo = 0;
+bool shipment_available()
+{
+    return cargo != 0;
+}
+// 消费者线程.
+void consume(int n)
+{
+    for (int i = 0; i &lt; n; ++i) {
+        std::unique_lock &lt;std::mutex&gt; lck(mtx);
+        cv.wait(lck, shipment_available);
+        std::cout &lt;&lt; cargo &lt;&lt; '\n';
+        cargo = 0;
+    }
+}
+
+int main()
+{
+    std::thread consumer_thread(consume, 10); // 消费者线程.
+    // 主线程为生产者线程, 生产 10 个物品.
+    for (int i = 0; i &lt; 10; ++i) {
+        while (shipment_available())
+            std::this_thread::yield();
+        std::unique_lock &lt;std::mutex&gt; lck(mtx);
+        cargo = i + 1;
+        cv.notify_one();
+    }
+    consumer_thread.join();
+    return 0;
+}
+</code></pre>
+
+:ET

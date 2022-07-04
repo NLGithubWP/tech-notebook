@@ -1,0 +1,207 @@
+I"�*<h1 id="introduction">Introduction</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220615194554905.png" alt="image-20220615194554905" /></p>
+
+<p>An application can be expressed as a workflow, which is composed of many functions. AWS Step Functions. IBM Action Sequences and OpenWhisk Composers enable developers to create and execute such workflows.</p>
+
+<p>In contemporary FaaS platforms, even requests that belong to the same existing function, are executed on a <strong>separate container</strong>. As a result, functions can only <strong>communicate through network / shared storage.</strong></p>
+
+<p>However,</p>
+
+<ol>
+  <li>The size of the <strong>direct</strong> communicable state across functions has a limitation ( 32kb in ASF )</li>
+  <li><strong>Large</strong> <strong>data</strong> must go through <strong>slow storage</strong> like S3,</li>
+</ol>
+
+<p>Those 2 limitations bring the following problems:</p>
+
+<ol>
+  <li>incur high interaction latency ( account for up to 95% of the execution time of a workflow instance on ASF and OpenWhisk)</li>
+  <li>incur high cost, the user has to pay for execution time, state transfer time, and storage cost.</li>
+</ol>
+
+<p>The paper tries to minimize the function interaction latency by executing functions of <strong>a workflow</strong> as <strong>threads</strong> within a <strong>single</strong> process of <strong>a container</strong> instance. For Python and NodeJs ( Thread Not allowed ), the paper uses a forked process.</p>
+
+<p>In this way, functions could communicate through a <strong>shared virtual address space</strong> of the process. Cache-coherence ensures strong consistency.</p>
+
+<p>However, threaded execution has two challenges:</p>
+
+<ol>
+  <li>
+    <p>Isolated execution for sensitive data:</p>
+
+    <p>Some data cannot be accessible for <strong>untrusted analytics functions from a library.</strong></p>
+
+    <p>But threads under a process share the same address space. The paper used lightweight thread-level isolation of sensitive data with Inter Memory Protection Keys (MPK ).  MPK allows a group of <strong>virtual memory pages</strong> (i.e., parts of process address space) to be assigned a specific protection key. Threads can have different protection keys and, thus, different access rights to the same region of the process’s address space.</p>
+
+    <p>With MPK, functions in a workflow instance, executing on <strong>separate threads</strong>, have <strong>different access rights to different parts of the address</strong> space. Simultaneously, it enables <strong>efficient sharing of non-sensitive data by placing it in pages shared across the functions.</strong></p>
+
+    <ul>
+      <li>MPK partitioned the virtual address space into 16 sets of pages.</li>
+      <li>MPK uses a 32-bite register ( PKRU ) to specify access rights ( read/write ) for each page.</li>
+      <li>Each key is mapped into 2 bits in the register.</li>
+      <li>Each process can visit the page with a key, and can have read/write access right.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Concurrent function executions</p>
+
+    <p>Many functions in an instance execute in parallel.</p>
+
+    <p>But threaded execution is not suitable for concurrent executing when using Python or NodeJs.</p>
+
+    <p>The paper uses an adaptive workflow composer,</p>
+
+    <ul>
+      <li>runs the parallel job in the process ( communicates with Python pipes which use shared memory communication )</li>
+      <li>run sequence job in threads in a container</li>
+      <li>If hundreds and thousands of parallel functions come, the system will use the traditional method of running multiple containers.</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="contributions">Contributions</h2>
+
+<ol>
+  <li>Reduce function interaction latency over OpenWhisk by 2307 X with threads.</li>
+  <li>Provides thread-level isolation using Intel MPK</li>
+  <li>It leverages parallelism by adapting to execute functions as processes.</li>
+</ol>
+
+<h1 id="faas-use-cases">FaaS use cases</h1>
+
+<h2 id="cases">Cases</h2>
+
+<p>The paper propose 3 use cases in FaaS, and each of them has one property.</p>
+
+<ol>
+  <li>FaaS can be used in validating trades against market data for about 200 pre-determined rules. It requires high parallelism.</li>
+  <li>ML serving system has pre-processing =&gt; prediction, which is sequence pattern.</li>
+  <li>Healthcare analytics cases show functions are conditionally executed based on the input and output of the previous function.</li>
+</ol>
+
+<h2 id="threat-model">Threat Model</h2>
+
+<p>Even functions belonging to the same application should not access each other’s state.</p>
+
+<p>But most applications use third-party repositories along with trusted functions and services that can access sensitive data.</p>
+
+<p>The paper uses MPK to protect the data, <strong>but cannot protect the code logic</strong></p>
+
+<h1 id="design--implementation">Design &amp; Implementation</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220615172105135.png" alt="image-20220615172105135" /></p>
+
+<h2 id="design">Design</h2>
+
+<ol>
+  <li>
+    <p>minimize interaction latency without sacrificing concurrency in parallel.</p>
+
+    <ul>
+      <li>
+        <p>Strive to run functions as threads/processes in a single container.</p>
+      </li>
+      <li>
+        <p>The composer periodically (e.g., once a day) <strong>profiles</strong> containers on the FaaS platform to <strong>ascertain</strong> the available parallelism.</p>
+
+        <p>It deploys a simple compute-bound micro-benchmark on the FaaS platform and <strong>observes its scalability</strong> to <strong>infer the number vCPUs</strong> in the container deployed by the platform.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Data sharing and function isolation</p>
+
+    <p>Faastlane uses Intel MPK to provide thread-granularity memory isolation for FaaS functions that share a virtual address space</p>
+  </li>
+  <li>
+    <p>Easy to use, and no new API.</p>
+
+    <p>The paper designs a static client-side tool, the <strong>workflow composer</strong></p>
+  </li>
+</ol>
+
+<h2 id="implementation">Implementation</h2>
+
+<h3 id="isolation">Isolation</h3>
+
+<ol>
+  <li>When a process starts, all pages in its address space are assigned  ( by system call ) a default protection key, and the PKRU value allows both read and write access ( by WRPKRU instruction which allows the process to modify the value of register from user-space ) to all pages.  And the protection key is written into the page-table entry.</li>
+  <li>WRPKRU can be called from user-space, so it must be run in trusted code ( <strong>thread-gate</strong> )</li>
+  <li>A thread gate is a sequence of instructions that contains MPK-specific instructions to modify the PKRU register or to <strong>assign protection keys to pages</strong>. The system has two gates.
+    <ul>
+      <li>Entry gate: Attaches a protection key to a thread, Informs the key into the memory manager such that the memory manager can ensure all subsequent memory requests are satisfied from the right pages and update the register information to ensure this thread has r.w rights.</li>
+      <li>Exit gate: Free the key for further use, zeros-out the memory region,</li>
+    </ul>
+  </li>
+  <li>the parent thread maintains a <strong>shared heap</strong> is accessible to all threads and serves as the <strong>shared memory region</strong> to which all threads enjoy unfettered read/write access.</li>
+</ol>
+
+<h3 id="thread-memory-manager">Thread memory manager</h3>
+
+<p>It modifies python’s memory manager to ensure <strong>memory requests from one thread are always mapped to the thread’s private arenas</strong></p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>With 4 applications, the paper</p>
+
+<ol>
+  <li>Measures the improvement of <strong>function interaction latency, end-to-end latency, throughput,  and dollar cost.</strong> in one server.</li>
+  <li>Measure scalability on many servers, and containers.</li>
+</ol>
+
+<p>Compare with ASF ( run on AWS cloud ), Open-Whisk, and SAND. ( run on local hardware platform ).</p>
+
+<h2 id="function-interaction-latency">Function Interaction Latency</h2>
+
+<p>Run each application at least 100 times and report the median.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220615172714057.png" alt="image-20220615172714057" /></p>
+
+<p>SAND’s hierarchical messaging queues serialize communication from concurrently executing functions.</p>
+
+<p>For ML prediction, since the data is large, ASF and OW transfer them with slow storage.</p>
+
+<h2 id="end2end-latency">End2End latency</h2>
+
+<p>The end-to-end execution latency of an application’s workflow is the time that elapses between the start of the first function of the workflow and the completion of the final function in the workflow. <strong>It doesn’t include the initialization time.</strong></p>
+
+<p>Execute each application at least 100 times and report both the median and tail (99%-tail) values</p>
+
+<p>End2End latency = <strong>external service request + compute time + interaction latency</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220615173601184.png" alt="image-20220615173601184" /></p>
+
+<h2 id="throughput">Throughput</h2>
+
+<p><strong>Measure the number of application requests serviced per minute on different FaaS platforms</strong></p>
+
+<p><strong>Throughput measurement also accounts for initialization ( spawning containers ) and post-processing time</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220615174357587.png" alt="image-20220615174357587" /></p>
+
+<h2 id="cost-of-isolation">Cost of Isolation.</h2>
+
+<p>The experiments show that the cost of MPK-based isolation is reasonable. ( with 1.9-14.9% in the end-to-end latency in Faastlane)</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220615174801155.png" alt="image-20220615174801155" /></p>
+
+<h2 id="money-cost">Money Cost</h2>
+
+<p>The system has zero cost of transitioning data. It has only lambda cost.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220615175104822.png" alt="image-20220615175104822" /></p>
+
+<h2 id="scalability">Scalability</h2>
+
+<p>Scaled up the number of functions in the parallel. varied the number of vCPUs in each container from 4 to 50.</p>
+
+<p>OW BaseLine: run each function in a separate container.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220615194521026.png" alt="image-20220615194521026" /></p>
+
+<p>Increasing vCPU / container, Faastlane launches fewer containers =&gt; at high speedup.</p>
+
+:ET

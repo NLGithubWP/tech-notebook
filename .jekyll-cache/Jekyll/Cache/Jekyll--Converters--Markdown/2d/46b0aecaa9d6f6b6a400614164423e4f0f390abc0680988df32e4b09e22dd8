@@ -1,0 +1,192 @@
+I"(<h1 id="introduction">Introduction</h1>
+
+<p>Dynamic priority is required in network scheduling algorithms</p>
+
+<h2 id="current-problems">Current Problems:</h2>
+
+<ol>
+  <li>Switches schedule package is mostly based on coarse-grained queue-level priorities, which is  <strong>not sufficient</strong> to support a broad class of scheduling algorithms that require the <strong>priorities of packets to change as a function of the time</strong> it has spent inside the network.</li>
+  <li><strong>Switch-level support</strong> for <strong>multiple fine-grained priority levels</strong> can help realizaiton of the scheduling algorithms. But still has challenges.
+    <ol>
+      <li>implementing strict and fine-grained priority levels is expensive</li>
+      <li>Switch-level support for priorities does not allow for dynamic changes to the priority of a packet during its stint inside the switch buffer</li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="solutions">Solutions:</h2>
+
+<p>Introduce calendar queue abstraction, which is fit for scheduling algorithms which not only require prioritisation but also perform dynamic escalation of packet priorities.</p>
+
+<h1 id="background">Background</h1>
+
+<h2 id="reconfigurable-switches">Reconfigurable switches</h2>
+
+<p>Assume that the <strong>programmable</strong> <strong>scheduling</strong> is used in conjunction with a reconfigurable switch. eg Reconfigurable Match Table (RMT) model:</p>
+
+<ol>
+  <li>Package arrives at the switch</li>
+  <li>Header fileds are extracted via <strong>user-defined programmable</strong> parser</li>
+  <li>Header fileds are passed into pipeline of user-defined <strong>programmable</strong> M+A stages.</li>
+  <li>Each stage match on a subset of extracted headers and perform simple process on header</li>
+</ol>
+
+<p>Switch also provide several hardware features:</p>
+
+<p>​	Stateful memory, computation primitives, the ability to recirculate or generate special datapath packets using <em>timers</em></p>
+
+<p>Switch metadata:</p>
+
+<p>​	queue lengths, congestion status, and bytes transmitted, can also be used in packet processing</p>
+
+<h2 id="traffic-manager">Traffic Manager</h2>
+
+<p>Responsible for two tasks</p>
+
+<ol>
+  <li>
+    <p>Buffering packets when <strong>many input ports</strong> is trying to <strong>send packets to the same output port</strong> simultaneously</p>
+
+    <p>Each output port has <strong>a fixed number FIFO buffer</strong>.</p>
+
+    <p>Once a packet is transmitted from <strong>ingress buffer</strong> to <strong>FIFO queue</strong>, it cannot be dropped.</p>
+  </li>
+  <li>
+    <p>Schedule packets at each output port and so other server can receive it.</p>
+
+    <p>Since each output port has multiple FIFO buffer, TM uses a combination of factors to determine which queue to dequeue from.</p>
+
+    <ol>
+      <li>Each queue has a priority</li>
+      <li>Within a priority level, queues are scheduled in weighted round-round robin order.</li>
+      <li>Each queue can be limited to a maximum rate, and can be moved or paused.</li>
+    </ol>
+  </li>
+</ol>
+
+<p>TM maintains each queue’s status such that TM can use them to perform buffering and scheduling</p>
+
+<h2 id="programmable-scheduling-prior-work">Programmable Scheduling (prior work)</h2>
+
+<p>Recent proposals for programmable scheduling propose additional switch hardware in the TM <strong>to make the scheduling decision programmable</strong>.</p>
+
+<p>PIFOs enable programmable scheduling by using a programmable <strong>priority queue</strong> to express custom scheduling algorithms. And the rank determines the packet’s order in the priority queue.</p>
+
+<h1 id="packet-scheduling-using-programmable-calendar-queues">Packet Scheduling using Programmable Calendar Queues</h1>
+
+<h2 id="drawbacks-of-existing-priority-queue-schemes">Drawbacks of existing priority queue schemes:</h2>
+
+<p>Many scheduling algorithms cannot be realized using fine-grained priority queuing schemes if the computed rank needs to fall within a finite range. eg fair queue, or earliest deadline first (EDF)</p>
+
+<h2 id="programmable-calendar-queues-pcqs">Programmable Calendar Queues (PCQs)</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211026221338708.png" alt="image-20211026221338708" /></p>
+
+<p>Calendar Queue abstraction has a fixed number of buckets or FIFO queues, each of which stores packets scheduled for next N periods.</p>
+
+<p>scheduling algorithms using CQ will do the following:</p>
+
+<ol>
+  <li>choose a future period from [0, N-1] to enqueue the packet into.</li>
+  <li>periodically decide when a period is over and move onto the next period.</li>
+  <li>when the CQ advances to the next period, the pipeline state has to be suitably modified to ensure the <strong>appropriate computation of ranks for incoming packets</strong>.</li>
+</ol>
+
+<p>Interface methods</p>
+
+<ol>
+  <li>CQ.enqueue(n): Used by the ingress pipeline to schedule the current packet <em>n</em> periods into the future.</li>
+  <li>CQ.dequeue(): Used by the egress pipeline to obtain a buffered packet, if any, for the current period.</li>
+  <li>CQ.rotate(): Used by the pipelines to advance the CQ so that it can start transmitting packets for the next period.</li>
+</ol>
+
+<h2 id="programmable-scheduling-using-pcqs">Programmable Scheduling using PCQs</h2>
+
+<p>various scheduling algorithms can be realized using Calendar Queues in conjunction with a pro- grammable packet processing pipeline</p>
+
+<h3 id="weighted-fair-queueing">Weighted Fair Queueing</h3>
+
+<h3 id="earliest-deadline-first">Earliest Deadline First</h3>
+
+<h3 id="leaky-bucket-filter">Leaky Bucket Filter</h3>
+
+<h2 id="implementing-pcqs-in-hardware">Implementing PCQs in Hardware</h2>
+
+<p>Calendar Queues can be implemented on programmable switches using mutable switch state, multiple FIFO queues, the ability to create and recirculate packets selectively, and the ability to pause/resume queues or alter queue priorities directly in the data plane.</p>
+
+<h3 id="implementation-overview">Implementation overview:</h3>
+
+<p>Each <em>period</em> in the CQ is mapped to a single FIFO queue within a set of queues associated with the outgoing port</p>
+
+<p>The ingress pipeline computes which <em>pe- riod</em> or queue each incoming packet is enqueued into</p>
+
+<p>The queue corresponding to the <strong>current period has the highest priority level</strong>, this queue as the head queue</p>
+
+<p>The queue corresponding to the next period has a lower priority level and is <strong>active/unpaused</strong>.</p>
+
+<h3 id="implementation-details">Implementation details:</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211026225624032.png" alt="image-20211026225624032" /></p>
+
+<ol>
+  <li>Initiate Rotation</li>
+</ol>
+
+<p><strong>When:</strong> initiate rotation when the head queue is empty.</p>
+
+<p><strong>How:</strong> check the queue id from which the packet was dequeued to infer whether the head queue is empty</p>
+
+<ol>
+  <li>
+    <p>Drain queue</p>
+
+    <p><strong>when</strong>:  When a rotation begins, we recirculate a special rotate packet to the ingress pipeline so that it stops enqueuing packets in the head queue and begins draining it. and it also ensures that the head queue is completely drained, and no more packets are enqueued into it till the rotation finishes.</p>
+
+    <p><strong>How</strong>:  the ingress enqueues a special <strong>marker</strong> packet into the head queue <strong>after updating</strong> the head of the calendar queue</p>
+  </li>
+  <li>
+    <p>Finish Rotation</p>
+
+    <p><strong>when</strong>: <strong>marker</strong> packet is the last packet to be enqueued into the head queue, and its arrival at the egress pipeline means the queue is completely drained.</p>
+
+    <p><strong>How</strong> :</p>
+
+    <ol>
+      <li>The marker packet is recirculated back to the ingress pipeline, and this informs the ingress pipeline that it is safe to reuse the queue for future periods</li>
+      <li>The ingress changes the priority of the just emptied queue to lowest and also pauses it, essentially pushing the queue to the end of the CQ.</li>
+    </ol>
+  </li>
+</ol>
+
+<h3 id="analysis">Analysis</h3>
+
+<p>First, CQs maintain state at the granularity of physical switch queues instead of individual packets or flows.</p>
+
+<p>At any given point in time, there is a designated head queue that is responsible for providing the packets that are to be transmitted.</p>
+
+<p>the rotation operation involves changing just the metadata of queue and that too of at most three queues. This combination of factors allows us to bolt-on the PCQ abstraction on to a traditional TM.</p>
+
+<h2 id="extensions">Extensions</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027141118965.png" alt="image-20211027141118965" /></p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>evaluate the practical feasibility, expressiveness, and per- formance of Calendar Queues by implementing them on a <strong>programmable Barefoot Tofino switch</strong> and realizing two clas- sical scheduling algorithms using CQs.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027141908456.png" alt="image-20211027141908456" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027141923029.png" alt="image-20211027141923029" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027142006637.png" alt="image-20211027142006637" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027142027559.png" alt="image-20211027142027559" /></p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Programmable Calendar Queues enables the efficient realization of several classical scheduling algorithms</p>
+
+<p>It is implemented efficiently on today’s programmable switches by dynamically changing the priority of queues.</p>
+
+<p>PCQs can be used to realize interesting variants of LSTF, Fair Queueing, and pFabric to provide stronger delay guarantees, burst-friendly fairness, and starvation-free prioritization of short flows, respectively</p>
+:ET

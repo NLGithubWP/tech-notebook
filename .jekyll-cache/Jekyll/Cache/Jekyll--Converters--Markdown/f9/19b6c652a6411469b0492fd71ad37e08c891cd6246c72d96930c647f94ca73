@@ -1,0 +1,35 @@
+I",<h1 id="cap-theorem">CAP theorem</h1>
+
+<p>The CAP theorem says that you can only have two of the three desirable properties of:</p>
+
+<p>​		C: Consistency, which we can think of as serializability for this discussion;</p>
+
+<p>​		A: <strong>100% availability</strong>, for both reads and updates;</p>
+
+<p>​		P: tolerance to network partitions.</p>
+
+<p>This leads to three kinds of systems: CA, CP, and AP, based on what letter you leave out. Note that you are not entitled to 2 of 3, and many systems have zero or one of the properties</p>
+
+<h1 id="linearizability">Linearizability</h1>
+
+<p>Focus on <strong>single-operation, single-object,</strong> real-time order</p>
+
+<p>Linearizability is a guarantee about single operations on single objects. It provides a <strong>real-time (i.e., wall-clock) guarantee</strong> on the behavior of <strong>a set of single operations</strong> (often reads and writes) on a single object (e.g., distributed register or data item).</p>
+
+<h1 id="serializability">Serializability</h1>
+
+<p>Focus on <strong>multi-operation, multi-object, arbitrary total order</strong></p>
+
+<p><em>Serializability is a guarantee about transactions, or groups of one or more operations over one or more objects.</em> It guarantees that the <strong>execution of a set of transactions (usually containing read and write operations) over multiple items is equivalent to some serial execution (total ordering) of the transactions.</strong></p>
+
+<p>Unlike linearizability, serializability does not—by itself—impose any real-time constraints on the ordering of transactions. Serializability is also not compostable. Serializability does not imply any kind of deterministic order—it simply requires that <strong><em>some</em> equivalent serial execution exists</strong></p>
+
+<h1 id="strict-serializability---external-consistency">strict serializability ( = external consistency?)</h1>
+
+<p>Combining serializability and linearizability yields <em>strict serializability</em>: <strong>transaction behavior is equivalent to some serial execution, and the serial order corresponds to real-time</strong>.</p>
+
+<p>For example, say I begin and commit transaction T1, which writes to item <em>x</em>, and you later begin and commit transaction T2, which reads from <em>x</em>. <strong>A database providing strict serializability for these transactions will place T1 before T2 in the serial ordering, and T2 will read T1’s write.</strong> <strong>A database providing serializability (but not strict serializability) could order T2 before T1</strong></p>
+
+<p>As <a href="http://cs.brown.edu/~mph/HerlihyW90/p463-herlihy.pdf">Herlihy and Wing</a> note, “linearizability can be viewed as a special case of strict serializability where transactions are restricted to <strong>consist of a single operation</strong> applied to a single object.”</p>
+
+:ET

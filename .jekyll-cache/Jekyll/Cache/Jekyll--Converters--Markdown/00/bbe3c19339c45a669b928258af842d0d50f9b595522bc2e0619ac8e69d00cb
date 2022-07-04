@@ -1,0 +1,84 @@
+I"{<h1 id="introduction">Introduction</h1>
+
+<p>The paper makes the following contributions:</p>
+
+<ol>
+  <li>
+    <p>The paper introduces the NAS-Bench-101, which includes 423k unique architectures and their corresponding accuracy and runtime (Trained on cifar 10)</p>
+  </li>
+  <li>
+    <p>Conducts experiments on various optimization algorithms on NAS.</p>
+
+    <h1 id="nasbench-dataset">NASBench Dataset</h1>
+
+    <h2 id="architecture">Architecture</h2>
+
+    <p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220530143537272.png" alt="image-20220530143537272" /></p>
+
+    <h2 id="cell-encoding">Cell Encoding</h2>
+
+    <p>Each cell is encoded by an <strong>adjacency matrix</strong> and a <strong>label vector</strong> with length 3, each element in the label vector is one operation. So there are a total of 510M unique cells =&gt; 510M unique models.</p>
+
+    <p>Each cell in a model is the same.</p>
+
+    <p>After removing the invalid module (no path from input or edges exceeds 9 ), there are 423K models left.</p>
+
+    <h2 id="combine-semantics">Combine semantics</h2>
+
+    <p>When <strong>multiple edges</strong> point to the <strong>same vertex,</strong> <strong>the incoming tensors must be combined. Adding them or concatenating them are both standard techniques</strong> (NASI uses the weighted combination. )</p>
+
+    <p>The paper uses the rule: tensors going to the output vertex are concatenated and those going into other vertices are summed.</p>
+
+    <h2 id="training">Training</h2>
+
+    <p>Datasets: CIFAR10, 40k training examples, 10k validation examples, 10k testing examples.</p>
+
+    <p>Hyperparameters:</p>
+
+    <ol>
+      <li>utilize a single, fixed set of hyperparameters for all NAS-Bench-101 models. (50 in this paper. )</li>
+      <li>Find <strong>hyperparameters</strong> optimizing the average accuracy of those models.</li>
+    </ol>
+
+    <p>Optimization: RMSProp</p>
+
+    <p>Loss: cross-entry loss with L2 decay.</p>
+
+    <h2 id="matrix">Matrix</h2>
+
+    <p>The paper evaluates each architecture after training <strong>three times with different random initializations.</strong></p>
+
+    <ol>
+      <li>Training accuracy;</li>
+      <li>Validation accuracy;</li>
+      <li>Testing accuracy;</li>
+      <li>Training time in seconds;</li>
+      <li>A number of trainable model parameters.</li>
+    </ol>
+
+    <h1 id="nasbench-as-a-benchmark">NASBench as a Benchmark</h1>
+
+    <h2 id="nas-algorithm-compare">NAS algorithm compare</h2>
+
+    <p>The paper firstly compares various NAS algorithms and HPO algorithms including</p>
+
+    <ol>
+      <li>RS, SMAC, BOHB.</li>
+      <li>regularized evaluation</li>
+      <li>RL based</li>
+    </ol>
+
+    <p>Each algorithm runs 500 independent trails, (evaluate + update algorithm), and measure the regret vs time spent on evaluating those 500 trails.</p>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220530172250301.png" alt="image-20220530172250301" /></p>
+
+<p>Foundings:</p>
+
+<ol>
+  <li>RE, BOHB, and SMAC perform best and start to outperform RS.</li>
+  <li>RE, BOHB, and SMAC show the most robust performance.</li>
+</ol>
+
+:ET

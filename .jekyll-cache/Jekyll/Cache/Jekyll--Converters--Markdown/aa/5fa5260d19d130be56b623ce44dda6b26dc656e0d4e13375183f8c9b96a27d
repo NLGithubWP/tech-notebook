@@ -1,0 +1,81 @@
+I"Ì<h1 id="introduction">Introduction</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>Data is often non-relational, and Nested. Normalizing and recombing those is hard. A better solution is to store all values of a given field consecutively to improve retrieval efficiency.</p>
+
+<p>The main challenge is how to <strong>preserve all structural information and can reconstruct records from an arbitrary subset of fields</strong>.</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>The paper proposes a scalable (trillion-record), interactive, ad-hoc query system for the analysis of <strong>read-only nested data.</strong></p>
+
+<ol>
+  <li>The paper proposes a novel columnar storage format for nested data. it basically dissects nested records into columns and reassembles them.</li>
+  <li>Query processing is efficient and does not require restructuring of the records.</li>
+  <li>Conducts experiments with trillion-record, multi-terabyte datasets. 1k-4k nodes. it shows The system can combine <strong>multi-level execution trees</strong> and <strong>columnar data layout</strong> to run aggregation over <strong>trillion-row tables in seconds.</strong></li>
+</ol>
+
+<h1 id="system">System</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220617184929277.png" alt="image-20220617184929277" /></p>
+
+<h2 id="data-model">Data Model</h2>
+
+<p>The data model is based on strongly-typed nested records.</p>
+
+<h2 id="nested-columnar-storage">Nested Columnar Storage</h2>
+
+<p>Mainly address the following challenges:</p>
+
+<ol>
+  <li>lossless representation of a record in columnar format =&gt; with r and d</li>
+  <li>fast encoding =&gt; tree writer, build a tree from schema.</li>
+  <li>efficient record assembly.</li>
+</ol>
+
+<h3 id="repetition-and-definition-levels">Repetition and Definition Levels</h3>
+
+<p>Use r and d to record the meta information of each value, eg, which record the value belongs to. etc</p>
+
+<p>Definition levels are not stored for values that are always defined. Similarly, repetition levels are stored only if required.</p>
+
+<h3 id="splitting-records-into-columns">Splitting Records into Columns</h3>
+
+<p>Most datasets are sparse and have thousands of fields, the paper tries to process missing fields as cheaply as possible.</p>
+
+<p>The paper uses a tree of field writers, whose structure matches the field hierarchy in the schema. It then updates field writers only when they have their own data.</p>
+
+<h3 id="record-assembly">Record Assembly</h3>
+
+<p>Efficiently reconstruct the original records from columnar data.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220617191202924.png" alt="image-20220617191206158" /></p>
+
+<h1 id="query-language--execution">Query Language &amp; Execution</h1>
+
+<p>Mainly for a read-only system. Many queries are one-pass aggregations.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220617195034705.png" alt="image-20220617195034705" /></p>
+
+<h1 id="experiments">Experiments</h1>
+
+<p>All query is about the sum, count, groupBy,</p>
+
+<p>And then measures</p>
+
+<ol>
+  <li>Executing time of the same query on row-based and column-based storage.</li>
+  <li>influences the number of servers in the server tree on execution time.</li>
+  <li>Scalability: Executing time vs increasing of leaf servers.</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220617200811223.png" alt="image-20220617200811223" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220617201018533.png" alt="image-20220617201018533" /></p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Record assembly and parsing are expensive</p>
+
+:ET

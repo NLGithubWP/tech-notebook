@@ -1,0 +1,160 @@
+I"�<h1 id="abstract--introduction">Abstract &amp;&amp; Introduction</h1>
+
+<h2 id="problem">Problem:</h2>
+
+<p>A cluster manager solves a challenging combinatorial optimization problem of finding configurations that satisfy hard constraints while minimizing violations of soft constraints.</p>
+
+<p>But it is not easy to design dute to :</p>
+
+<ol>
+  <li>Heuristics design are hard to scale to cluster with thousands of nodes as the design require purpose built and pre-computing to remain tractable.</li>
+  <li>Naive heuristics is not efficiently when facing many schedule decision constraints.</li>
+  <li>heuristics design leads to complex code and hard to extend.</li>
+</ol>
+
+<p>the paper try to solve those problems by introducing a new system .</p>
+
+<h2 id="contributations">Contributations</h2>
+
+<p>This paper propose a new method (<em>Declarative Cluster Managers</em> (DCM)) and developers only need to specify the constraint using high level declarative language like SQL to specify cluster management policies .</p>
+
+<ol>
+  <li>The DCM maintain cluster state in a relation database, and declaratively specify the constraints that the cluster manager should enforece using SQL.</li>
+  <li>With the specification, DCM generate a program which can pull the latest cluster state from database and encode the user’s requests into a optimization problem.</li>
+  <li>DCM solve it and make changes to the cluster.</li>
+</ol>
+
+<p>Main propority of the system:</p>
+
+<ol>
+  <li>DCM significantly lowers the barrier to building cluster managers that achieve all three of <em>scalability</em>, <em>high decision quality</em>, and <em>extensibility</em> when adding new features and policies.</li>
+  <li>Scalability: reduce the P99 placement latency by 53% in 500 nodes over K8s cluster.</li>
+  <li>Decision quality: guarantees optimal solutions for specified problems.</li>
+  <li>Extensibility:  whole architecture make it easy to add new constraints and new features.</li>
+</ol>
+
+<p>Experiemnts :</p>
+
+<p>Build scheduler on top of Kubernetes.  And it mainly <strong>measure pod placement latency</strong> (time to find a pod placement, and time to preempts pods)</p>
+
+<ol>
+  <li>Testing on 500 nodes on AWS, DCM improves p95 <strong>pod placement</strong> latency upto 2x.</li>
+  <li>The scheduler can also be extended to place VMS.</li>
+</ol>
+
+<h1 id="background-motivation">Background &amp;Motivation</h1>
+
+<p>Kubernetes supports hard(must be satisfied) and soft versions of <strong>placement</strong> constraints.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220106175057526.png" alt="image-20220106175057526" /></p>
+
+<p>k8s use greedy, best-effort heuristic to place one pod at a time, drawn from a pod queue.  It then select nodes with hard constraints and score the nodes with soft constraints and pick the best-scored node.</p>
+
+<p>Limitiations:</p>
+
+<ol>
+  <li>To remain performant, the Kubernetes scheduler only considers a random subset of nodes when scheduling a pod, which might miss feasible nodes.</li>
+  <li>K8s doesn’t support simultaneously reconfigure arbitrary groups of pods. Schedule one node may requires evict other node.</li>
+  <li>K8s scheduler policy requires tracking making it very hard to scale and scheduler’s data struct is not easy to change.</li>
+</ol>
+
+<h1 id="system-architecutre">System Architecutre</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107153000292.png" alt="image-20220107153000292" /></p>
+
+<h2 id="workflow">Workflow:</h2>
+
+<ol>
+  <li>
+    <p>Scheduler stores cluster state in an SQL database.</p>
+  </li>
+  <li>
+    <p>Developer specified the <strong>constraint sql</strong> and the <strong>schema sql</strong>.</p>
+  </li>
+  <li>
+    <p>Compiler generates encoder based on <strong>developer specified constraints and schema.</strong></p>
+  </li>
+  <li>
+    <p>The generated encoder pulls the required cluster state from the database, produces and solves an optimization model that is parameterized by that state, and outputs the required scheduling decisions.</p>
+  </li>
+</ol>
+
+<h2 id="cluster-state-database">Cluster state database:</h2>
+
+<p>In k8s, all states of pods and nodes are stored in an etcd cluster, and k8s maintain a cache of relevant parts of stats locally.</p>
+
+<p>In DCM, they replace the cache with in-memory embedded SQL database to represent the cluster state. Specifically,  it uses 18 tables and 12 views to describe the set of pods, nodes, volumes, container images, pod labels, node labels, and other cluster state.</p>
+
+<p>A placement decision of a pod on a node is represented by the table.</p>
+
+<p>Schema.sql:</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107181408660.png" alt="image-20220107181408660" /></p>
+
+<h2 id="constraints">Constraints.</h2>
+
+<p>Constraint.sql:</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107181443625.png" alt="image-20220107181443625" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107181743448.png" alt="image-20220107181743448" /></p>
+
+<h2 id="compiler-and-runtime">Compiler and runtime</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107182534678.png" alt="image-20220107182534678" /></p>
+
+<p>the model solve return a copy of pod_to_assign table with node_name reflecting the optimal placement. The scheduler then use this data to issue placement cmd for each pod via k8s scheduling API.</p>
+
+<p>It computes scheduling decisions for a batch of pods at a time.(the pods are specificed in the schema.sql)</p>
+
+<h1 id="challenges-dcm-complier">Challenges-DCM complier</h1>
+
+<h2 id="complier-work-flow">Complier work flow:</h2>
+
+<ol>
+  <li>SQL parser first extracts all table and view definitions from the supplied database schema, and produces <strong>syntax trees</strong> for all the hard and soft constraints. It then decides which part should be evaluated in the database and which part should be left for solver.</li>
+  <li>converts the query to an intermediate representation (IR)</li>
+  <li>Generate program that produces an optimization model by intereacting with interfaces exposed by ILP solver (eg, <em>OR-tools CP-SAT</em>)</li>
+</ol>
+
+<h2><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107184030107.png" alt="image-20220107184030107" /></h2>
+
+<h2 id="how-to-make-compile-process-faster">How to make compile process faster</h2>
+
+<p>Rewrite to use fixed arity.</p>
+
+<h1 id="experiments">Experiments:</h1>
+
+<h2 id="implementation-and-steps">Implementation and steps:</h2>
+
+<p>User cases</p>
+
+<ol>
+  <li>Scheduler run as a pod within kubernetes cluster and uses the same API to get cluster status.</li>
+  <li>VM load balancer,</li>
+  <li>distributed transactional datastore</li>
+</ol>
+
+<p>Measurement: testing scalability, decision quality and extendibility.</p>
+
+<ol>
+  <li>Scalability: 500 node cluster on AWS using workload fro Azure, and also they scale up tp 10k nodes</li>
+  <li>Decision quality: test the k8s scheduler and load balancer’s quality.</li>
+  <li>Extensibility: express all cluster management policies in all three use cases.</li>
+</ol>
+
+<h2 id="resules">Resules:</h2>
+
+<p>For scalability:</p>
+
+<p>End-to-end latency: measure from when the workload generator issues a pod creation command to when the pod first changes its status to Running</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107193820570.png" alt="image-20220107193820570" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107194344382.png" alt="image-20220107194344382" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107200313217.png" alt="image-20220107200313217" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107200332969.png" alt="image-20220107200332969" /></p>
+
+:ET

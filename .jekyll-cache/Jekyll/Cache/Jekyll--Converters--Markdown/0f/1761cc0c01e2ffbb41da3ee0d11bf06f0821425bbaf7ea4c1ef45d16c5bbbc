@@ -1,0 +1,99 @@
+I"<p>Efficient Neural Architecture Search via Parameter Sharing</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="current-problems">Current Problems</h2>
+
+<p>BoottleNet of NAS is the training of each child model to convergence</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>ENAS constructs a large computational graph, where each subgraph represents a neural network architecture.</p>
+
+<p>The main contribution of this work is to improve the efficiency of NAS by forcing all child models to share weights to skip training each child model from scratch to convergence.</p>
+
+<h1 id="method">Method</h1>
+
+<p>Represent NAS’s search space using a single directed acyclic graph (DAG), where each child architecture can be viewed as a sub-graph of the larger graph. Since the weight is in a large graph, Therefore, all sub-graph shared the same parameters.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430200624398.png" alt="image-20220430200624398" /></p>
+
+<p>Each node is an operation.</p>
+
+<h2 id="controller">Controller</h2>
+
+<p>Take the RNN node, for example, Each Node is just an operation.</p>
+
+<p>Controller decides</p>
+
+<ol>
+  <li><strong>Which edges are activated?</strong></li>
+  <li><strong>Which computations are performed at each node?</strong></li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430201223063.png" alt="image-20220430201223063" /></p>
+
+<p>RNN prediction step;</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430201659395.png" alt="image-20220430201659395" /></p>
+
+<p>The controller is an LSTM with 100 hidden units. And the sample decision via softmax classifiers,</p>
+
+<h2 id="training-process">Training Process</h2>
+
+<h3 id="training-of-sampled-architecture">Training of sampled architecture</h3>
+
+<p>Sampled architecture can be:</p>
+
+<ol>
+  <li>RNN for Penn Treebank:  400 steps, 64 examples.</li>
+  <li>CNN for CIFAR-10:  minibatch 128</li>
+</ol>
+
+<p>Overall</p>
+
+<ol>
+  <li>It fixes the controller, runs controller prediction M times, and gets M child models.</li>
+  <li>The FInal loss function is the expected loss function, overall child models. The gradient is computed using a Monte Carlo estimate.</li>
+  <li>The experiment shows M = 1 is just fine.**</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430203956374.png" alt="image-20220430203956374" /></p>
+
+<h3 id="training-of-sampled-architecture-1">Training of sampled architecture</h3>
+
+<p>2000 steps.</p>
+
+<p>Overall</p>
+
+<p>Fix the weight of large computational graph. And maximize the expected rewards.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430204838171.png" alt="image-20220430204838171" /></p>
+
+<h2 id="predict-cnn">Predict CNN</h2>
+
+<p>In predicting CNN, Each node can still be an operation.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430204944286.png" alt="image-20220430204944286" /></p>
+
+<h2 id="predict-small-model">Predict Small Model</h2>
+
+<p>Each cell has 4 nodes. A controller can predict the operation of each node in on cell.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430210159687.png" alt="image-20220430210159687" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430205319327.png" alt="image-20220430205319327" /></p>
+
+<h1 id="experiments">Experiments</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430205837929.png" alt="image-20220430205837929" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430205858780.png" alt="image-20220430205858780" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430205949395.png" alt="image-20220430205949395" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430210325862.png" alt="image-20220430210325862" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220430210346923.png" alt="image-20220430210346923" /></p>
+
+:ET

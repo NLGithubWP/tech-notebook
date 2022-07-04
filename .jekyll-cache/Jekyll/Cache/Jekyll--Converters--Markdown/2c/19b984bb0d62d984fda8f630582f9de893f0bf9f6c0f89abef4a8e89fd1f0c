@@ -1,0 +1,36 @@
+I"q<h1 id="introduction">Introduction</h1>
+
+<p>Advantages to columnar formats:</p>
+
+<ol>
+  <li>better compression</li>
+  <li>reduced I/O to only a few columns</li>
+</ol>
+
+<h1 id="parquet-file">Parquet file</h1>
+
+<p>https://parquet.apache.org/docs/file-format/</p>
+
+<p>Format:</p>
+
+<p>N Column is divided into M groups.</p>
+
+<pre><code class="language-bash ">4-byte magic number "PAR1"
+&lt;Column 1 Chunk 1 + Column Metadata&gt;
+&lt;Column 2 Chunk 1 + Column Metadata&gt;
+...
+&lt;Column N Chunk 1 + Column Metadata&gt;
+&lt;Column 1 Chunk 2 + Column Metadata&gt;
+&lt;Column 2 Chunk 2 + Column Metadata&gt;
+...
+&lt;Column N Chunk 2 + Column Metadata&gt;
+...
+&lt;Column 1 Chunk M + Column Metadata&gt;
+&lt;Column 2 Chunk M + Column Metadata&gt;
+...
+&lt;Column N Chunk M + Column Metadata&gt;
+File Metadata
+4-byte length in bytes of file metadata
+4-byte magic number "PAR1"
+</code></pre>
+:ET

@@ -1,0 +1,56 @@
+I"õ<h1 id="introduction">Introduction</h1>
+
+<h2 id="bo">Bo</h2>
+
+<p>Bayesian optimization efficiently trades off <strong>exploration and exploitation</strong> of the parameter space to quickly guide the user into the configuration that <strong>best optimizes some overall evaluation criteria</strong> (OEC) like accuracy, AUC, or likelihood.</p>
+
+<p>Bayesian optimization assumes the <strong>unknown function was sampled from a GP</strong> and maintains a posterior distribution for this function as a result of running learning algorithms.</p>
+
+<p><strong>Acquisition Functions</strong> can be EI, UCB, PI.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516154927618.png" alt="image-20220516154927618" /></p>
+
+<p>Examples:</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516162603934.png" alt="image-20220516162603934" /></p>
+
+<h2 id="ml-differs-from-other-blackbox-optimization">ML differs from other BlackBox optimization.</h2>
+
+<ol>
+  <li>In ML, different parameters (number of hidden units) may result in different evaluation times. Evaluation time needs to be considered.</li>
+  <li>ML runs in parallel on multiple cores. Parallelly computing should be used in BO.</li>
+</ol>
+
+<h2 id="contribution">Contribution</h2>
+
+<ol>
+  <li>Make clear the relationship between the <strong>covariance function</strong> and the hyperparameters.</li>
+  <li>Take evaluation time into consideration</li>
+  <li>The paper <strong>leverages multiple cores for parallel experiments</strong> in BO process.</li>
+  <li>The result shows the alrogirhtm in the paper improves on previous automatic procedures and can reach or surpass human expert-level optimization for many algorithms including latent Dirichlet allocation, structured SVMs, and convolutional neural networks.</li>
+</ol>
+
+<h1 id="practical-consideration-for-bo">Practical Consideration for BO</h1>
+
+<h2 id="covariance-functions">Covariance Functions</h2>
+
+<p>The paper used ARD 5/2 kernel</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516160439083.png" alt="image-20220516160439083" /></p>
+
+<h2 id="modeling-costs">Modeling costs</h2>
+
+<p>The paper proposes optimizing with the <strong>expected improvement per second</strong>, which prefers to acquire points that are not only likely to be good, but that is also likely to be evaluated quickly.</p>
+
+<p>The idea it to model the duration function c(x) along with object function f(x). And it assume c(x) and f(x) are indenpendent.</p>
+
+<h2 id="parallelism">Parallelism</h2>
+
+<p>Try to decide what x should be evaluated next, even <strong>while a set of points are being evaluated</strong></p>
+
+<p>The paper proposes a sequential strategy that <strong>takes advantage of the tractable inference properties</strong> of the Gaussian process to compute <strong>Monte Carlo estimates</strong> of the <strong>acquisition function</strong> under different possible <strong>results from pending function evaluations</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516161957191.png" alt="image-20220516161957191" /></p>
+
+<p>They found our Monte Carlo estimation procedure to be highly effective in practice.</p>
+:ET

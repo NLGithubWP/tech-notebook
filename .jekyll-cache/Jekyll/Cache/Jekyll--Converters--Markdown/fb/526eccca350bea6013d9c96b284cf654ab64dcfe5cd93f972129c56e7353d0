@@ -1,0 +1,126 @@
+I"<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510142429279.png" alt="image-20220510142429279" /></p>
+
+<p>GNN can capture the dependence of graphs via message passing between nodes of graphs. GCN, GAT, and GRN are proposed and have good performance. The paper discusses the variants of each component, systematically categorize the applications, and proposes four open problems for future work.</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<p>Graph analysis focuses on node classification, link prediction, and clustering</p>
+
+<p>Many methods can be applied to learn a vector to represent graph nodes, edges, or subgraphs.</p>
+
+<ul>
+  <li>hand-engineered features</li>
+  <li>DeepWalk</li>
+  <li>Node2Vec, Line, Tadw</li>
+</ul>
+
+<p>But all of those have 2 limitations</p>
+
+<ul>
+  <li>No parameters are shared between nodes in the encoder, leading to computationally inefficiency.</li>
+  <li>Direct embedding methods lack the ability of generalization. They cannot deal with dynamic graphs or generalize to new graphs.</li>
+</ul>
+
+<p>Based on CNNs and graph embedding, variants of graph neural networks (GNNs) are proposed to collect aggregate information from graph structure.</p>
+
+<p>This survey has the following contributions:</p>
+
+<ol>
+  <li>Review existing graph neural network models.</li>
+  <li>present several major applications and category the application into structural/non-structural.</li>
+  <li>propose some research problems.</li>
+</ol>
+
+<h1 id="existing-models">Existing Models.</h1>
+
+<p>Design pipeline of a GNN model for a specific task on a specific graph type</p>
+
+<ol>
+  <li>
+    <p>Find graph structure</p>
+
+    <ul>
+      <li>structure: Graph structure is explicit in the applications.</li>
+      <li>Non-structure: Graphs are implicit so we have to first build the graph from the task.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Specify graph type and scale</p>
+
+    <ul>
+      <li>Directed/Undirected Graphs.</li>
+      <li>Homogeneous/Heterogeneous Graphs: Node and edge has the same type in Homogeneous</li>
+      <li>Static/Dynamic Graphs:  Dynamic graphs’ input features or the topology varies with time</li>
+    </ul>
+  </li>
+  <li>
+    <p>Design loss function based on our task type and the training set.</p>
+
+    <ul>
+      <li>Node-level tasks: Node classification, node regression (predict a continuous value for node), node clustering</li>
+      <li>Edge-level tasks: Edge classification and link prediction( predict whether there is an edge).</li>
+      <li>Graph-level tasks: Graph classification, Graph regression, and Graph matching.</li>
+    </ul>
+
+    <p>In training, we could conduct supervised setting, semi-supervised setting, and unsupervised setting.</p>
+
+    <p>While in a semi-supervised setting, we could use the model to predict labels of each given node or infer from the same distribution.</p>
+  </li>
+  <li>
+    <p>Build a model using computational modules. eg.</p>
+
+    <ul>
+      <li>
+        <p><strong>Propagation Module:</strong></p>
+
+        <ul>
+          <li>Propagate information between nodes</li>
+          <li>The <strong>convolution operator</strong> and <strong>recurrent operator</strong> are usually used to aggregate information from neighbors while the <strong>skip connection</strong> operation is used to gather information from historical representations of nodes and mitigate the over-smoothing problem</li>
+        </ul>
+      </li>
+      <li>
+        <p>Sampling Module:</p>
+
+        <p>When graphs are large, sampling modules are usually needed to conduct propagation on graphs</p>
+      </li>
+      <li>
+        <p>Pooling Module:</p>
+
+        <p>When we need the representations of high-level subgraphs or graphs, pooling modules are needed to extract information from nodes.</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510154707920.png" alt="image-20220510154707920" /></p>
+
+<h2 id="graph-basic">Graph basic</h2>
+
+<p>Degree Matrix: diagonal matrix, which value is number of edges attached to each vertex.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510165833454.png" alt="image-20220510165833454" /></p>
+
+<h2 id="computation-module">Computation Module</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510155344483.png" alt="image-20220510155344483" /></p>
+
+<p>GCN: GCN</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510170343215.png" alt="image-20220510170343215" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510170228746.png" alt="image-20220510170228746" /></p>
+
+<p>Take two layer GCN for example</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510170731755.png" alt="image-20220510170731755" /></p>
+
+<p>AGCN, DGCN.</p>
+
+<h2 id="types-ans-scale">Types ans scale</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510170930188.png" alt="image-20220510170930188" /></p>
+
+<h1 id="applications">Applications</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220510171046369.png" alt="image-20220510171046369" /></p>
+:ET

@@ -1,0 +1,312 @@
+I"�7<h1 id="introduction">Introduction</h1>
+
+<h2 id="problems">Problems</h2>
+
+<p>Trend of decentralization in database introduces a new requirement - database’s integrity must be able to verified. eg, <code>third-party service providers can be malicious</code>. so their database must maintain a trusted data history and allow users to verify the integrity of both current and historical data. (tampering of data and query execution can be securely detected.)</p>
+
+<p>The main <code>requirement</code> incluede data immutability, tamper evidence.</p>
+
+<ul>
+  <li><code>Immutability</code>: data is only writen once and never deleted. (has more effecient concurrency due to no synchronization of written is needed), <code>it is also used in RDD (spark)</code></li>
+  <li><code>Query verifiability(</code>tamper evidence): query result contains integrity proofs for both data and query execution.(use can use it to detect if data or query has been tampered)</li>
+</ul>
+
+<p>Challenges in realizing the above requirements</p>
+
+<ul>
+  <li><code>Store management:</code> data immutability requires managing <code>ever-increasing volume of data.</code> its management needs to be efficient and reliable.</li>
+  <li><code>Efficient access methods for querying immutable data:</code> since data is huge, there must be efficient storage layout and indexs to support query.</li>
+  <li><code>Minimize performance overhead:</code> VDB must generate integrity proofs whose cost can be significant small.</li>
+  <li><code>Support both OLTP/OLAP workloads:</code>
+    <ul>
+      <li>OLAP: use fully-homomorphic encryption.</li>
+      <li>OLTP: require the strict ordering provided by serializability.</li>
+    </ul>
+  </li>
+  <li><code>Deployability:</code> easy data conversion of moving data to new database. easy programming model.</li>
+</ul>
+
+<h2 id="contributions">Contributions</h2>
+
+<ol>
+  <li>Discuess two approaches for realizing an efficient verifiable database, by extending existing systems, and developing a new system - spitz.</li>
+  <li>Experimental study.</li>
+</ol>
+
+<h1 id="verifiable-databases">Verifiable Databases</h1>
+
+<h2 id="verifiable-database">Verifiable Database</h2>
+
+<p><strong>using verifiable computation techniques</strong></p>
+
+<ul>
+  <li>SNARKs support arbitrary computation tasks but requires expensive setup phase.</li>
+  <li>Ben-Sasson bound complexity of setup phase and query complexity.</li>
+  <li>vSQL use interactive protocol to support verifiable SQL queries.</li>
+</ul>
+
+<p><strong>using authentication data structures (Merkle trees)</strong></p>
+
+<ul>
+  <li>some work evaluate authentication index structures combining Merkle trees and B+-trees.</li>
+  <li><code>ServeDB</code> propose Merkle Tree index based on hierarchical cube encoding.</li>
+  <li>SUNDR protects all file system contents and proposes a fork consistency protocol to detect data tampering.</li>
+  <li>VeritasDB/Concerto use trusted hardware to speed up verification. Both store merkle tree inside SGX enclaves. VeritasDB store tree root inside enclave and Concerto use memory verification to avoid contention inside the enclaves.</li>
+</ul>
+
+<h2 id="out-of-blockchain-database">Out-of Blockchain Database</h2>
+
+<p>blockchain and distributed database hava four dimension in common: <code>replication, concurrency, storage and sharding.</code></p>
+
+<ul>
+  <li>
+    <p>TrustDBle propose an OLTP engine that provides verifiable ACID compliant transactions on shared data using trusted hardware.</p>
+  </li>
+  <li>
+    <p>BlockchainDB , Veritas , FalconDB , and LineageChain use blockchain as a verifiable storage and add database features on top of it.</p>
+
+    <ul>
+      <li>
+        <p>BlockchainDB consists of database layer and storage layer, where database layer control consistency level of requests and storage layer is unified interface to underlying blockchains.</p>
+
+        <p>It adopts a KV data model and supports get/put/verify operations. It translates requests from the database layer into blockchain transactions and monitors the transaction status.</p>
+
+        <p>when a client invokes verify, a blockchain node contact other peers to check where the transaction is committed in the ledger.  (a node in BlockchainDB dont have complete state. the state is partitioned to mutiple blockchain nodes.)</p>
+      </li>
+      <li>
+        <p>Veritas targets on complex data models (relation model). And it use Intel SGX as verifier that read database logs for transaction validation. 
+Validation results (in form of verifiers’ vote) also stored in blockchain.
+It doesn’t support partitioning.</p>
+      </li>
+      <li>
+        <p>FalconDB organizes database records into authenticated data structure - Merkle Tree.</p>
+      </li>
+      <li>
+        <p>LineageChain is built on top of ForkBase and FabricSharp.</p>
+
+        <p>It captures provenance during contract execution and stores it in a merkle tree, and provides skip list index to support efficient provenance queries.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="ledger-databse">Ledger Databse</h2>
+
+<p>QLDB is a cloud service providing data immutability and verifiability. It consists of blocks organized in a hash chain called journal.</p>
+
+<p>Insert, update and delete operation are collected into blocks and appended to journal. And Merkle tree is built on the entire journal.</p>
+
+<p>Oracle Blockchain Table offer append-only verifiable tables by implementing a centralized ledger model.</p>
+
+<p>MongoDB supports verifiable change history by storing document collections in a hash chain.</p>
+
+<p>Datomic is a distributed immutable database system designed to be ACID compliant.</p>
+
+<h1 id="challenges-and-opportunites">Challenges and opportunites</h1>
+
+<h2 id="storage-and-indexing">Storage and Indexing</h2>
+
+<p>Merkle Patricia Trie (MPT) Merkle Bucket Tree (MBT) and Pattern-Oriented-Split Tree (POS-Tree) support efficient queries on immutable data.</p>
+
+<h2 id="query-verification">Query Verification</h2>
+
+<p>Query verifiability in VDB means that the user who sends the query can verify the integrity of the result.</p>
+
+<p><strong>Client-side / service-side verfication</strong></p>
+
+<ul>
+  <li>Verfication at client side is expensive,</li>
+  <li>SGX can help mitigate this cost to server. eg,. SGX outputs only succinct proofs that can be easily verified by user.</li>
+</ul>
+
+<p><strong>Online-verfication / deferred verfication</strong></p>
+
+<ul>
+  <li><strong>online verfication:</strong> Data committed after verfication succeeds. If recovery from malicious tampering is costly, then we can use online verification to prevent malicious commit.</li>
+  <li><strong>deferred verfication:</strong> verfication is done over a batch of transactions.</li>
+</ul>
+
+<p><strong>Verfication via encryption</strong>:</p>
+
+<ul>
+  <li>encrypt data using private key, and store ciphertexts on untrusted storage.</li>
+  <li>but the computation on cloud must be conducted on ciphertexts.</li>
+</ul>
+
+<p><strong>Verfication via authentication data structure</strong></p>
+
+<ul>
+  <li>Use merkle tree to store data. tree root is digest</li>
+  <li>The new digest is <code>recalculated</code> recursively and equality is checked with the previously saved digest</li>
+</ul>
+
+<h2 id="concurrency-control">Concurrency control</h2>
+
+<p>The database has fixed transaction isolation levels, but sometimes different application requires different isolation level.</p>
+
+<p>One solution to fix the isolation level at database to a weak level (read committed) and implement customized logic (locks, checking, reversions.) to handle stricter level in the applications.</p>
+
+<h1 id="extending-oltpolap-to-vdb">Extending OLTP/OLAP to VDB</h1>
+
+<p>VDB can be implemented by adding a verifiable ledger to an existing database system. And the ledger supports immutable data and verifiable quries.</p>
+
+<h2 id="non-intrusive-design">Non-intrusive design</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220222183210801.png" alt="image-20220222183210801" /></p>
+
+<p>Ledger is added without modifying the original database system.</p>
+
+<ol>
+  <li>the design minimizes disruption to existing systems</li>
+  <li>the design incurs considerable performance overhead due to interaction with ledger due to interaction with the ledger.</li>
+</ol>
+
+<h2 id="intrusive-desige">Intrusive desige</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220222184003016.png" alt="image-20220222184003016" /></p>
+
+<p>Embed the ledger into existing database system.</p>
+
+<ol>
+  <li>This design eliminates communications overhead with outside ledger</li>
+  <li>incures significant cost in data migration. data must be move to this system so they can use verfication.</li>
+</ol>
+
+<h1 id="systemsptiz-architecture">System(Sptiz) Architecture.</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220222191344314.png" alt="image-20220222191344314" /></p>
+
+<p>The system supports both OLTP and OLAP workloads with verifiable ledgers.</p>
+
+<h2 id="control-layer">Control layer</h2>
+
+<p>Multiple processor nodes which accept and process requests from a global messsage queue.</p>
+
+<p>Each node has three main components</p>
+
+<ul>
+  <li>Request handler: Interact with user, accept request and return results with proofs.</li>
+  <li>Auditor: Communicates with ledger in the storage layer to keep track of data change.</li>
+  <li>Transaction Manager: Control execution of the queries.</li>
+</ul>
+
+<h2 id="storage-layer">Storage layer</h2>
+
+<p>There are multiple index structures built into the storage layer to support <code>verifiable query processing.</code></p>
+
+<h3 id="ledger">Ledger</h3>
+
+<p>Consist of sequence of hashed blocks, each block track modification of records, query statements, metadata and root node of indexs on entire dataset.</p>
+
+<p>On top of the block linkedList is Merkle tree, which can be used to verify data.</p>
+
+<h3 id="index">Index</h3>
+
+<p>B+-tree for query processing. The input: requested keys, output: matched data cell</p>
+
+<h2 id="query-processing">Query processing</h2>
+
+<p>The system supports both read/write/mixed workloads, and can parser SQL and self-defined JSON schema.</p>
+
+<p><strong>Write workload</strong></p>
+
+<ol>
+  <li>Resquest handler collects a transaction from queue.</li>
+  <li>Auditor checks write operations and <code>updates the ledger.</code> ledger records the changes and return <code>proof</code> to auditor.</li>
+  <li>TM traverses the <code>B+ tree</code> and perform <code>write to cell store.</code></li>
+  <li>TM return client with <code>&lt;Result, Proof&gt;</code></li>
+</ol>
+
+<p><strong>Read worklaod</strong></p>
+
+<ol>
+  <li>Resquest handler collects a transaction from queue.</li>
+  <li>TM traverses the <code>B+ tree</code> and perform read.</li>
+  <li>TM ask auditor to get proofs from ledger.</li>
+  <li>TM return client with <code>&lt;Result, Proof&gt;</code></li>
+</ol>
+
+<h2 id="concurrency-controlserializability">Concurrency Control(serializability)</h2>
+
+<p><strong>Atomicity</strong></p>
+
+<p>Data is stored at bith indexs and the virtual storage. 2PC is used to make the data consistent.</p>
+
+<p>In the prepare phase of 2PC, each transaction with read/write and write/write conflict with this order will abort.</p>
+
+<p><strong>Isolation</strong></p>
+
+<p>Since the cell is multi-versioned itself, concurrency control mechanisms based on MVCC are more suitable. eg,. MVCC with 2PL, MVCC with timestamp ordering, MVCC with OCC.</p>
+
+<p>Global timestamp service to allocate the timestamps (version) upon a transaction starts and commits. And then order tx based on start time.</p>
+
+<p><strong>Limitation</strong></p>
+
+<ol>
+  <li>
+    <p>The global timestamp service has limitation.</p>
+  </li>
+  <li>
+    <p>And the abort rate could be high in face of write-intensive workload.</p>
+  </li>
+</ol>
+
+<p><strong>Solution</strong></p>
+
+<ol>
+  <li>Adopt the hybrid logic timestamp scheme that <code>allocates timestamps by each individual node</code> and still has serializability guarantee</li>
+  <li>Adopt the combination of OCC and MVCC by dynamically adjusting the transaction order to reduce abort rates</li>
+</ol>
+
+<h2 id="proof-and-verification">Proof and Verification</h2>
+
+<p>Clients can use the <code>digest</code> of the ledger to perform verification locally.</p>
+
+<p>The system use deferred verfication to improve the throughput.</p>
+
+<h1 id="experimental-study">Experimental Study.</h1>
+
+<h2 id="implementation">Implementation</h2>
+
+<ol>
+  <li>Implement a baseline system to emulate a commercial product.</li>
+  <li>Furthermore, the appended blocks are materialized to indexed views for fast query processing.</li>
+  <li>Implement ledger by adopting index from SIRI family</li>
+  <li>Implement a immutable kv store using ForkBase without verfication.</li>
+</ol>
+
+<h2 id="evaluation">Evaluation</h2>
+
+<h3 id="oltp-workloads">OLTP workloads</h3>
+
+<p>read-only and write-only workloads in single thread setup</p>
+
+<p>X: initial database size from 10,000 to 1,280,000 records,</p>
+
+<p>Y: Throughput</p>
+
+<p>With the initial database size increasing, read/write spend more time going through the index, as a result the throughput is decreasing.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220222212751580.png" alt="image-20220222212751580" /></p>
+
+<p>With unified index structure of Ledger the system can store proofs and values, and such storage faciliate read/write.</p>
+
+<h3 id="olap-worklaods">OLAP worklaods</h3>
+
+<p>range queries.</p>
+
+<p>Performance of range qureies is worce than point query. This is due to the additional nodes needed to be traversed and scanned when the query is processed.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220222214300608.png" alt="image-20220222212751580" /></p>
+
+<h1 id="ai-for-db">AI for DB</h1>
+
+<ol>
+  <li>Learning which index to use</li>
+  <li>Learning-based transaction management: AI to predict workloads and schedule the transactions.</li>
+</ol>
+
+<h1 id="db-for-ai">DB for AI</h1>
+
+<p>Use VDB to make ensure the trustworthiness of analytical results.</p>
+:ET

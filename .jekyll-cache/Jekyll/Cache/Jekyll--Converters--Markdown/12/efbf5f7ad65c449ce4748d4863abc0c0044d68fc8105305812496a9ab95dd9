@@ -1,0 +1,9 @@
+I"F<ol>
+  <li>
+    <p>通信前，先修改系统的状态， 因为通信过程中，系统的状态可能发生修改</p>
+  </li>
+  <li>Client 直接发给coord和participant 会有活锁的问题，多个client 共同对2个server 的 key 加锁， 只发给coord，coord先加锁，然后拒绝后续的请求，可以避免这个问题。</li>
+  <li>2pc中， coordinator 发送给participant 也用了at-most-once 这个方式，可是coordintor可以并行发送， 当amoapplication收到新的请求后，会把之前还未完成的请求，标记成oldRequest。</li>
+</ol>
+
+:ET

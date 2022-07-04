@@ -1,0 +1,179 @@
+I"�!<h1 id="introduction">Introduction</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>Serverless platforms: AWS Lambda, Azure Functions, Google Cloud Functions. Applications adopted in serverless: Event processing, API composition, API aggregation, data flow control, etc</p>
+
+<p>Serverless computing has three benefits.</p>
+
+<ol>
+  <li><strong>Unlimited elasticity:</strong> user can specify the number of such functions that are executed concurrently</li>
+  <li><strong>Pay per use pricing model:</strong> The user specifies an executable function and is only charged for the duration of the function execution.</li>
+  <li><strong>Lower start-up and set-up overhead.</strong></li>
+</ol>
+
+<p>Most Serverless infrastructure has the following limitations:</p>
+
+<ol>
+  <li>Only supports <strong>stateless function calls with limited computations resource and duration</strong>. (a function call in AWS Lambda can use up to 3GB of memory and must finish within 15 minutes).</li>
+  <li>Do not allow <strong>direct communications</strong> between <strong>stateless functions.</strong></li>
+</ol>
+
+<p>In summary, FaaS’s resource is on-demand and auto-scaled. While in IaaS, users tend to <strong>overprovision</strong> to handle peak workloads by reserving more computation resources than needed.</p>
+
+<p>But the advantage of serverless is still inconclusive when compared with server-full infrastructures in ML applications, eg.</p>
+
+<ol>
+  <li>When a serverless infrastructure (FaaS) outperforms a server-full infrastructure ( IaaS ) for distributed ML training？</li>
+</ol>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>The paper implements a platform, LambdaML, to present a comparative study of distributed ML over FaaS and IaaS. And it also develops an analytic model to capture cost/performance tradeoffs that must be considered when opting for a serverless infrastructure.</p>
+
+<p>In summary</p>
+
+<ol>
+  <li>Systematically explore <strong>algorithm choice and system design</strong> for FaaS and IaaS ML training, and depict the tradeoff over an extensive range of ML models, training workloads, and infrastructure choices.</li>
+  <li>Develop an analytical model that characterizes the tradeoff between FaaS and IaaS-based training
+    <ul>
+      <li>Fari comparison: FaaS and IaaS implement the same algorithm (SGD); run the most suitable algorithms with the most suitable hyper-parameters for FaaS and IaaS.</li>
+      <li>End-to-end benchmark: end-to-end training performance</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Foundings:</p>
+
+<ol>
+  <li>FaaS can be faster than IaaS if <strong>communication</strong> is very efficient.</li>
+  <li>When FaaS is much faster, it is not much cheaper. When FaaS is faster, It <strong>usually</strong> incurs a comparable cost in dollars.</li>
+</ol>
+
+<h1 id="system-design">System Design</h1>
+
+<h2 id="basic-design-dimensions">Basic design dimensions</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610200419126.png" alt="image-20220610200419126" /></p>
+
+<p>The paper builds an ML system on top of Amazon Lambda. And four dimensions need to be considered when developing the system, namely:</p>
+
+<ol>
+  <li>ML optimization algorithm
+    <ul>
+      <li>gradient averaging</li>
+      <li>model averaging</li>
+    </ul>
+  </li>
+  <li>The communication channel
+    <ul>
+      <li>Shared-nothing architecture with message passing between executors.</li>
+      <li>shared-disk file system or in-memory kv store, in AWS,  there are four alternatives—S3, ElastiCache for Redis, ElastiCache for Memcached, and DynamoDB</li>
+    </ul>
+  </li>
+  <li>Communication patterns can be Gather, AllReduce, or ScatterReduce.</li>
+  <li>Synchronization protocol can be bulk synchronous parallel (BSP) and asynchronous parallel (ASP)
+    <ul>
+      <li>BSP: can be divided into the merge phase and update phase.</li>
+      <li>ASP: Each executor update one shared-global model state without caring about the speeds of other executors.</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="faas-details">FaaS Details</h2>
+
+<p>Execution time cannot be longer than 15 minutes. So each executor runs 15mins and then restarts by triggering themselves.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610201516112.png" alt="image-20220610201516112" /></p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<h2 id="settings">Settings</h2>
+
+<p>Datasets: CIFAR10, RCV1, HIGG</p>
+
+<p>Models: LR, SVM, MN, RN, KM, EM.</p>
+
+<p>Optimization Algorithms: GA-SGD, MA-SGD, ADMM.</p>
+
+<h2 id="evaluate-algorithms">Evaluate algorithms</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610202859642.png" alt="image-20220610202859642" /></p>
+
+<p>GA-SGD can converge steadily and achieve a lower loss, and MA is unstable.</p>
+
+<h2 id="evaluate-communication-channels">Evaluate communication channels.</h2>
+
+<p>Compare design choices including Memcached, S3, Redis, and DynamoDB.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610203137731.png" alt="image-20220610203137731" /></p>
+
+<p>S3: no startup time,</p>
+
+<p>Memcached: multiple threading architectures are suitable to support large models’ communication.</p>
+
+<p>DynamoDB: reduce communication time by 20%, but there is startup time. It also only allows messages smaller than 400KB.</p>
+
+<p>Hybrid solutions: A ps container can save 2X communication compared with S3/Memcached.</p>
+
+<p>HybridPS is currently bounded not only by the maximal network bandwidth but also by <strong>serialization/ deserialization and model update</strong>. Since serialization and deserialization are the bottlenecks, increasing bandwidth by adding more ps cannot speed up the training.</p>
+
+<p>And the hybrid approach is slower than a pure FaaS approach with a large model. (due to seria/desearia.)</p>
+
+<h2 id="communication-pattern">Communication pattern</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610205746340.png" alt="image-20220610205746340" /></p>
+
+<p>When communication is heavy, a single reducer (in ALL reduce) is the bottleneck, and ScatterReduce is better.</p>
+
+<p>When the communication is small, ScatterReduce is a little bit slow since it will partition all data.</p>
+
+<h2 id="sync-protocols">Sync protocols.</h2>
+
+<p>Study Synchronous and Asynchronous.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610205758632.png" alt="image-20220610205758632" /></p>
+
+<p>Async:  Store a global model at S3, and each FaaS will rewrite it.</p>
+
+<p>Synchronous converges steadily, whereas Asynchronous suffers from unstable convergence.</p>
+
+<h1 id="compare-faas--iaas">Compare FAAS &amp; IAAS</h1>
+
+<p>Start FaaS and IaaS once the data is submitted into S3, then train the model until it converges.</p>
+
+<p>Compare LambdaML with Hybrid PS, Distributed PyTorch, and Angel.</p>
+
+<p>Datasets and Models:</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610211727153.png" alt="image-20220610211727153" /></p>
+
+<h2 id="loss">Loss</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610211928347.png" alt="image-20220610211928347" /></p>
+
+<h2 id="total-run-time">Total Run time</h2>
+
+<p>runtime = start-up time + communiaction time + data-loading time.</p>
+
+<p>FaaS function can quickly startup. At the same time, the IaaS requires starting EC2 clusters, mounting shared volumes, dispatching scripts, etc.</p>
+
+<p>LambdaML is the fastest, although it has the highest communication time.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master//img/a_img_store/image-20220610213010078.png" alt="image-20220610213010078" /></p>
+
+<h2 id="analytical">Analytical</h2>
+
+<p>The paper also provides a cost model to model the execution time.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220610214843261.png" alt="image-20220610214843261" /></p>
+
+<p><strong>FaaS incurs a more negligible start-up overhead, while IaaS incurs a smaller communication overhead because of its flexible mechanism and higher bandwidth</strong>.</p>
+
+<p>Conclusion:</p>
+
+<p>When the R ( number of epochs to converge, <strong>algorithm speed</strong> ) is small, or f ( scaling factor, minor f means better scalability ) is small, the FaaS is better than IaaS.</p>
+
+<p>In other words, when the algorithm is fast, and communication is less, FaaS is better than IaaS.</p>
+
+:ET

@@ -1,0 +1,65 @@
+I"_<h1 id="frequent-questions">frequent questions</h1>
+
+<h2 id="abstract-class-vs-interface">Abstract class VS Interface</h2>
+
+<p>设计思想不同,使用动机不同.</p>
+
+<p>抽象类和接口设计的时候,设计思想不同. 设计抽象类是自下而上的过程,因为调用者子类需要某些属性和特有行为,所以调用者继承抽象类 设计接口是自上而下的过程,接口规范某一行为,我某类需要这个行为,调用者实现某接口,</p>
+
+<p>开发者使用的时候,使用动机不同. 开发者继承抽象类是为了使用抽象类的属性和行为; 开发者实现接口只是为了使用接口的行为.</p>
+
+<p><strong>区别总结:</strong></p>
+
+<p>区别一<strong>: 抽象类只能单继承,接口能多实现</strong></p>
+
+<p>区别二: 抽象类是一个类,可以被任意权限修饰符修饰,静态和非静态属性，final和非final属性，可以<strong>有抽象方法和非抽象方法；</strong></p>
+
+<p>接口只能被public,final修饰,只能有<strong>静态方法</strong>,即使没有显示的声明，而且是不可修改的；</p>
+
+<p>区别三: 抽象的事物不同:   抽象类是对类的抽象,接口是对行为的抽象； 		 	  抽象类是对整个类抽象,包括属性,行为； 		 	  接口是对类的行为(局部)进行抽象；</p>
+
+<p>区别四: 定义的时候,定义抽象类和接口的思想不同； 		          设计抽象类是自下而上的过程,我子类需要,所以我定义抽象类； 		          设计接口是自上而下的过程,我接口规范某一行为,我某类需要这个行为,我实现某接口；</p>
+
+<p>核心区别:</p>
+
+<p>调用者使用动机不同,实现接口是为了使用他规范的某一个行为；</p>
+
+<p>继承抽象类是为了使用这个类属性和行为.</p>
+
+<p><strong>再简单点说:</strong></p>
+
+<p>我们知道抽象类是从子类中发现公共部分，然后泛化成抽象类，子类继承该父类即可，但是接口不同。实现它的子类可以不存在任何关系，共同之处。例如猫、狗可以抽象成一个动物类抽象类，具备叫的方法。鸟、飞机可以实现飞Fly接口，具备飞的行为，这里我们总不能将鸟、飞机共用一个父类吧！所以说抽象类所体现的是一种继承关系，要想使得继承关系合理，父类和派生类之间必须存在”<a href="https://link.zhihu.com/?target=http%3A//www.mydown.com/soft/network/chat/475/444475.shtml">is</a>-a” 关系，即父类和<a href="https://www.zhihu.com/search?q=派生类&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra={&quot;sourceType&quot;%3A&quot;answer&quot;%2C&quot;sourceId&quot;%3A117886746}">派生类</a>在概念本质上应该是相同的。对于接口则不然，并不要求接口的实现者和接口定义在概念本质上是一致的， 仅仅是实现了接口定义的规则而已。</p>
+
+<h2 id="类型大些小写的区别">类型大些小写的区别？</h2>
+
+<pre><code class="language-java">boolean
+Boolean
+</code></pre>
+
+<h1 id="some-keywords-in-java">some keywords in Java</h1>
+
+<h2 id="static">Static</h2>
+
+<p>Java 中 static 变量：</p>
+
+<ul>
+  <li>static 变量在类装载的时候进行初始化。</li>
+  <li>多个实例的 static变量会共享同一块内存区域, 一个实例对类static变量做了更改，其他实例也可以访问到.</li>
+</ul>
+
+<pre><code class="language-java">class A{
+    static int num = 1;
+}
+
+Public class Test{
+    public static void main(String[] args){
+        A a = new A();
+        a.num++;
+        
+        A b = new A();
+        System.out.println(b.num); // this is 2
+    }
+}
+</code></pre>
+
+:ET

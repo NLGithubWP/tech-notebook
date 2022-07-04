@@ -1,0 +1,243 @@
+I"� <p>Paxos Made Moderately Complex</p>
+
+<h1 id="question-of-implementation-of-paxos">Question of Implementation of Paxos</h1>
+
+<ol>
+  <li>Each operation requires 2 rounds of communications</li>
+  <li>which proxy instance the client should send to</li>
+  <li>The gap of the log, eg, many requests come to Paxos instance, each request will trigger 2 rounds of communications.  When the late request comes, the previous may still not reach consensus.</li>
+  <li>How to elect a distinguished proposer.</li>
+</ol>
+
+<h1 id="pmmc">PMMC</h1>
+
+<h1 id="introduction">Introduction</h1>
+
+<p>This article gives an operational description of the reconfigurable version of the multi-Paxos. And briefly describes variants of the Paxos protocol.</p>
+
+<p>The paper also stress <code>Paxos' invariants</code> for two reasons</p>
+
+<h1 id="high-level-idea">High-level idea</h1>
+
+<p>Leader elects itself by running Paxos Phase 1 for all instances.</p>
+
+<p>Once elected, only runs Paxos Phase 2 for each proposal</p>
+
+<p>If the leader dies, other nodes repeat the process (elect themselves, etc.)</p>
+
+<h1 id="roles">Roles</h1>
+
+<h2 id="client">Client</h2>
+
+<p>the client talks to the  replica, sends leader messages.</p>
+
+<h2 id="leader">Leader</h2>
+
+<h3 id="states">States</h3>
+
+<p>leader maintains</p>
+
+<ul>
+  <li><code>ballot_num</code>: Bollot number , init with (0, 0)</li>
+  <li><code>active</code>:  If I’m the leader or not</li>
+  <li><code>Proposals:</code>:  Map &lt;slotId: proposal cmd &gt;</li>
+</ul>
+
+<p>Leader doing</p>
+
+<ul>
+  <li>Elected proposer</li>
+  <li>One elected, start 2 phase communication.</li>
+  <li>Each proposal is defined <code>ballots = (LeaderId, SeqNum)</code>, (0, 1) &gt; (2, 0) &gt; (1, 0) &gt; (0, 0)</li>
+</ul>
+
+<p><strong>Election time</strong></p>
+
+<ul>
+  <li>Once the proposer starts</li>
+  <li>When the current active leader seems to fail. (Not receive heartbeat)</li>
+  <li>If a leader is preempted, don’t immediately try for election again.</li>
+</ul>
+
+<p><strong>Election process</strong></p>
+
+<ul>
+  <li>Proposer broadcast the Prepare Message with the current ballot.</li>
+  <li>Acceptor act as in Paxos.</li>
+</ul>
+
+<h3 id="code">Code</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220310160012496.png" alt="image-20220310160012496" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220310160041518.png" alt="image-20220310160041518" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220310160057879.png" alt="image-20220310160057879" /></p>
+
+<h2 id="acceptor">Acceptor</h2>
+
+<h3 id="states-1">States</h3>
+
+<ul>
+  <li>The same as Paxos acceptor</li>
+  <li>each acceptor maintains:
+    <ul>
+      <li>Ballot number</li>
+      <li>Accepted: a set of pvalues,</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="invariants">Invariants</h3>
+
+<ul>
+  <li>Only accept prepare request with <code>bigger ballots</code></li>
+  <li><code>Only accept values from the current ballot. ballot_num = b</code></li>
+  <li>Acceptors cannot remove values from the accepted list.</li>
+  <li>for any b and s, there is only one cmd that can be accepted by the majority of acceptors.</li>
+  <li>if (S, C) is chosen by the majority.  then for any proposal with higher b, the proposal has (s, c) (same as Paxos p2)</li>
+</ul>
+
+<h3 id="code-1">Code</h3>
+
+<p>Acceptor request = (b, s, c) where b is ballot number,  s is slot number c is operation.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220310160133155.png" alt="image-20220310160133155" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220304205212266.png" alt="image-20220304205212266" /></p>
+
+<h2 id="replicas">Replicas</h2>
+
+<h3 id="states-2">States</h3>
+
+<ul>
+  <li>
+    <p><code>The client can talk to replica, and replica only tale to leaders.</code></p>
+  </li>
+  <li>
+    <p>Like learners,</p>
+  </li>
+  <li>
+    <p>Maintains following variables</p>
+
+    <ul>
+      <li>
+        <p>Each replica starts from the <code>same init state and keeps a copy of the application</code> (sequence of slots), each slot has a slot number (ballot).</p>
+      </li>
+      <li>
+        <p><code>Maintain 2 pointers</code>, one is a slot-out pointer, another is a slot-in pointer.</p>
+
+        <ul>
+          <li>
+            <p><code>slot-out pointer: Point to the next message to be chosen.</code></p>
+
+            <p><code>initially 1</code></p>
+          </li>
+          <li>
+            <p><code>Slot-in pointer: Point to the position where the proposer wants to propose next. initially 1</code></p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><code>Maintain request set:</code> request the replica has received, and not yet proposed or decided.</p>
+      </li>
+      <li>
+        <p><code>Maintain proposals set:</code> An initially empty set of proposals that are currently outstanding.</p>
+      </li>
+      <li>
+        <p><code>Maintain decisions set:</code>:  A set of proposals that are known to have been decided (also</p>
+
+        <p>initially empty).</p>
+      </li>
+      <li>
+        <p><code>Maintain proposal leader set:</code>  The set of leaders in the current configuration. The leaders of the initial configuration are passed as an argument to the replica.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="invariants-1">Invariants</h3>
+
+<ul>
+  <li>
+    <p>The same slot must have the same cmd decided</p>
+  </li>
+  <li>
+    <p>Slot-out ensure all operations before it is chosen.</p>
+  </li>
+  <li>
+    <p>For all replicas, the same operation results in the same result state.</p>
+  </li>
+  <li>
+    <p>A replica proposes commands only for slots for which it knows the configuration:</p>
+
+    <p>∀ρ : ρ.slot in &lt; ρ.slot out + WINDOW.</p>
+  </li>
+</ul>
+
+<h3 id="code-2">Code</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220310155910508.png" alt="image-20220310155910508" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220306201656627.png" alt="image-20220306201656627" /></p>
+
+<h1 id="progress">Progress</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220306205046863.png" alt="image-20220306205046863" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220306222252074.png" alt="image-20220306222252074" /></p>
+
+<ul>
+  <li>
+    <p>leader election</p>
+  </li>
+  <li>
+    <p>The client sends an &lt;request, c&gt; where c = &lt;κ, cid, op&gt;  to <code>all replicas or one replica</code>, wait form &lt;response, cid, result&gt;</p>
+  </li>
+  <li>
+    <p>The replica record the operation to a slot of the local log. and  assigns it’s cmd with slot id,</p>
+
+    <p>Replica then sends the proposal = &lt;s, c&gt; to the leader. where s is the lowest unused slot. (slot_in)</p>
+
+    <p>As shown in replicas code.</p>
+  </li>
+  <li>
+    <p>The leader sends the pvalue = &lt;b, s, c&gt; to acceptors to reach a consensus. where</p>
+
+    <p>ballot number b, a slot number s, and command c.</p>
+  </li>
+  <li>
+    <p>Once the operation reaches consensus, the Leader broadcasts to all other replicas.</p>
+  </li>
+  <li>
+    <p>And then the replica receives the operation and then the slot_out pointer moves in.</p>
+  </li>
+  <li>
+    <p>Once slot_out moves in, it’s safe to execute it.</p>
+  </li>
+  <li>
+    <p>client send out</p>
+  </li>
+  <li>
+    <p>replica receives the client’s request and</p>
+  </li>
+</ul>
+
+<h2 id="implementation">Implementation:</h2>
+
+<ol>
+  <li>
+    <p>The operation can be out of order. eg, Op4 is decided, but Op3 is still not decided.  <code>But in this situation, slot_out still stay at the current position</code></p>
+  </li>
+  <li>
+    <p>In the face of concurrently operating clients, different replicas may end up proposing different commands for the same slot.</p>
+
+    <p>If the new decided value is not the same as the current value, propose the current value in the next proposal round.</p>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220304220414008.png" alt="image-20220304220414008" /></p>
+
+<h1 id="bugs">Bugs</h1>
+
+:ET

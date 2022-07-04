@@ -1,0 +1,39 @@
+I"œ<h1 id="introduction">Introduction</h1>
+
+<p>The paper introduces the NAS-Bench-201, which is extended from NAS-Bench-101.</p>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>Previously NAS-Bench-101 and NAS-HPO-Bench are proposed. However,</p>
+
+<ol>
+  <li>
+    <p>some NAS algorithms can not be applied directly on NASBench-101.</p>
+
+    <p>101 has constraints on the nodes/edges of each cell. Some NAS algorithms based on weight-sharing cannot be applied into it.</p>
+  </li>
+  <li>
+    <p>NAS-HPO-Bench only has 144 candidate architectures, which may be insufficient to evaluate NAS algorithms.</p>
+  </li>
+</ol>
+
+<h2 id="contributions">Contributions</h2>
+
+<p>In summary, the paper makes the following contributions.</p>
+
+<ol>
+  <li>The search space: Cell-based, each cell has <strong>4 nodes and 5 operations</strong>, which results in 15625 cell/architectures candidates in total.</li>
+  <li>Each architecture is trained on three datasets (CIFAR10, CIFAR100, ImageNet-16-120 ), and the paper records their loss, accuracy, number of parameters, and FLOPs.</li>
+  <li>The paper benchmarked <strong>10 NAS algorithms</strong> on the above search space.</li>
+</ol>
+
+<h1 id="nas-bench-201">NAS-Bench-201</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220531162907710.png" alt="image-20220531162907710" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220531162924350.png" alt="image-20220531162924350" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master//img/a_img_store/image-20220531162938041.png" alt="image-20220531162938041" /></p>
+
+<h1 id="discussion">Discussion</h1>
+:ET

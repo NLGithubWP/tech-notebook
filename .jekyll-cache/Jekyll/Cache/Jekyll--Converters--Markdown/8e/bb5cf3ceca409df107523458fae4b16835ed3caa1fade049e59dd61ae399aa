@@ -1,0 +1,311 @@
+I"�I<h2 id="problems-not-solves">Problems not solves:</h2>
+
+<ol>
+  <li>How to only load model structure (small), not the model parameters ?</li>
+  <li>Inference job can preempt the training job, if the model is the same, can it be used in online learning?</li>
+</ol>
+
+<h1 id="abstract--introduction">Abstract &amp; Introduction</h1>
+
+<h2 id="background">Background</h2>
+
+<p>GPU clusters are often over-provisioned based on the peak load of inference and the cluster has limited sharing between applications and task types. eg.</p>
+
+<ol>
+  <li>Inference tasks cannot be served with training clusters under flash crowds,</li>
+  <li>Training tasks cannot utilize inference clusters when the inference load is low.</li>
+  <li>Even for inference itself, production systems are typically provisioned to each application on per-GPU to limit the interference between applications</li>
+</ol>
+
+<p><strong>challenge 1:</strong>  GPU has high overhead when switching between tasks. eg. If a GPU switches to a DNN model (<em>e.g.,</em> ResNet) that has not been preloaded onto the GPU, it can take <strong>multiple seconds</strong> before serving the first inference request.</p>
+
+<p><strong>challenge 2:</strong> NVIDIA Multiple Process Sharing (MPS) and Salus allow multiple processes to use the same GPU, they require all processes’ data (e.g., DNN models) to be <strong>preloaded into the GPU memory</strong>. But GPU memory is limited.</p>
+
+<h2 id="problems">Problems</h2>
+
+<p>How to quickly <strong>switch the contents on GPU memory</strong> such that each one of the applications (that can be multiplexed ) is able to use the entire GPU compute and memory resources during its time slice?</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>They present PipeSwitch, a system that enables <strong>unused cycles of an inference application to be filled by training or other inference applications.</strong></p>
+
+<p>Overall, <strong>the system leverages pipelined model transmission, unified memory management, and active-standby worker switching to achieves millisecond-scale context switching latencies and high throughput</strong>.</p>
+
+<ol>
+  <li>They proposed PipeSwitch, a system that enables GPU- efficient fine-grained time-sharing for multiple DL applications, and <strong>achieves millisecond-scale context switching latencies and high throughput</strong>.</li>
+  <li>They introduce <em>pipelined context switching</em>, which exploits the characteristics of DL applications, and <strong>leverages pipelined model transmission, unified memory management, and active-standby worker switching to minimize switching overhead and enforce process-level isolation</strong>.</li>
+  <li>They implement a system prototype and integrate it with PyTorch. Experiments on a variety of DL models and GPU cards show that PipeSwitch only incurs a task startup over- head of 3.6–6.6 ms and a total overhead of 5.4–34.6 ms (10–50× better than NVIDIA MPS), and achieves near 100% GPU utilization.</li>
+</ol>
+
+<h1 id="system-overview">System Overview</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113165732459.png" alt="image-20220113165732459" /></p>
+
+<p>Controller: contains two threads, TCP thread and scheduler thread ( together with memory daemon).</p>
+
+<p>Memory daemon: it manages the GPU memory and the DNN models.</p>
+
+<ol>
+  <li>before starting a task, user register the model in scheduler.</li>
+  <li>It <strong>allocates the GPU memory to the active worker,</strong></li>
+  <li>It <strong>transfers the model from the host memory (scheduler) to the GPU memory</strong>.</li>
+</ol>
+
+<p>Active worker: A process that executes a task on one GPU. it contains two threads.</p>
+
+<ol>
+  <li>Termination thread: receive termination signal from controller and notifies main thread.</li>
+  <li>Main thread: manages DNN models and performs computation for inference or training</li>
+  <li>Worker only loads model structure (small), not the model parameters</li>
+</ol>
+
+<p>StandBy worker: idle process, is initializing a new task or cleaning its environment for previous task.</p>
+
+<p>Execution steps:</p>
+
+<ol>
+  <li>Controller queues a set of tasks received from clients.</li>
+  <li>Uses a scheduling policy to decide which task to execute next.</li>
+  <li>To start a new task, the controller either waits for the current task to finish (e.g., if it is inference) or preempts it by notifying the active worker to stop (e.g., if it is training). At the same time, controller notifies an idle standby worker to initialize its environment for the new task.</li>
+  <li>Active worker completes a task</li>
+  <li>Controller notifies <strong>memory daemon</strong> and standby worker to load task to GPU to execute with pipelined model transmission (if the model are the same, may be no need to transfer, online learning?).</li>
+  <li>Memory daemon <strong>allocates memory to standby worker, and trasmits the model from memory to GPU</strong></li>
+  <li>Standby worker become active worker to execute the new task</li>
+  <li>Active worker become standby worker and clean envs for previous task</li>
+</ol>
+
+<h2 id="pipeswitch-design">PipeSwitch Design</h2>
+
+<h2 id="profiling-task-switching-overhead">Profiling task switching overhead</h2>
+
+<p>On scenario that typical scenario that a server stops a training task running on the GPU, and then starts an inference task.</p>
+
+<p>model: ResNet152</p>
+
+<p>Measure: time to start and execute it on GPU.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113172005325.png" alt="image-20220113172005325" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113172047563.png" alt="image-20220113172047563" /></p>
+
+<p>All the components take considerable time compared to the inference time, so all those components should be optimized.</p>
+
+<h2 id="profiling-model-transmission">Profiling model transmission</h2>
+
+<p>The PCIe bandwidth is the physical limit on how fast an arbitrary task can be loaded to the GPU.  In another words, transmitting a task from CPU to GPU is bounded by the PCIe bandwidth.</p>
+
+<p>In DNN,  a task does not need to wait for the entire model to be transmitted to the GPU before beginning the computation.  <strong>Instead, the task can start the computation of a layer as soon as the layer is loaded in the GPU and the input of the layer is ready</strong> (i.e., the previous layers have finished their computation), regardless of its following layers.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113194904406.png" alt="image-20220113194904406" /></p>
+
+<p><strong>Optimal model-aware grouping</strong></p>
+
+<p>Why grouping layers for transmission?  (minimize these two sources of overhead.)</p>
+
+<ol>
+  <li>Transmission overhead of large amount of data is dominated by data size</li>
+  <li>Transmission overhead of layer-by-layer is dominated by too many PCIe calls.</li>
+</ol>
+
+<p>How to choose group size? two insights:</p>
+
+<ol>
+  <li>First group cannot be to large (F3.a).</li>
+  <li>Other than first group, we can safely pack multiple layers in a group <strong>based on progress of computation</strong> without affecting pipeline efficiency (F3.b).</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114164630688.png" alt="image-20220114164630688" /></p>
+
+<p>The algorithm runs <em>offline</em> to find the strategy, and the resulting strategy is used online by PipeSwitch for context switching.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113220259314.png" alt="image-20220113220259314" /></p>
+
+<h2 id="unified-memory-management">Unified Memory Management</h2>
+
+<p>By default:</p>
+
+<ol>
+  <li>NVIDIA provides <strong>cudaMalloc</strong> to allocate memory on GPU.</li>
+  <li>NVIDIA also provides <strong>CUDA unified memory</strong> to automatically handle <strong>memory movement between the host memory and the GPU memory for applications</strong></li>
+</ol>
+
+<p>Two characteristics of DL applications:</p>
+
+<ol>
+  <li>The amount of memory allocated to the DNN model is fixed, and does not change during task execution.
+(structure is fixed, so parameter num is fixed = &gt; memory is fixed. )</li>
+  <li>The intermediate results (output of each layer) change do not cause <em>memory fragmentation</em>.
+    <ol>
+      <li>In inference, after the next layer is computed, they are no longer needed and can be safely freed.</li>
+      <li>In training, they cannot be immediately freed, because they are also used by the backward pass to update the weights. (but the intermediate results are consumed first-in-last-out style.)</li>
+    </ol>
+  </li>
+</ol>
+
+<p><strong>New design:</strong></p>
+
+<p><strong>=&gt; Minimize memory allocation overhead:</strong></p>
+
+<p>The <strong>memory daemon uses <code>cudaMalloc</code> to obtain the GPU memory</strong> when the system starts, and then dynamically allocates the memory to the workers at runtime.</p>
+
+<ol>
+  <li>Eliminates the overhead for each worker to use <code>cudaMalloc</code> to get memory.</li>
+  <li>Memory daemon only pass memory pointers to workers.</li>
+  <li>Memory daemon ensure only one worker owns GPU memory to guarantee memory isolation between workers.</li>
+</ol>
+
+<p><strong>=&gt; Minimize memory copies overhead:</strong></p>
+
+<p>The memory daemon stores the models, and it can directly transfer model to GPU for task startup.</p>
+
+<p><strong>=&gt; Minimize IPC overhead:</strong></p>
+
+<p>After model is transmitted to GPU, memory daemon needs to notify workers and <strong>export GPU memory handler to workers</strong>, which requires IPC APIs.  (<code>cudaIpcOpenMemHandle</code> for NVIDIA GPUs).</p>
+
+<p><code>cudaIpcOpenMemHandle</code> incur high overhead, memory daemon uses the GPU IPC once to initialize the worker, and then uses cheap CPU IPCs to notify the worker which pipeline group has been transmitted.</p>
+
+<p><strong>=&gt; Pin memory</strong>:</p>
+
+<p>The OS would swap a memory page to disk if the page is inactive for a certain amount of time. We pin the pages of the memory daemon to the host memory, to eliminate this overhead</p>
+
+<h2 id="active-standby-worker-switching">Active-Standby worker Switching</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113225019317.png" alt="image-20220113225019317" /></p>
+
+<p>Two process: Each process need to clean GPU envs and warm-up GPU.</p>
+
+<p>One process: Although new task can reuse warm CUDA context, but current task has to clean its status and it does not provide process-level isolation between tasks.</p>
+
+<p>Active-standby:</p>
+
+<ol>
+  <li><strong>Each worker initializes its own GPU environment (i.e., CUDA context) when it is first created. eliminates the GPU environment initialization overhead when a new task is assigned to a worker</strong></li>
+  <li>When a task is stopped, a major job is to clear asynchronous CUDA functions queued on GPU. The paper insert synchronization points into training tasks. So the number of queued function are limited and can be quickly cleared.</li>
+  <li>When a task is stopped, another job is to free memory, in this paper, they <strong>only deletes the pointers</strong> pointing to the tensor data rather than freeing the actual data. Therefore, it is <strong>safe for the new task to transmit its model to the GPU memory at the same time</strong>. In other words, we can <strong>parallelize the task cleaning of the current task and the pipelined model transmission of the new task,</strong> to hide the task cleaning overhead.</li>
+</ol>
+
+<p>When task arrives, there sould be an idle worker waiting for the task, every standby worker needs to maintain its own CUDA context, which consumes a few hundred MB GPU memory.</p>
+
+<p>Two standby workers are sufficient to ensure at least one idle worker, which eliminates the waiting time and has moderate GPU memory consumption.</p>
+
+<h1 id="implementation">Implementation</h1>
+
+<p>3600 lines of code in C++ and Python,</p>
+
+<p>Integrated it with PyTorch including adding functions for allocating GPU memory, sharing the GPU memory to workers through CUDA IPC API and getting the shared GPU memory.</p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p><strong>Setup</strong></p>
+
+<p>conducts on AWS, PCIe 3.0 ×8, and 32 GB memory. The software environment includes PyTorch-1.3.0, torchvision- 0.4.2, scipy-1.3.2, and CUDA-10.1.</p>
+
+<p><strong>Workloads</strong></p>
+
+<p>Models used: ResNet152, Incep- tion_v3, and Bert_base.</p>
+
+<p>The default batch size for training is 32, and that for inference is 8.</p>
+
+<p><strong>Training tasks periodically checkpoint their models to the host memory, and restart from the latest checkpoint after preemption</strong>, and <strong>checkpointing frequency</strong> of training tasks is set <strong>according to the scheduling cycle</strong> to minimize checkpointing overhead</p>
+
+<p><strong>Metrics</strong></p>
+
+<p>Measure throughput and latency.</p>
+
+<h2 id="end-to-end-experiments">End-to-End Experiments</h2>
+
+<p>Experiment: A client sends an inference task to a GPU server, and the GPU server preempts the training task to execute the inference task and sends a reply back to the client.</p>
+
+<p>Measure end to end latency and compare with</p>
+
+<ol>
+  <li>Ready model: no training task, lowest latency for inference task.</li>
+  <li>Stop-and-start:
+    <ol>
+      <li>preempt the train task and start inference task .</li>
+      <li>this is slowest, main source of the overhead is <strong>CUDA context initialization</strong> and <strong>first-time library loading operations in PyTorch</strong>.</li>
+    </ol>
+  </li>
+  <li>NVIDIA MPS:
+    <ol>
+      <li>multi-process support from NVIDIA which allows the inference process to share the GPU with the training process, and training task occupies the entire GPU memory and does not stop when inference tasks come. CUDA unified memory is used for memory swapping.</li>
+      <li>One source of the overhead is the contentions both on the computation and memory of the GPU, as the training task do not stop when an inference task comes. Another source is GPU memory swapping.</li>
+    </ol>
+  </li>
+  <li>PipeSwitch:
+    <ol>
+      <li>Perform the best and is close to lower bound. 10ms overhead for most apps.</li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114150714453.png" alt="image-20220114150714453" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114151330625.png" alt="image-20220114151330625" /></p>
+
+<p>Measure end to end throughput and latency with different scheduling cycle.</p>
+
+<p>We only use ResNet152 for both training and inference on eight p3.2xlarge instances, and <strong>switch between these two tasks after each scheduling cycle</strong>.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114151734730.png" alt="image-20220114151734730" /></p>
+
+<h2 id="pipelined-model-transmission">Pipelined Model Transmission</h2>
+
+<p>Experiment: we keep all other components of PipeSwitch the same, and compare the following mechanisms.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114152604801.png" alt="image-20220114152604801" /></p>
+
+<p>Grouped transmission improves no optimization by combining the layers of the model into one big tensor and transmitting it in one group.</p>
+
+<p>Per-layer pipeline overlaps transmission and computation at the granularity of layer. But because it has <strong>PCIe overhead</strong> and <strong>synchronization overhead for every layer,</strong> for the models with <strong>many layers but relatively light computation</strong> such as ResNet152 and Inception, it can perform <strong>worse than grouped transmission and sometimes even no pipeline.</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114152847244.png" alt="image-20220114152847244" /></p>
+
+<p>This experiments proves that pruning speeds up the algorithm 1.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114153608942.png" alt="image-20220114153608942" /></p>
+
+<h2 id="unified-memory-management-1">Unified Memory Management</h2>
+
+<p>Experiment: we keep all other components of PipeSwitch the same, and compare the following five mechanisms.</p>
+
+<ol>
+  <li>No unified memory management: Each worker uses <strong>cudaMalloc</strong> to allocate GPU memory, and transmits the model to GPU by its own.</li>
+  <li>No IPC optimization: The memory daemon handles GPU memory allocation and model transmission, but creates and <strong>sends GPU memory handlers to workers</strong>. To compare, <strong>PipeSwitch simply sends an 64-bit integer offset for the shared GPU memory to workers.</strong></li>
+  <li>No pin memory: It has all optimizations on unified memory management except that the <strong>pages</strong> of the memory daemon are <strong>not pinned</strong> to the main memory.</li>
+  <li>CUDA unified memory: Each worker allocates GPU memory with cudaMallocManaged, and CUDA automatically transmits the model to GPU when needed.</li>
+  <li>PipeSwitch: It is the unified memory management mechanism used by PipeSwitch.</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114154316377.png" alt="image-20220114154316377" /></p>
+
+<p>All the optimizations on memory management are effective.</p>
+
+<h2 id="active-standby-worker-switching-1">Active-Standby Worker Switching</h2>
+
+<p>Experiment:  Keep all other components of PipeSwitch the same, and compare the following mechanisms.</p>
+
+<ol>
+  <li>Two processes:
+    <ol>
+      <li>The process of the old task cleans the GPU environment, and then another process is created and initialized for the new task.</li>
+      <li>The new process needs to create a new CUDA environment, which dominates the total time</li>
+    </ol>
+  </li>
+  <li>One process.
+    <ol>
+      <li>The process cleans the GPU environment for the old task, and reuses the environment for the new task.</li>
+      <li>One process reuses the CUDA environment, but still pays the overhead to clean the environment.</li>
+    </ol>
+  </li>
+  <li>PipeSwitch:
+    <ol>
+      <li>It is the active-standby workers switching mechanism used by PipeSwitch.</li>
+      <li>parallelize old task cleaning and new task initialization</li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114160055499.png" alt="image-20220114160055499" /></p>
+
+:ET

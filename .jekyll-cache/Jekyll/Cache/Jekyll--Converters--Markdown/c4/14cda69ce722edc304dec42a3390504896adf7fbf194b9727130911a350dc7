@@ -1,0 +1,288 @@
+I"k2<p>The design of a practical system for fault-tolerant virtual machines</p>
+
+<h1 id="something-get-from-the-paper">Something get from the paper</h1>
+
+<p>Fault-tolerate = primary/backup + state-machine sync method (init state, same ops, same order.)</p>
+
+<p>Receiving ack before returning to client can guarantee state-consistency betwen primary and backups.</p>
+
+<p>Shared storage to make sure only one VM is primary</p>
+
+<p>Slow down the primary is backup is too slow.</p>
+
+<p>Using easy-to-control temp buffer to handle race conditin of disk operation and memory accessing of VM.(virtual memory, some data in memory is stored on disk. )</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="current-problems">Current Problems</h2>
+
+<p><code>Primary/backup approach</code></p>
+
+<p>Requires keep the state of backup identical to the state of primary all the time.</p>
+
+<p>But shipping changes to all state of primary,CPU, memory and I/O devices, are very large and time-consuming since it requires much bandwidth.</p>
+
+<p><code>State-machine Approach</code></p>
+
+<p>Model the server as deterministic state machine which are kept in sync by starting from <strong>same init state, and execute same request in same order.</strong></p>
+
+<p>But mose servers or services don’t have deterministic operations, extra coordination must be used to keep the extra information.</p>
+
+<p>Implementing coordination to ensure deterministic execution of physical servers is difficult, as processor frequenceies increase. VM is excellent platform for <code>state-machine approach</code>, where the hypervisor play the role of coordinator.</p>
+
+<h2 id="solution">Solution</h2>
+
+<p>The paper implemented fault-tolerant system using primary/backup approach on VM.</p>
+
+<ol>
+  <li>The System has small time lag.</li>
+  <li>The System use <code>deterministic replay technology</code> to record the execution of primary and replay at backup server, such that the bandwidth usage is not high.</li>
+  <li>The System automatically restores redundancy after failure by starting a new backup VM on new server.</li>
+  <li>mainly deal with fail-stop failures.</li>
+</ol>
+
+<h1 id="basic-ft-design">Basic FT design</h1>
+
+<h2 id="basic-ideas">Basic ideas</h2>
+
+<p>Only primary VM is accessable for client.</p>
+
+<p>Primary sync the request to backup via network connection known as <code>logging channel</code>, and Backup VM return ack to primary VM explicitly.</p>
+
+<p>Output of backup VM is dropped by hypervisor and only primary VM return res to client.</p>
+
+<p>Using <code>heartbeating between server</code> and <code>monitoring of traffic on logging channel</code> to detect VM failure.</p>
+
+<h2 id="determinsitic-replay-implementation">Determinsitic Replay Implementation</h2>
+
+<p>Input needs to be replicated</p>
+
+<ul>
+  <li>determinstic events: Network packets, disk reads, input from devices</li>
+  <li>No-eterminstic events: virtual interrupts, reading clock cycle counter.</li>
+</ul>
+
+<p>Challenge</p>
+
+<ul>
+  <li>How to capture all deter/No-deter events correctly?</li>
+  <li>How to apply those inputs to backup VM?</li>
+  <li>Replication process doesn’t degrade performance</li>
+</ul>
+
+<p>Solution - Use <code>VMware determinsitic replay</code></p>
+
+<ul>
+  <li>It records events of VM in stream of log entries written to a log file.</li>
+  <li>Other VMs can read the file and replay.</li>
+  <li>It’s efficient in recording and delivering by using various techniques like hardware performance counters. So the system can record and delivered events nearly realtime.</li>
+  <li>The system use <code>VMware deterministic replay</code> but it send log entries via logging channel instead of writting log entires to disk. So the backup VM can replay in real time.</li>
+</ul>
+
+<h2 id="ft-protocol">FT Protocol</h2>
+
+<p>Goal/Challenge</p>
+
+<ul>
+  <li>
+    <p>if the backup VM takes over after primary VM failure, the backup VM will continue <strong>executing in a way that is entirely consistent with all outputs that the primary VM has sent to client.</strong></p>
+
+    <p>(this requires no data is lost during VM switching if primary fails.)</p>
+  </li>
+</ul>
+
+<p>Current problem</p>
+
+<ul>
+  <li>Failure happens after primary VM write successfully and return to client and before this write operation is sent to backup VMs, backup VM can takes over and replay the execution. If client issues a read to backup, then client read an inconsistenct data.</li>
+</ul>
+
+<p>Solution</p>
+
+<ul>
+  <li>
+    <p>The primary VM may <strong>not send an output to client</strong> until <strong>backup VM has received and ack the log entry</strong> associated with the operation producing the output. With this even primary VM fails after replying to client, backup VMs can still handle read request.</p>
+
+    <p><img src="imgs/image-20220203214015895.png" alt="image-20220203214015895" style="zoom:33%;" /></p>
+  </li>
+</ul>
+
+<p>Backup cannot determine if a primary crashed.</p>
+
+<h2 id="detecting-and-responding-to-failure">Detecting and Responding to Failure</h2>
+
+<p><strong>Failure detection</strong></p>
+
+<p><code>VMware FT</code> use UDP heartbeating between servers to detect when a server may have crashed. eg., <code>VMware FT</code>  monitor traffic sent from primary to backup and the ack sent from backup to primary.</p>
+
+<p><strong>Action</strong></p>
+
+<p>Once a backup VM is switched to primary VM, <code>VMware FT</code> automatically advertises the MAC address of the new primary VM on the network, so the network swithes know what server the new primary VM is located.</p>
+
+<p><strong>Problems</strong></p>
+
+<p>If the network has partition, brain-split happens.</p>
+
+<p><strong>Solution</strong></p>
+
+<p>To make sure only one primary exist in the system, the system introduce shared storage to provide the atomic operation.</p>
+
+<h1 id="practical-implementation-of-ft">Practical Implementation of FT</h1>
+
+<p>To enhance usable, robust and automatic of system, some new components are needed to add.</p>
+
+<h2 id="starting-and-restarting-ft-vms">Starting and Restarting FT VMs</h2>
+
+<p><strong>Problem</strong></p>
+
+<ol>
+  <li>How to start a new backup VM or re-start failured VM as a backup in the same state as a primary VM?</li>
+  <li>How to choose a server for such VM?</li>
+</ol>
+
+<p><strong>Solution</strong></p>
+
+<ol>
+  <li>Adopt the VMotion functionality of VMware vSphere, such that the origin VM is <strong>copped</strong> to a new server instead of migrating to new server.(migrating requires destory original VM)</li>
+  <li>All VMs can run on any server in the cluster with a shared storage. there is <code>clustering service</code> doing <code>resource mangement</code> and when a failure happens, backup VM become primary VM and then ask clustering service for a new backup VM, the clustering service determine best server based on resource usage and other constraints.</li>
+</ol>
+
+<h2 id="managing-the-logging-channel">Managing the logging channel</h2>
+
+<p>Hypervisors maintain a large buffer for logging entries for the primary and backup VMs. So the <code>VMware FT</code> can monitor the logging channel.</p>
+
+<p><img src="imgs/image-20220204114508590.png" alt="image-20220204114508590" style="zoom:50%;" /></p>
+
+<p><strong>Problem</strong></p>
+
+<p>When primary VM encounters a full log buffer when it needs to write a log entry, it must stop execution until log entries can be flushed out. (pause) This pause could increase clients latency. So how to minimize the possibility that the primary log buffer fills up.</p>
+
+<p><strong>Solution</strong></p>
+
+<p>Backup to slow =&gt; Primary log buffer fills up. Luckly, VMware deterministic replay guarantee the executing speed is the roughly the same.</p>
+
+<p><strong>Problem</strong></p>
+
+<p>Backup VM slow is inevitable when the server hosting backup VM is heavily loaded with other VM. If primary fails at this time and backup VM switch to primary VM, then backup VM must replaying all log entries. Which introduce more latency (<code>lag time</code>). How to reduce this?</p>
+
+<p><strong>Solution</strong></p>
+
+<p>Additional mechanism to <strong>slow down the primary VM to prevent the backup VM from getting too far behind.</strong> eg,. when backup VM has significant execution lag (&gt; 1 second), <code>VMware FT</code> starts slowing down the primary by informing the scheduler to give it smaller CPU.</p>
+
+<h2 id="operation-on-ft-vms">Operation on FT VMs</h2>
+
+<p>Various control operations applied to primary VM also should be applied to backup VMs.eg,.</p>
+
+<ul>
+  <li><code>Explicitly Powered off</code> on primary also applied to backups.</li>
+  <li><code>Explicitly resource change</code> on primary also applied to backups</li>
+</ul>
+
+<p>Various operations should only applied on primary VM.</p>
+
+<p>All above requirements are achieved using necessary control entry.</p>
+
+<h2 id="implementation-issues-for-disk-io">Implementation issues for Disk I/O</h2>
+
+<p>Disk operation are non-blocking, and can execute in parallel. Implementation of disk IO uses <code>DMA</code> directly to/from memory of virtual machines.</p>
+
+<p><strong>Problem</strong></p>
+
+<ul>
+  <li>Parallelims introduce race condition.</li>
+  <li>Disk operation can also race with memory access by application in VM since <strong>disk operation directly access the memory of a VM via DMA.</strong></li>
+</ul>
+
+<p><strong>Solution</strong></p>
+
+<p>The system detect race IO and make them sequential.</p>
+
+<p>The system also provide page protection on pages that are targets of disk operations. eg,. when race happens, then <strong>VM can paused until disk operation completes.</strong></p>
+
+<p>As for the implementation, use <strong>fully controlled</strong> temporary buffer to store the modified data. (we could provide consistency of this buffer easily compared with directly change MMU protection on pages.)</p>
+
+<ul>
+  <li>when disk read operation happens, read the temporary buffer.</li>
+  <li>when disk write operation happens, copy data to tmp buffer, update the data in buffer.</li>
+</ul>
+
+<h2 id="implementation-issues-for-network-io">Implementation issues for Network IO</h2>
+
+<p>Two approaches to improve VM network performance while running FT.</p>
+
+<ol>
+  <li>Reduce VM interrupts by only posting the interrupt for a group of packets.</li>
+  <li>Reduce transmit delay (time between sending log message to backup and getting an ack) by remove thread context switch.</li>
+</ol>
+
+<h1 id="design-alternatives">Design Alternatives</h1>
+
+<h2 id="shared-vs-non-shard-disk">Shared vs Non-shard Disk</h2>
+
+<p><strong>shared disk</strong></p>
+
+<p>Only primary VM does actual writes to disk, and write must be delayed after get ack from backups.</p>
+
+<p><strong>No-shared disk</strong></p>
+
+<p>Challenges includes</p>
+
+<ul>
+  <li>sync the disk infor</li>
+  <li>handle split-brain problem</li>
+</ul>
+
+<p><img src="imgs/image-20220204170006130.png" alt="image-20220204170006130" style="zoom:40%;" /></p>
+
+<h2 id="executing-disk-reads-on-backup-vm">Executing Disk reads on backup VM</h2>
+
+<p>In reading operation, Primary VM read from disk and send read result to backups.</p>
+
+<p>Alternate design is to send read ops to backups, and backups can read from disk themselves.</p>
+
+<p>challenges</p>
+
+<ul>
+  <li>backup read disk failes =&gt; retry</li>
+  <li>Primary read disk fails =&gt; backup should knows it and revert the data to original</li>
+  <li>reading disk introduce latency at backup VMs.</li>
+</ul>
+
+<p>Experiments shows executing disk reads on backup can cause some slightly reduced throughput (1-4%) for real applications.</p>
+
+<h1 id="preformanace-evaluation">Preformanace Evaluation</h1>
+
+<h2 id="applications">Applications</h2>
+
+<p>SPECJbb: java application which is CPU-intensive and little IO</p>
+
+<p>Kernel Compile: CPU and MMU intensive. (Race of memory access)</p>
+
+<p>Oracle Swingbench: OLTP workload with substantial disk and network IO</p>
+
+<p>MSSQL DVD Store: many clients.</p>
+
+<h2 id="basic-performance-result">Basic performance result</h2>
+
+<p>3rd column is average bandwidth of daata sent on logging channel when app are running.</p>
+
+<p><img src="imgs/image-20220204170922453.png" alt="image-20220204170922453" style="zoom:50%;" /></p>
+
+<p>Overhead of FT is small with less than 10%</p>
+
+<h2 id="network-benchmarks">Network Benchmarks</h2>
+
+<p>Primary and backup connected by 1GB/10GB channels.</p>
+
+<p><img src="imgs/image-20220204171732998.png" alt="image-20220204171732998" style="zoom:50%;" /></p>
+
+<p>When FT is disabled, Vm can achieve 940Mbit/s</p>
+
+<p>When FT is enabled for receive workloads, the logging bandwidth is large since all incomming packets must be sent on logging channels.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Adding FT to system only introduce less 10% overhead.</p>
+
+<p>logging bandwidth required to keep the primary and backup in sync is small, less then 20Mbit/s. The primary and backup can separated by long distances.</p>
+:ET

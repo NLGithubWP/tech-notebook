@@ -1,0 +1,292 @@
+I"�6<p>The Role of Distributed State</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="problems">Problems</h2>
+
+<p>In distributed systems, the <strong>overall state</strong> of the system is <strong>partitioned among</strong> server machines. But there are two potential issues.</p>
+
+<ol>
+  <li>some state must be <strong>accessed in different fashion</strong> than other states.</li>
+  <li>if one machine crashes, it causes <strong>some but not all of overstate to be lost.</strong></li>
+</ol>
+
+<h2 id="solutions">Solutions</h2>
+
+<p>The act of building a distributed system consists of making trade-offs among various alternatives for managing the distributed state.</p>
+
+<p>And finally, the paper concludes with the opinion that there is <strong>no perfect solution to managing distributed state: each system designer must choose a particular approach based on the needs of his or her particular environment.</strong></p>
+
+<h1 id="why-is-distributed-state-good">Why Is Distributed State Good?</h1>
+
+<p>Distributed state provides <code>performance, coherency, and reliability</code> in distributed system.</p>
+
+<ol>
+  <li><code>Performance</code>: Each server reads some state locally and avoids retrieving information from the remote machine.</li>
+  <li><code>coherency</code>: Each party knows something about the other so they can work together effectively. Eg, sequenceNum in exactly-once protocol.</li>
+  <li><code>reliability</code>: Replication of state guarantees the lost-recover.</li>
+</ol>
+
+<h1 id="why-is-distributed-state-bad">Why Is Distributed State Bad?</h1>
+
+<p>Problems introduced by distributed state: <code>consistency, crash sensitivity, time and space overheads, and complexity</code></p>
+
+<h2 id="consistency">Consistency</h2>
+
+<p><strong>Problem</strong></p>
+
+<p>Delay of updating of duplicate copies could incur system inconsistent.</p>
+
+<p><strong>Solutions</strong></p>
+
+<ol>
+  <li>
+    <p>Detect stale data on use, and fetches the latest copy</p>
+  </li>
+  <li>
+    <p>Prevent inconsistency: Wait until the system reaches consistence.</p>
+  </li>
+  <li>
+    <p>Tolerate inconsistency: reading stale data is allowed.</p>
+  </li>
+</ol>
+
+<h2 id="crash-sensitivity">Crash sensitivity</h2>
+
+<p><strong>Problem</strong></p>
+
+<p>Backup machine cannot recover the full state data that had existed on the failed machine. And it is rare for state to be fully replicated.</p>
+
+<p><strong>Fully replication of state can solve this problem but need to meet following rules.</strong></p>
+
+<ol>
+  <li>communication protocols make sure sender can redirects message traffic to replacement machine after failure of primary machine.</li>
+  <li>when failure occurs, communicaiton protocols can determine latest copies and bring out-of-date copies back to consistency without waiting for failed machine to reboot.</li>
+  <li>when failed machine reboot, comminucatin protocols can bring its state back to consitency with others.</li>
+</ol>
+
+<h2 id="time-and-space-overheads">Time and Space overheads</h2>
+
+<p><strong>Problem</strong></p>
+
+<p>Maintaining consistency of distributed state incure the time overheads. , eg</p>
+
+<ol>
+  <li>state must be checked every time the state is used,</li>
+  <li>some party track distributed copies and notity other’s abou the change.</li>
+</ol>
+
+<p>Distributed copies across cluster incure storage overheads.</p>
+
+<p><strong>Solutions</strong></p>
+
+<p>The overhead problems are closely related to the <strong>degree of sharing and rate of modification.</strong></p>
+
+<ol>
+  <li>If information is not widely shared, then there need not be many copies of the information.</li>
+  <li>If shared information is updated frequently, the cost of maintaining consistency becomes higher than the cost of communicating with a central server on each use; So we can use centralized approach to state management.</li>
+</ol>
+
+<h2 id="complexity">Complexity</h2>
+
+<p>Dealling with consistency and debugging distributed system is complex, making it hard to tune system performance.</p>
+
+<h1 id="case-study---nfs">Case study - NFS</h1>
+
+<h2 id="nfs-system---statelessness-and-idempotency">NFS System - <code>Statelessness and idempotency</code></h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220126130446307.png" alt="image-20220126130446307" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220125213216852.png" alt="image-20220125213216852" /></p>
+
+<h3 id="idempotent">idempotent</h3>
+
+<p>The second important characteristic of NFS is that almost all of its operations are idempotent</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220125213512714.png" alt="image-20220125213512714" /></p>
+
+<h3 id="stateless">stateless</h3>
+
+<p>In NFS, the distributed state is kept almost exclusively on the clients. Servers do not store any information about their clients except for a list indicating which clients are allowed to access which disk partitions. This distributed state includes the following</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220125213633255.png" alt="image-20220125213633255" /></p>
+
+<h2 id="advantages-of-nfs">Advantages of NFS</h2>
+
+<p><strong>Ease to handle server crashes</strong></p>
+
+<p>The clients will detect the timeouts and simply retry their requests until eventually the server reboots and the requests succeed.</p>
+
+<p>All important server state is on disk so nothing is lost during the crash.</p>
+
+<p><strong>simplicity development</strong></p>
+
+<p>Simple interactions between clients and servers makes it easy to build. NFS have been made in variants of the UNIX operating system</p>
+
+<h2 id="disadvantages-of-nfs">Disadvantages of NFS</h2>
+
+<p>Statelessness makes NFS protocol suffers from three major weaknesses: <code>performance, consistency, and semantics.</code></p>
+
+<h3 id="performance">Performance</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220126165921880.png" alt="image-20220126165921880" /></p>
+
+<p>(Not only update data ,but also update index block =&gt;  write amplification )</p>
+
+<p>Optimization:</p>
+
+<p>When descriptors and index blocks are repeatedly written, as described above, the writes are made to the non-volatile memory. <strong>Only a single disk write will be necessary when the cache if full</strong>. Because the cache is non-volatile, it can survive server reboots just as well as the disk.</p>
+
+<h3 id="consistency-across-the-clients">Consistency (across the clients)</h3>
+
+<p>Servers do not keep track of which clients are using which files. If one client modifies a file, there is no way for the server to notify other clients that have cached the old contents of the file.</p>
+
+<p>Each client manages it’s own states.</p>
+
+<ol>
+  <li>
+    <p><strong>Check fetch time:</strong> Whenever a file is accessed on a client, the client checks to see how recently the attributes for the file were fetched from the server. (客户端检查从服务器获取文件属性的最近时间) If the attributes are more than <strong>a few seconds old</strong>, the client refetches them.</p>
+  </li>
+  <li>
+    <p><strong>Check last-modified-time:</strong>If the last-modified-time in the new attributes does not match the last-modified-time in the client’s old copy of the attributes, client drop its cached data for the file and load latest to current cache.</p>
+  </li>
+</ol>
+
+<p>This approach ensures that each client eventually receives up-to-date information, but it permits <strong>windows of inconsistency where stale data may be used.</strong>(fetch time allows few seconds old, this few seconds is inconsistency window, since other client could modify data. ) Because of this, NFS cannot be used for certain applications where consistency is required.</p>
+
+<p>NFS uses a <em>write-through-on-close</em> policy to <strong>reduce windows of inconsistency</strong>. Whenever a file is closed on a client machine, the client immediately transmits modified data for the file back to the server. The close operation does not complete until the data is safely on the server’s disk. but the write-through-on-close deplays the closing process, and it also results in unncessary load on server and disk. eg,. some temp data are also transmitted.</p>
+
+<h3 id="semantics">Semantics</h3>
+
+<p>Statelessness and idempotency make it hard to add new features. like file lock.</p>
+
+<h1 id="case-study---sprite-file-system">Case study - Sprite File System</h1>
+
+<h2 id="sprite-file-system---stateful">Sprite File System - Stateful</h2>
+
+<p><strong>Sprite provides high performance and clean semantics, but it is more complex and faces more difficult crash recovery problems.</strong></p>
+
+<p><code>Three additional pieces of distributed state are kept in Sprite</code></p>
+
+<ol>
+  <li><strong>Clients also retain modified file blocks in their main memories</strong>; and wait 30s or wait until the information is needed by some other client before writting to disk.</li>
+  <li><strong>Servers retain modified file blocks in their main memories</strong>, and wait 30s before writting to disk</li>
+  <li><strong>Servers uses main memories to store which workstations are reading or writing which files</strong>. This requires clients to notify servers whenever files are opened or closed, but allows the servers to enforce consistency.</li>
+</ol>
+
+<p><code>Operations:</code></p>
+
+<p><strong>client open file:</strong></p>
+
+<ol>
+  <li>send request to server.</li>
+  <li>if the file is modified by other client, server retrieve the data from that client and return.</li>
+  <li>server return client a <strong>version number</strong>, it will not match the version associated with the stale data, so the file will be purged from the client’s cache.</li>
+</ol>
+
+<p><strong>Client close file</strong></p>
+
+<ol>
+  <li>send close request to server.</li>
+  <li>server close it and client can continue processing immediately without waiting server closing it;</li>
+</ol>
+
+<h2 id="advantages">Advantages</h2>
+
+<h3 id="consistency-1">Consistency</h3>
+
+<p><strong>version number</strong> make sure each read operation is guaranteed to return the most recently written data for that file.</p>
+
+<p>Sprite’s stateful approach also allowed file locking to be implemented easily.</p>
+
+<p>If multiple clients try to write, no one can cache.</p>
+
+<h3 id="preformance">Preformance</h3>
+
+<p>Client’s <strong>send-back-wait</strong> reduce the communication overhead.</p>
+
+<p>Server’s <strong>write-wait</strong> reduce the write amplification.</p>
+
+<p>Client need not wait for information to be written to disk when they close files.</p>
+
+<p><img src="imgs/image-20220126174521842.png" alt="image-20220126174521842" style="zoom:50%;" /></p>
+
+<h2 id="limitations">Limitations</h2>
+
+<p>complexity, recovery, performance, and space overhead.</p>
+
+<h3 id="complexity-1">complexity</h3>
+
+<p>Managing the server’s state is complex. (avoid deadlock, race condition.)</p>
+
+<h3 id="recovery">recovery</h3>
+
+<p>State kept in client and server can lost in crash.</p>
+
+<p>The system flushes their <strong>file cache</strong> to (to disk in the case of servers; to servers in the case of clients) when crash happens, <strong>but still lost the information of which clients are using which files.</strong></p>
+
+<p><code>Solution</code></p>
+
+<p>Client <strong>keep the file state locally</strong>, and a new operation was added to the Sprite protocol: <strong>reopen</strong>. When a server reboots, each client reopens <strong>all of its files</strong> by passing the server a copy of its state information (including information such as which files are open for read- ing or writing, which are locked, etc.). Server can reconstruct its state.</p>
+
+<p>But this solution may incur <strong>recovery storm</strong> (overload the servers to the point where they cannot respond to requests in a timely fashion) when hundred files open at the crash point.</p>
+
+<h3 id="slow-open">Slow open</h3>
+
+<p>Each open and close be reflected through to the file’s server.</p>
+
+<p>In contrast, NFS clients never contact servers during closes except to write new data; during opens, an NFS client need not contact the server as long as it has up-to-date attributes cached for the file.</p>
+
+<h3 id="space-overhead">Space overhead</h3>
+
+<p>A file server needs <strong>several hundred bytes</strong> of storage for <strong>each open file</strong> to keep track of the file’s usage,</p>
+
+<p>and may have many thousand files open at once. As a result, the storage required for file state grossly exceeded our initial estimates, causing internal memory limits in the Sprite kernel to be exceeded.</p>
+
+<p>Usage state information typically occupies about <strong>15-20%</strong> as much space as the file data (many megabytes in larger configurations).</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p><strong>Stateless</strong> model has <strong>lower performance</strong> than stateful one.  (Limited by disk performance)</p>
+
+<p>Distributed state incure complexity, so we should reduce states.</p>
+
+<p>Merge recovery with normal operation to reduce complexity during recovery to facilite the testing.</p>
+
+<h2 id="nfs">NFS</h2>
+
+<p>Performance</p>
+
+<ul>
+  <li>every client write request synchronously writes to server disks</li>
+</ul>
+
+<p>Consistency</p>
+
+<ul>
+  <li>other client caches are not notified of the updates</li>
+  <li>read inconsistent data • NFS’ solution?
+    <ul>
+      <li>periodic polling</li>
+      <li>eventually receive updates</li>
+      <li>affects performance</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="sprite">SPRITE</h2>
+
+<p>Advantages:</p>
+
+<ul>
+  <li>consistency: if one client write, server notify other client who is reading, and let them read from server only.</li>
+  <li>performance</li>
+</ul>
+
+<p>Disadvantages:</p>
+
+<ul>
+  <li>complexity</li>
+  <li>durability and recovery</li>
+</ul>
+:ET

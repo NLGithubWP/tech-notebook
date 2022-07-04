@@ -1,0 +1,97 @@
+I"$'<p>non-blocking thread synchronization</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<p>From <a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm">wiki</a></p>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>The traditional approach to multi-threaded programming is to use <a href="https://en.wikipedia.org/wiki/Lock_(computer_science)">locks</a> to synchronize access to shared <a href="https://en.wikipedia.org/wiki/Resource_(computer_science)">resources</a>. Synchronization primitives such as <a href="https://en.wikipedia.org/wiki/Mutual_exclusion">mutexes</a>, <a href="https://en.wikipedia.org/wiki/Semaphore_(programming)">semaphores</a>, and <a href="https://en.wikipedia.org/wiki/Critical_section">critical sections</a> are all mechanisms by which a programmer can ensure that certain sections of code do not execute concurrently if doing so would corrupt shared memory structures. If one thread attempts to acquire a lock that is already held by another thread, the thread will block until the lock is free.</p>
+
+<p>Other problems are less obvious. For example, certain interactions between locks can lead to error conditions such as <a href="https://en.wikipedia.org/wiki/Deadlock">deadlock</a>, <a href="https://en.wikipedia.org/wiki/Livelock">livelock</a>, and <a href="https://en.wikipedia.org/wiki/Priority_inversion">priority inversion</a>.</p>
+
+<p>Using locks also involves a trade-off between</p>
+
+<ol>
+  <li>coarse-grained locking, which can significantly reduce opportunities for <a href="https://en.wikipedia.org/wiki/Parallel_computing">parallelism</a></li>
+  <li>fine-grained locking, which requires more careful design, increases locking overhead and is more prone to bugs.</li>
+</ol>
+
+<p>non-blocking algorithms do not suffer from these downsides, and in addition, are safe for use in <a href="https://en.wikipedia.org/wiki/Interrupt_handler">interrupt handlers</a></p>
+
+<ol>
+  <li>even though the <a href="https://en.wikipedia.org/wiki/Pre-emptive_multitasking">preempted</a> thread cannot be resumed, progress is still possible without it.</li>
+  <li>In contrast, global data structures protected by mutual exclusion cannot safely be accessed in an interrupt handler, as the preempted thread may be the one holding the lock—but this can be rectified easily by masking the interrupt request during the critical section.</li>
+</ol>
+
+<p>A lock-free data structure can be used to improve performance. A lock-free data structure increases the amount of time spent in parallel execution rather than serial execution, improving performance on a <a href="https://en.wikipedia.org/wiki/Multi-core_processor">multi-core processor</a>, because access to the shared data structure does not need to be serialized to stay coherent.</p>
+
+<h2 id="implementation">Implementation</h2>
+
+<p>With few exceptions, non-blocking algorithms use <a href="https://en.wikipedia.org/wiki/Linearizability">atomic</a> <a href="https://en.wikipedia.org/wiki/Read-modify-write">read-modify-write</a> primitives that the hardware must provide, the most notable of which is <a href="https://en.wikipedia.org/wiki/Compare-and-swap">compare and swap (CAS)</a>. <a href="https://en.wikipedia.org/wiki/Critical_section">Critical sections</a> are almost always implemented using standard interfaces over these primitives (in the general case, critical sections will be blocked, even when implemented with these primitives). In the 1990s all non-blocking algorithms had to be written “natively” with the underlying primitives to achieve acceptable performance. However, the emerging field of <a href="https://en.wikipedia.org/wiki/Software_transactional_memory">software transactional memory</a> promises standard abstractions for writing efficient non-blocking code.</p>
+
+<ol>
+  <li>Using atomic primitives</li>
+  <li>Using non-blocking data structure without atomic primitives.
+    <ul>
+      <li>a single-reader single-writer <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a> <a href="https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)">FIFO</a>, with a size that evenly divides the overflow of one of the available unsigned integer types, can unconditionally be <a href="https://en.wikipedia.org/wiki/Producer–consumer_problem#Without_semaphores_or_monitors">implemented safely</a> using only a <a href="https://en.wikipedia.org/wiki/Memory_barrier">memory barrier</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Read-copy-update">Read-copy-update</a> with a single writer and any number of readers. (The readers are wait-free; the writer is usually lock-free until it needs to reclaim memory).</li>
+      <li>Read-copy-update with multiple writers and any number of readers. (The readers are wait-free; multiple writers generally serialize with a lock and are not obstruction-free).</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Optimizing compiler and CPUs often re-arrange operations, In c++ we can use atomic to tell the compiler not to re-arrange such instructions. and to insert the appropriate memory barriers.</p>
+
+<h1 id="内存屏障">内存屏障</h1>
+
+<p>程序在运行时内存实际的访问顺序和程序代码编写的访问顺序不一定一致，这就是内存乱序访问。内存乱序访问行为出现的理由是为了提升程序运行时的性能。内存乱序访问主要发生在两个阶段：</p>
+
+<ol>
+  <li>编译时，编译器优化导致内存乱序访问（指令重排）</li>
+  <li>运行时，多 CPU 间交互引起内存乱序访问</li>
+</ol>
+
+<p>Memory barrier 能够让 CPU 或编译器在内存访问上有序。一个 Memory barrier 之前的内存访问操作必定先于其之后的完成。Memory barrier 包括两类：</p>
+
+<ol>
+  <li>编译器 barrier</li>
+  <li>CPU Memory barrier</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220504114649377.png" alt="image-20220504114649377" /></p>
+
+<h1 id="algorithms">Algorithms</h1>
+
+<p>There are two types of <a href="http://en.wikipedia.org/wiki/Non-blocking_synchronization">non-blocking thread synchronization</a> algorithms - lock-free, and wait-free.</p>
+
+<h2 id="lock-free-algorithms">Lock-free algorithms</h2>
+
+<p>Any particular computation can be blocked for some period of time. All CPUs are able to continue performing other computations.</p>
+
+<p>A given thread might be blocked by other threads in a lock-free system, all CPUs can continue doing other useful work without stalls. Lock-free algorithms increase the overall throughput of a system by occasionally increasing the latency of a particular transaction. Most high-end database systems are based on lock-free algorithms, to varying degrees.</p>
+
+<h3 id="implementation-1">Implementation</h3>
+
+<ol>
+  <li>completing one’s own operation,</li>
+  <li>assisting an obstructing operation,</li>
+  <li>aborting an obstructing operation,</li>
+  <li>waiting</li>
+</ol>
+
+<h2 id="wait-free-algorithm">Wait-free algorithm</h2>
+
+<p>By contrast, wait-free algorithms ensure that in addition to all CPUs continuing to do useful work, no computation can ever be blocked by another computation. Wait-free algorithms have stronger guarantees than lock-free algorithms and ensure a high throughput without sacrificing the latency of a particular transaction. They’re also much harder to implement, test, and debug. The <a href="http://lwn.net/Articles/291826/">lockless page cache</a> patches to the Linux kernel are an example of a wait-free system.</p>
+
+<h3 id="implementation-2">Implementation</h3>
+
+<p>Wait-free algorithms were rare until 2011, both in research and in practice. However, in 2011 Kogan and <a href="https://en.wikipedia.org/wiki/Erez_Petrank">Petrank</a>[<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm#cite_note-wf-queue-18">18]</a> presented a <strong>wait-free queue building on the <a href="https://en.wikipedia.org/wiki/Compare-and-swap">CAS</a> primitive</strong>, generally available on common hardware. Their construction expanded the lock-free queue of Michael and Scott,[<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm#cite_note-lf-queue-19">19]</a> which is an efficient queue often used in practice. A follow-up paper by Kogan and Petrank[<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm#cite_note-wf-fpsp-20">20]</a> provided a method for making wait-free algorithms fast and used this method to make the wait-free queue practically as fast as its lock-free counterpart. A subsequent paper by Timnat and Petrank[<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm#cite_note-wf-simulation-21">21]</a> provided an automatic mechanism for generating wait-free data structures from lock-free ones. Thus, wait-free implementations are now available for many data structures.</p>
+
+<h2 id="compare">Compare</h2>
+
+<p>In a situation where a system handles dozens of concurrent transactions and has <a href="http://en.wikipedia.org/wiki/Real-time_computing#Hard_and_soft_real-time_systems">soft latency requirements</a>, lock-free systems are a good compromise between development complexity and high concurrency requirements. A database server for a website is a good candidate for a lock-free design. While any given transaction might block, there are always more transactions to process in the meantime, so the CPUs will never stay idle. The challenge is to build a transaction scheduler that maintains a good mean latency, and a well-bounded standard deviation.</p>
+
+<p>In a scenario where a system has roughly as many concurrent transactions as CPU cores or has hard real-time requirements, the developers need to spend the extra time to build wait-free systems. In these cases blocking a single transaction isn’t acceptable - either because there are no other transactions for the CPUs to handle, minimizing the throughput, or a given transaction needs to complete within a well-defined non-probabilistic time period. Nuclear reactor control software is a good candidate for wait-free systems.</p>
+
+:ET

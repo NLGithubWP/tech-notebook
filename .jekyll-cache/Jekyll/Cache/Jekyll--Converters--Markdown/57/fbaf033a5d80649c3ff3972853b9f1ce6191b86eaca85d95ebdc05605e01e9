@@ -1,0 +1,355 @@
+I"fE<h1 id="questions-still-not-solved"><strong>Questions still not solved</strong></h1>
+
+<ol>
+  <li>
+    <p>The coordinator leader ensures that clients cannot see any data committed by Ti until <em>TT.after</em>(si) is true. Commit wait ensures that si is less than the absolute commit time of Ti,  or si &lt; t_abs (e_<em>commit</em>).</p>
+
+    <p>But what if a read request arrives after si but before absolute commit time of Ti? could it see the latest update?</p>
+  </li>
+  <li>
+    <p>In 4.1.2, it says <em>“For a given transaction, Spanner assigns it the timestamp that Paxos assigns to the Paxos write that represents the transaction commit</em>.”</p>
+
+    <p>But in 4.2.1, it says “<em>Before allowing any coordinator replica to apply the commit record, the coordinator leader waits until TT.after(s), so as to obey the commit-wait rule described in Section 4.1.2. Because the coordinator leader chose s based on TT.now().latest, and now waits until that time- stamp is guaranteed to be in the past”</em> .</p>
+
+    <p>Which means si is picked before Paxos write that represents the transaction commit happens.</p>
+
+    <p><strong>This is contradict with 4.1.2!!!</strong></p>
+  </li>
+</ol>
+
+<h1 id="some-resoures"><strong>some resoures</strong></h1>
+
+<p>https://cloud.tencent.com/developer/article/1442909</p>
+
+<p>https://zhuanlan.zhihu.com/p/47870235</p>
+
+<h1 id="1-introduction">1. Introduction</h1>
+
+<p>Mysql: shard data is complex and requires efforts in business logic. Resharding is costly.</p>
+
+<p>Nosql system: no transactional semantics</p>
+
+<p>BigTable: difficult to use for applications requires complex, evolving schemas, or those that want strong consistency in the presence of wide-area replication.</p>
+
+<p>Spanner provides:</p>
+
+<ol>
+  <li>replication configurations can be controlled,eg which data to replicate, how far data is from user etc</li>
+  <li>Provides <strong>externally consitent</strong> read and writes <strong>in global scale</strong></li>
+  <li>Provides <strong>global consistent reads acorss database at a timestamp.</strong></li>
+  <li>Upgrade <strong>2PC</strong> to make it more efficient</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211014101536635.png" alt="image-20211014101536635" /></p>
+
+<h1 id="2-implementation">2. Implementation</h1>
+
+<p>in tegration of concurrency control, replication, and 2pc.</p>
+
+<p><strong>Universe</strong>: a spanner depliyment</p>
+
+<p><strong>Zone:</strong> Zones are the unit of administrative deployment, phsical isolation, dynamically add or remove</p>
+
+<p><strong>ZoneMaster</strong>: assigns data to spanservers</p>
+
+<p><strong>Spanservers</strong>: serve data to clients.</p>
+
+<p><strong>Location proxies</strong>: used by <strong>clients</strong> to locate the spanservers which can server client’s data.</p>
+
+<p><strong>placement driver</strong>: handels automated movement of data across <strong>zones</strong>. It <strong>periodically</strong> communicates with the spanservers to <strong>find data that needs to be moved</strong>, either to <strong>meet updated replication constraints or to balance load</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211013202821848.png" alt="image-20211013202821848" /></p>
+
+<h2 id="spanserver-software-stack">Spanserver Software Stack</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211012120142565.png" alt="image-20211012120142565" /></p>
+
+<p><strong>Tablet:</strong> Each server is responsible for between 100 and 1000 instances of data struct, called <strong>tablet</strong>, which is the kv pair as follow, Where spanner assigns <strong>timestamp to data</strong>, which is more like a <strong>multi-version database</strong>.</p>
+
+<p>Spanner tablet is a container that may encapsulate <strong>multiple partitions of the row space</strong></p>
+
+<pre><code class="language-python">(key:string, timestamp:int64) → string
+</code></pre>
+
+<p>Table’s state is stored in <strong>B-tree-like files</strong> and <strong>write-ahead log</strong>, all on DFS <strong>Colossus</strong></p>
+
+<p>Log each Paxos write twice, onece in tablet’s log, and once in Paxos log. Write applied by Paxis in order. The implementation of Paxos is <strong>pipelined</strong>, so as to improve Spanner’s throughput in the presence of WAN latencies, <u>(sequential write?)</u></p>
+
+<p>Write must go to leader, but read can access from underlying tablet at any replica that is <strong>sufficiently up-to-data</strong> <u>(prefix consistency?)</u></p>
+
+<p>Each raplica leader has a <strong>lock table</strong> to implement concurrency control (<strong>2PL</strong>). It maps ranges of keys to lock states.  Each replica leader also has a <strong>transaction manager</strong> to support distributed transaction (<strong>2pc</strong>)</p>
+
+<p>If only use <strong>one</strong> <strong>Paxos</strong> <strong>group</strong>, <strong>it bypass the transaction manage</strong>r because the lock table and Paxos together provide A.</p>
+
+<p><strong>State of each transaction manager</strong> is <strong>also stored in underlying Paxos group and is replicated.</strong></p>
+
+<h2 id="directories-and-placement">Directories and Placement</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211012135203429.png" alt="image-20211012135203429" /></p>
+
+<p><strong>Directory:</strong> <strong>a set</strong> of contiguous <strong>keys</strong> with same prefix.</p>
+
+<p>​	It enable user to control locality of their data more carefully.</p>
+
+<p>​	All data in same diectory has same replication configuration</p>
+
+<p><strong>Move data</strong></p>
+
+<p>​	between Paxos groups, directory by directory, one zone to another zone</p>
+
+<p>​	To shed load from a Paxos group, eg, put directories that are frequently accessed together into the same group(<u>why?)</u></p>
+
+<p>​	To move a directory into a group that closer to accessors</p>
+
+<p>​	50MB directory can be moved in a few seconds.</p>
+
+<p>​	“Movedir” task run on background and it will use a single transaction to aotmically update related metadata after moving all data.</p>
+
+<p>Spanner will shard a directory into multiple <em>fragments</em> if it grows too large. Fragments may be served from different Paxos groups</p>
+
+<h2 id="data-model">Data model</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211012164442833.png" alt="image-20211012164442833" /></p>
+
+<p>Spanner exposes chematized semi-relational tables, query languages, and general purpose transactions.</p>
+
+<p>Running 2pc over Paxos mitigates the availability problems.(<u>why</u>?)</p>
+
+<p>Each dataset must be partitioned by clients into one ore more hierarchies of tables. The table at the <strong>top of it is directory table</strong>.</p>
+
+<p><strong>directory = Each row in directory table with key K + rows in descendant tables which starts with K</strong>. unit of data movement</p>
+
+<h1 id="3-true-time">3. True Time</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211012215144713.png" alt="image-20211012215144713" /></p>
+
+<p>TrueTime is implemented by a set of <em>time master</em> machines per datacenter and a <em>timeslave daemon</em> per machine. All masters’ time references are regularly compared against each other.</p>
+
+<p><strong>Time Master</strong> has GPS receivers and it will advertise a slowly increasing time uncertainty</p>
+
+<p><strong>timesalve daemon</strong> polls a variety of master (of different data center) to reduce vulnerability to errors from any one master.</p>
+
+<h1 id="4-concurrency-control">4. Concurrency Control</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211012221740708.png" alt="image-20211012221740708" /></p>
+
+<p>True time is used to guarantee the correctness on concurrency control.</p>
+
+<h2 id="timestamp-management">Timestamp Management</h2>
+
+<h3 id="paxos-leader-leases">Paxos Leader Leases</h3>
+
+<p>When a replica receives quorm of votes, it becomes a leader and each spanner’s leader can live 10 seconds.</p>
+
+<p>Paxos leader extends it’s lease on a successful write and leader requests lease-vote extension if it is near expiration</p>
+
+<p><strong>A Paxos leader’s lease interval:</strong> the time duration when a replica is a leader.</p>
+
+<p>For <strong>each Paxos group</strong>, each Paxos leader’s lease interval is disjoint from every other leader’s.</p>
+
+<p>A leader can also abdicate, but it must make sure TT.after(S_max)= True, where the S_max is maximum <strong>timestamp</strong> used by a leader.</p>
+
+<h3 id="assigning-timestamps-to-rw-transactions">Assigning Timestamps to RW Transactions</h3>
+
+<p><strong>Isolaton</strong> of RW is guranted by using <strong>2PL</strong>.</p>
+
+<p>Spanner assigns it the timestamp that <strong>Paxos assigns to the Paxos write that represents the transaction commit.</strong> (use the time when the Paxos write happens triggered by commit.)</p>
+
+<p><strong>monotonicity invariant</strong>: In each Paxos group, spanner leader assigns timestamps to Paxos write in <strong>monotonically increasing order</strong>. Since the lease interval is disjointness, the timestamp is in monotonically increasing order even across leaders.</p>
+
+<p>When a timestamp is assigned to a transaction, S_max is updated.</p>
+
+<p><strong>External consistency invariant</strong>: If <strong>start of T2</strong> occurs after <strong>commit of T1,</strong> then <strong>commit timestamp of T2</strong> must be greater than <strong>commit timestamp of T1</strong>.</p>
+
+<p><strong>Proof of External consistency :</strong> (trueTime, start, commit-wait)</p>
+
+<p><strong>e_start:</strong>  transaction is started, probably counted on client side.</p>
+
+<p><strong>e_commit:</strong> transaction is commited</p>
+
+<p><strong>e_server:</strong> transaction is sent to coordinator leader (server )</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211012232357062.png" alt="image-20211012232357062" /></p>
+
+<ol>
+  <li>
+    <p><strong>start</strong></p>
+
+    <p>The coordinator leader for a write tx T_i will assign a <strong>commit timestamp &gt;= <em>TT.now().latest</em> and so &gt;= e_server</strong></p>
+  </li>
+  <li>
+    <p><strong>commit wait</strong></p>
+
+    <p>The coordinator leader ensures that clients cannot see any data committed by Ti until <em>TT.after</em>(si) is true. Commit wait ensures that si is less than the absolute commit time of Ti,  or si &lt; t_abs (e_<em>commit</em>).</p>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211013194500658.png" alt="image-20211013194500658" /></p>
+
+<h3 id="serving-reads-at-a-timestamp">Serving Reads at a Timestamp</h3>
+
+<p>The <strong>monotonicity invariant</strong> described in Section 4.1.2 <strong>allows Spanner</strong> to correctly <strong>determine whether a replica’s state is sufficiently up-to-date to satisfy a read</strong>.</p>
+
+<p>Each replica tracks a value called safe time T_safe, <strong>which is maximum timestamp at which a replica is up-to-date</strong>. (It promises T_safe is up-to-date). <strong>Replica can satisfy read if T(read) &lt;= T_safe</strong></p>
+
+<p>T_safe = min(T_safe_Paxos,  T_safe_TM)</p>
+
+<p><strong>T_safe_Paxos:</strong> Timestamp of highest applied Paxos write</p>
+
+<p><strong>T_safe_TM:</strong> = min_i(s_i_g_prepare-1) (if there are many uncommitd txs in each server, the server will pick the smallest value of s_i_prepare-1, where s_i_prepare is provided by transaction participants for group g)</p>
+
+<h3 id="assign-timestamp-to-read-only-tx">Assign Timestamp to read only Tx</h3>
+
+<p>Two phase: assign a timestamp <strong>s_read</strong> and then execute the read as <strong>snapshot read</strong> at s_read, which can run at any sufficiently up-to-date replica.</p>
+
+<p>For simple, s_read = TT.now().latest. But this may block because t_safe could less than s_read.</p>
+
+<h2 id="details">Details</h2>
+
+<h3 id="read-write-transaction">Read-Write transaction</h3>
+
+<p>Spanner executes a set of <em>reads</em> and writes atomically at a single logical point in time.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211013224229147.png" alt="image-20211013224229147" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211013224632848.png" alt="image-20211013224632848" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211013153301380.png" alt="image-20211013153301380" /></p>
+
+<p><strong>Client</strong>, <strong>Transaction Coordiantor</strong> and <strong>Transaction Participants</strong></p>
+
+<h4 id="for-read">For Read:</h4>
+
+<p>client issues reads to leader replica of a Paxos group, which acquires a <strong>read locks</strong>. Client send keepalive message to prevent participant leader from timing out the transaciton.</p>
+
+<h4 id="for-write">For Write</h4>
+
+<p>After client finish all read and <strong>buffer all write at client side</strong>, it can start <strong>2pc</strong></p>
+
+<p><strong>Client</strong>:</p>
+
+<ol>
+  <li>Choose a server as TC and Send commit message to each TP with TC’s address.</li>
+  <li></li>
+</ol>
+
+<p><strong>TC</strong>:</p>
+
+<ol>
+  <li>
+    <p>once receive commit message from client, get <em>TT.now</em>()</p>
+  </li>
+  <li>
+    <p>Acquires write locks</p>
+
+    <p>…</p>
+  </li>
+  <li>
+    <p>skip the prepare phase, wait until getting all prepare message from all TPs</p>
+  </li>
+  <li>
+    <p>choose a <strong>timestamp for the entire transaction s</strong>,</p>
+
+    <ol>
+      <li>s &gt;= All prepare timestamps (to make sure each TP can calculate T_safe more precisely , T_safe = min(T_prepare-1))</li>
+      <li><em>s &gt; TT.now</em>().<em>latest</em> (commit time &gt; time of receving the request at server side. )</li>
+      <li>s &gt; Any timestamps the leader has assigned to previous transactions (to preserve monotonicity)</li>
+    </ol>
+  </li>
+  <li>
+    <p>wait until <strong><em>TT.after(s)</em>=True</strong>, (commit-wait rules)</p>
+  </li>
+  <li>
+    <p>send commit timestamp to <strong>client and all TPs</strong></p>
+  </li>
+  <li>
+    <p>realease locks</p>
+  </li>
+</ol>
+
+<p><strong>TP</strong>:</p>
+
+<ol>
+  <li>
+    <p>Acquires write locks</p>
+  </li>
+  <li>
+    <p>choose prepare timestamp &gt;=  any timestamps it has assigned to pre- vious transactions  (to preserve monotonicity)</p>
+  </li>
+  <li>
+    <p>logs a prepare record.</p>
+  </li>
+  <li>
+    <p>notifies the coordinator of its prepare timestamp.</p>
+  </li>
+</ol>
+
+<p>…</p>
+
+<ol>
+  <li>
+    <p>Wait until receive TC’s commit timestamp,</p>
+  </li>
+  <li>
+    <p>Log transactions’ output</p>
+  </li>
+  <li>
+    <p>apply tx and release locks</p>
+  </li>
+</ol>
+
+<h3 id="read-only-transaction">Read-Only transaction</h3>
+
+<p><strong>Reads in a read-only transaction execute at a system-chosen timestamp without locking, so that incoming writes are not blocked.</strong></p>
+
+<p>can proceed on any replica that is sufficiently up-to-date</p>
+
+<p><strong>Scope</strong>: sumarizes the keys that will be read by entire transaction.</p>
+
+<p>If using single Paxos group, Paxos leader assigns s_<em>read</em> = <em>LastTS</em>()  and execute read. The <em>LastTS</em>() is the last committed write at a Paxos group</p>
+
+<p>If using many Paxos groups, Spanner use s_read = TT.now().latest. Which may wait for safe time to advance</p>
+
+<h3 id="snapshot-read-transaction">Snapshot read transaction</h3>
+
+<p>Similarly to read only transaction, lock free,  execution of a snapshot read proceeds at any replica that is sufficiently up-to-date.</p>
+
+<p>The difference is a client can either specify a timestamp for a snapshot read, or provide an upper bound on the desired timestamp’s staleness and let Spanner choose a timestamp. While in read only transaction, the client don’t need to provide timestamp.</p>
+
+<h3 id="schema-change-transaction">Schema-Change transaction</h3>
+
+<p>TrueTime enables Spanner to support atomic schema changes</p>
+
+<p>A Spanner schema-change transaction is a generally non-blocking variant of</p>
+
+<h3 id="refinements-transaction">Refinements transaction</h3>
+
+<p>t_tm__safe as defined above has a weakness, in that a single prepared transaction prevents t_<em>safe</em> from advancing.</p>
+
+<p>T_Paxos_safe has weakness: if the last write happens before time t, then the read request with timestamp t cannot read. (because T_Paxos_safe is the safe time, read is allowed when t&lt;T_Paxos_safe)</p>
+
+<h1 id="5-evaluation">5. Evaluation</h1>
+
+<h2 id="microbenchmarks">MicroBenchmarks</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211013172621164.png" alt="image-20211013172621164" /></p>
+
+<h2 id="availability">Availability</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211013172646157.png" alt="image-20211013172646157" /></p>
+
+<h1 id="6-conclusion">6. Conclusion</h1>
+
+<p>Spanner combines and extends on ideas from two research communities:</p>
+
+<p>from the database com- munity, <strong>a familiar, easy-to-use, semi-relational interface, transactions, and an SQL-based query language</strong>;</p>
+
+<p>from the systems community,</p>
+
+<ol>
+  <li>scalability, automatic sharding,</li>
+  <li><strong>fault tolerance, consistent replication</strong>,wide-area distribution (raft)</li>
+  <li>external consistency, (truetime and timestamp)</li>
+</ol>
+
+:ET

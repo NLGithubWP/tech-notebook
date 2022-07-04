@@ -1,0 +1,182 @@
+I"^*<h1 id="1-abstract--introduction">1. Abstract &amp; Introduction</h1>
+
+<h2 id="problems">Problems</h2>
+
+<p><em>Neural Architecture Search</em> efficiency is limited by need for model training for numerous candidate archi- tectures during the search process.</p>
+
+<p>One-shot NAS algorithms share model parameters among candidate architectures, thereby reducing the cost of model training substantially, but still require the training of the one-shot architecture.</p>
+
+<p>Many training-free algorithms are also not sufficient.</p>
+
+<ol>
+  <li>
+    <p>Park et al. (2020) have approximated the converged performance of candidate architecture by the performance of their corresponding NNGP, but it is costly.</p>
+  </li>
+  <li>
+    <p>Abdelfattah et al. (2021) have investigated several training-free proxies to rank candidate architectures in the search space.</p>
+  </li>
+</ol>
+
+<h2 id="idea">Idea</h2>
+
+<p>can we realize NAS is at initialization such that model training can be completely avoided during the search process?</p>
+
+<h2 id="solutions">Solutions</h2>
+
+<p>This paper presents a novel NAS algorithm called <em>NAS at Initialization</em> (NASI) that can completely avoid model training to boost search efficiency.</p>
+
+<p>It exploits the capability of a <em>Neural Tangent Kernel</em> in being able to characterize the converged performance of candidate architectures at initialization. Hence <strong>avoid model training</strong> to boost the search efficiency.</p>
+
+<p>Compared with other training-free algorithms, the algorithm in paper is</p>
+
+<ol>
+  <li>Providing <strong>theoretically grounded performance estimation</strong> by NTK (compared with (Mellor et al., 2020; Abdelfattah et al., 2021; Chen et al., 2021)),</li>
+  <li>Guaranteeing the <strong>transferability</strong> of its selected architectures with its provable label and data-agnostic search under mild conditions (compared with (Mellor et al., 2020; Park et al., 2020; Abdelfattah et al., 2021; Chen et al., 2021)))</li>
+  <li>Achieving <strong>SOTA performance</strong> in a large search space over various benchmark datasets (compared with (Mellor et al., 2020; Park et al., 2020; Abdelfattah et al., 2021)).</li>
+</ol>
+
+<h2 id="result">Result</h2>
+
+<p>Compared with other NAS algorithms, NASI incurs the smallest search cost while preserving the competitive performance of its selected architectures.</p>
+
+<h1 id="2-related-works-and-background">2. <a href="https://rajatvd.github.io/NTK/">Related works and BackGround</a></h1>
+
+<p>The NTK stays <strong>asymptotically constant</strong> during the course of training as the <strong>width of DNNs goes to infinit</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225172959309.png" alt="image-20211225172959309" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225181308294.png" alt="image-20211225181308294" /></p>
+
+<p>The weights don’t change much at all for larger hidden widths.</p>
+
+<p>Taylor expand the network function <strong><em>with respect to the weights</em></strong> around its <strong>initialization</strong>.</p>
+
+<h1 id="3-neural-architecutre-search-at-initialization">3. Neural Architecutre Search at Initialization</h1>
+
+<h2 id="reformulating-nas-via-ntk">Reformulating NAS via NTK</h2>
+
+<p>To completely avoid this training cost, it exploit the capability of NTK for characterizing the converged performance of DNNs at initialization.</p>
+
+<p>For a L-layer DNN, we denote the output dimension of its hidden layers and the last layer as
+n1 =···=nL−1 = k and nL =n, respectively.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211226145119529.png" alt="image-20211226145119529" /></p>
+
+<p>according to Proposition 1.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211226150008239.png" alt="image-20211226150008239" /></p>
+
+<p>NAS can be realizable at initialization. Specifically, given a fixed and sufficiently large training budget, to select the best-performing architecture, we can simply minimize the upper bound of Lt (6) over all the candidate architectures in the search space for t → ∞</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211226145156394.png" alt="image-20211226145156394" /></p>
+
+<p>However, this constant NTK is computationally costly to evaluate. The trace norm of NTK at initialization can be efficiently approximated. So the paper mainly consider using it.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225225420848.png" alt="image-20211225225420848" /></p>
+
+<h2 id="approximating-the-trace-norm-of-ntk">Approximating the Trace Norm of NTK</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225225545221.png" alt="image-20211225225545221" /></p>
+
+<ol>
+  <li>
+    <p>Frobenius norm of the Jacobian matrix in (9) is costly to evaluate. So, we approximate this term using its lower bound.</p>
+  </li>
+  <li>
+    <p>Calculate each sample in function (9) using parallelization over mini-batches.</p>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225230032957.png" alt="image-20211225230032957" /></p>
+
+<ol>
+  <li>further approximate the summation over m/b mini-batches in (11) by one single uniformly randomly sampled mini-batch Xj</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225230133764.png" alt="image-20211225230133764" /></p>
+
+<h2 id="optimization-and-search-algorithm">Optimization and Search Algorithm</h2>
+
+<p>with the approximation in (12), our reformulated NAS problem (8) can be transformed into</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225230753501.png" alt="image-20211225230753501" /></p>
+
+<p>The optimization of (13) in the discrete search space is intractable. So, we apply some optimization tricks to simplify it.</p>
+
+<p>Next, instead of optimizing (13), we introduce a distribution pα(A) (param- eterized by α) over the candidate architectures in this search space.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225231625672.png" alt="image-20211225231625672" /></p>
+
+<p>Then, we apply Gumbel-Softmax to relax the optimization of (14) to be continuous and differentiable using the reparameterization trick.</p>
+
+<p>Specifically, for a given α, to sample an architecture A, we simply have to sample g from p(g) = Gumbel(0, 1) and  then determine A using α and g.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225232009358.png" alt="image-20211225232009358" /></p>
+
+<p>we approximate (15) based on its <strong>first-order Taylor expansion</strong> at initialization such that it can be optimized efficiently through a gradient-based algorithm.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225232645184.png" alt="image-20211225232645184" /></p>
+
+<p>Unfortunately, the expectation in (17) makes the evaluation of ∆∗ intractable. Monte Carlo sampling is thus applied to estimate ∆∗ efficiently.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225233128186.png" alt="image-20211225233128186" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225233242861.png" alt="image-20211225233242861" /></p>
+
+<p>This simple and efficient solution in (18) can already allow us to select architectures with competitive performances.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211225233707249.png" alt="image-20211225233707249" /></p>
+
+<h1 id="4-lable--and-data-agnostic-search-of-nasi">4. Lable- and Data-agnostic Search of NASI</h1>
+
+<p>conclusion: NASI is guaranteed to be label- and data-agnostic under mild conditions, which implies the transferability of the final architectures selected by NASI over different datasets.</p>
+
+<h2 id="label-agnostic-search">Label-Agnostic Search</h2>
+
+<p>Our reformulated NAS problem (8) explicitly reveals that it can be optimized without the need of the labels from a dataset. Because (12) can be derived using random labels</p>
+
+<h2 id="data-agnostic-search">Data-Agnostic Search</h2>
+
+<h1 id="5-experiments">5. Experiments</h1>
+
+<h2 id="search-efficiency-and-effectiveness">Search Efficiency and Effectiveness</h2>
+
+<p>Three search spaces of NAS-Bench-1Shot1 on CIFAR-10</p>
+
+<h3 id="search-in-nas-bench-1shot1">Search in NAS-Bench-1Shot1.</h3>
+
+<p>A lower penalty coefficient μ and a larger constraint ν (i.e., μ=1 and ν=1000) are adopted to encourage the selection of high-complexity architectures in the optimization of (13).</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211226133539003.png" alt="image-20211226133539003" /></p>
+
+<h3 id="search-in-the-darts-search-space">Search in the DARTS Search Space</h3>
+
+<p>We then compare NASI with other NAS algorithms in a more complex search space than NAS-Bench-1Shot1, i.e., the DARTS (Liu et al., 2019) search space .</p>
+
+<p>NASI adopts a higher penalty coefficient μ and a smaller constraint ν (i.e., μ=2, ν=500)</p>
+
+<p>NASI selects the architecture with a search budget of T =100 and batch size of b=64 in this DARTS search space.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211226134146567.png" alt="image-20211226134146567" /></p>
+
+<p>These results show that NASI is also efficient and effective in large search spaces.</p>
+
+<h2 id="evaluation-of-selected-architectures">Evaluation of Selected Architectures</h2>
+
+<p>CIFAR-100 and ImageNet</p>
+
+<p>We adopt the same search setting as those in Sec. 5.1 on the DARTS search space</p>
+
+<h3 id="evaluation-on-cifar-10">Evaluation on CIFAR-10</h3>
+
+<p>Compared with popular training-based NAS algorithms, NASI achieves a substantial improvement in search efficiency and maintains a competitive generalization performance.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211226135441955.png" alt="image-20211226135441955" /></p>
+
+<h3 id="evaluation-on-imagenet">Evaluation on ImageNet.</h3>
+
+<p>The results on ImageNet further confirm the transferability of the architectures selected by NASI to larger-scale datasets.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211226135601379.png" alt="image-20211226135601379" /></p>
+
+:ET

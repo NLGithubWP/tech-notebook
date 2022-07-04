@@ -1,0 +1,188 @@
+I"�#<p>Paxos Made Simple</p>
+
+<h1 id="flp">FLP</h1>
+
+<p><strong>Impossible</strong> for a <code>deterministic</code> protocol to guarantee consensus in <code>bounded time</code> in an <code>asynchronous distributed system</code> (even with only one faulty process)</p>
+
+<h1 id="assumption">Assumption</h1>
+
+<p><code>Asynchronous environment</code>: no bounds on timing.</p>
+
+<ul>
+  <li>Each agent operates at an arbitrary speed, can fail and restart.</li>
+  <li>Messages can be delayed, lost, duplicated, but cannot be corrupted.</li>
+  <li>There is a sufficiently long period without further failures</li>
+</ul>
+
+<p><code>non-Byzantine failure.</code></p>
+
+<p>How many replica Paxos needs to tolerate f failures.</p>
+
+<p><code>n-f &gt; n/2 =&gt; n&gt;2f =&gt; n = 2f+1</code></p>
+
+<h1 id="safety-and-liveness">Safety and Liveness</h1>
+
+<h3 id="goal">Goal</h3>
+
+<p>The goal is to make sure acceptors achieve <code>consensus</code> on a <code>single value</code>.</p>
+
+<h3 id="liveness">Liveness</h3>
+
+<p>The proposed value is eventually chosen.</p>
+
+<p>If a value is chosen, a process eventually learns it.</p>
+
+<h3 id="safety">Safety</h3>
+
+<p>only a single value can be chosen</p>
+
+<p>The learner can only learn the chosen value.</p>
+
+<h2 id="paxos-ensures">Paxos ensures</h2>
+
+<p><strong><code>Paxos can provide safety properties by using unique proposal numbers.</code></strong></p>
+
+<p>Init Paxos <code>cannot</code> guarantee liveness,</p>
+
+<p><strong><code>Liveness can therefore be achieved by electing a single distinguished proposer</code></strong></p>
+
+<h1 id="proposers-action">Proposer’s Action</h1>
+
+<h2 id="rule">Rule</h2>
+
+<p>Single acceptor fails to lead to no value being chosen =&gt; break liveness =&gt;</p>
+
+<p><code>Rule 0: A value is chosen only when it is accepted by a majority of acceptors.</code></p>
+
+<p>Acceptors must accept a value otherwise the system can be blocked forever =&gt; break liveness =&gt;</p>
+
+<p><code>P1. An acceptor must accept the first proposal that it receives.</code></p>
+
+<p>But multiple values can be proposed at the same time, one value is accepted by half of them and another value is accepted by another half of them, leading to no value being chosen.</p>
+
+<p><code>The acceptor must be allowed to accept more than one proposal and the proposal is labeled with number &lt;value, number&gt; </code></p>
+
+<ul>
+  <li>Proposal numbers must be unique and infinite</li>
+  <li>A proposal number server won’t work</li>
+  <li>Instead, assign each proposer an infinite slice</li>
+  <li>Proposer i of N gets: i, i+N, i+2N, i+3N, …</li>
+</ul>
+
+<p>If acceptors can accept many proposals, then how to make sure only one value is chosen (guarantee safety) =&gt;</p>
+
+<p><code>P2. If a proposal with value v is chosen, then every higher-numbered proposal that is chosen has value v.</code></p>
+
+<p>Above requires A proposal must be accepted by at least one acceptor =&gt;</p>
+
+<p><code>P2a. If a proposal with value v is chosen, then every higher-numbered proposal accepted by any acceptor has value v</code> (if a new proposal don’t have value V, it is ignored)</p>
+
+<p>If the majority has accepted value v1, but the left agents have never accepted any value yet, according to P1, if a new proposal with v2 comes, the left agents accept it. Which is in conflict with P2a.=&gt;</p>
+
+<p><code>P2b. If a proposal with value v is chosen, then every higher-numbered proposal issued by any proposer has value v.</code> (in sending, it must have v since it is chosen)</p>
+
+<p>How to make sure the proposal knows which value is chosen or if no value is chosen =&gt;</p>
+
+<p><code>P2c. For any v and n, if a proposal with value v and number n is issued, then there is a set S consisting of a majority of acceptors such that either </code></p>
+
+<p><code>(a) no acceptor in S has accepted any proposal numbered less than n, or </code></p>
+
+<p><code>(b) v is the value of the highest-numbered proposal among all proposals numbered less than n accepted by the acceptors in S.</code></p>
+
+<h2 id="discussion">Discussion</h2>
+
+<p>If v1 is chosen by the majority, then</p>
+
+<p>P2c(propose figure out v1 is chosen) =&gt; P2b(can only send v1) =&gt; P2a(can only accept v1) =&gt; P2( can only choose v1 )</p>
+
+<p>P2c means if a proposal send (v,n), then either</p>
+
+<ol>
+  <li>the <code>majority</code> has not accepted any value yet.</li>
+  <li>the <code>majority</code> has accepted value v, and the new proposal n is the latest proposal.</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228232541369.png" alt="image-20220228232541369" /></p>
+
+<p>To maintain P2c, a proposer that wishes to propose a proposal numbered <em>n</em> must learn the highest-numbered proposal with a number less than <em>n</em>, if any, that <strong>has been</strong> or <strong>will be</strong> accepted by each acceptor in some majority of acceptors =&gt;</p>
+
+<h2 id="implementation-algorithm">Implementation Algorithm</h2>
+
+<h3 id="prepare-request"><code>Prepare request</code></h3>
+
+<p><code>A proposer chooses a new proposal number n and sends a request to each member of some set of acceptors, asking it to respond with:</code></p>
+
+<p><code>(a) A promise never again to accept a proposal numbered less than n, and</code></p>
+
+<p><code>(b) The proposal with the highest number less than n that it has accepted, if any.</code></p>
+
+<h3 id="accept-request"><code>Accept request</code></h3>
+
+<p><code>If the proposer receives the requested responses from a majority of the acceptors, then it can issue a proposal with number n and value v, where v is the value of the highest-numbered proposal among the responses, or is any value selected by the proposer if the responders reported no proposals.</code></p>
+
+<h1 id="acceptor-action">Acceptor Action</h1>
+
+<p><code>P1a. An acceptor can accept a proposal numbered n iff it has not responded to a prepare request having a number greater than n.</code></p>
+
+<p>(n prepare - accept ), (n+1 prepare - accept ), (n+2 prepare - accept )</p>
+
+<ul>
+  <li>
+    <p>if n+1’s prepare is accepted, the acceptor <code>ignore</code> n’s accept request,</p>
+
+    <p><strong>this situation may break the <code>liveness</code> when the acceptor always rejects the accept request due to higher prepare request coming.</strong></p>
+
+    <p>solution is to elect a leader proposer, and allow only it to propose value.</p>
+  </li>
+  <li>
+    <p>if n hasn’t reply n+1’s prepare request, it can still response n’s accept request.</p>
+  </li>
+  <li>
+    <p><code>Optimization: if n+1's prepare is accepted, n's accept ignore n+1's duplicated prepare request</code></p>
+  </li>
+</ul>
+
+<p>Acceptor remember only</p>
+
+<ol>
+  <li>the highest-numbered proposal that it has ever <code>accepted</code></li>
+  <li>the number of the highest-numbered <code>prepare</code> request to which it has responded.</li>
+</ol>
+
+<h1 id="algorithms">Algorithms</h1>
+
+<h2 id="phase-1">Phase-1</h2>
+
+<p>(a) A proposer selects a proposal number n and sends a prepare request with number n to a majority of acceptors.</p>
+
+<p>(b) If an acceptor receives a prepare request with number n greater than that of any prepare request to which it has already responded, then it responds to the request with a promise not to accept any more proposals numbered less than n and with the highest-numbered proposal (if any) that it has accepted.</p>
+
+<h2 id="phase-2">Phase-2</h2>
+
+<p>(a) If the proposer receives a response to its prepare requests (numbered n) <code>from a majority</code> of acceptors, then it sends an accept request to <code>each of those acceptors</code> for a proposal numbered n with a value v, where v is the value of the highest-numbered proposal among the responses, or is any value if the responses reported no proposals.</p>
+
+<p>(b) If an acceptor receives an accept request for a proposal numbered n, it accepts the proposal <code>unless it has already responded to a</code> <strong><code>prepare request</code></strong> having a number greater than n.</p>
+
+<p><code>Optimization: It should probably inform the proposer, who should then abandon its proposal. This is a performance optimization that does not affect correctness.</code></p>
+
+<h1 id="learner">Learner</h1>
+
+<p>More generally, the acceptors could respond with their acceptances to some set of distinguished learners, each of which can then inform all the learners when a value has been chosen.</p>
+
+<h1 id="progress">Progress</h1>
+
+<p>if p1 and p2 propose at the same time, p1 send prepare request n1, p2 send prepare request with n2. then acceptor ignore n1’s accept after receiving n2’s prepare, p1 then propose n3 prepare, acceptor refuse n2’s accept and so on.</p>
+
+<p>To guarantee progress, a distinguished proposer must be selected as the only one to try issuing proposals</p>
+
+<h1 id="implementation">Implementation</h1>
+
+<p>Collection of clients and servers.</p>
+
+<p>Each server independently implements a <code>deterministic</code> state machine.</p>
+
+<p>One server is the leader (distinguished proposer)</p>
+
+<p>Client send cmd to leader.</p>
+
+:ET

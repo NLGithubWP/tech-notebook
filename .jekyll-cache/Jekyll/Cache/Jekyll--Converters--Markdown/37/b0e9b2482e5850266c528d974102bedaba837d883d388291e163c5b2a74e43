@@ -1,0 +1,93 @@
+I"�<h1 id="file-storage">File Storage</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220126160919484.png" alt="Ho" /></p>
+
+<h2 id="propority">Propority</h2>
+
+<p>Each file is s single piece and stores at one location.</p>
+
+<p>Data in a file storage system is organized in a hierarchical system of folders, directories, and sub-directories.</p>
+
+<p>Files have limited metadata attached to them – usually just the basic file attributes, such as name, date of creation, and date last modified. Each file has a unique file path that functions as its address within the storage system.</p>
+
+<p>Cloud file storage is frequently supported by a network-attached server (NAS)</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>Common applications for file storage in the cloud include content or document management systems, recordkeeping, and digital libraries.</p>
+
+<h1 id="object-storage">Object Storage</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220126160230863.png" alt="Ho" /></p>
+
+<h2 id="propority-1">Propority</h2>
+
+<p><code>defination</code></p>
+
+<p>Object storage is a data storage architecture used by organizations of all sizes and across industries to store and access <strong>large amounts of unstructured data</strong> in a <strong>highly scalable and cost-effective way.</strong></p>
+
+<p><code>architecture</code></p>
+
+<p>Objects in the cloud are stored in a “flat” hierarchy with no folders or directories, a feature that allows for <strong>consistent, low-latency data access</strong>.</p>
+
+<p>Object storage systems on <strong>multiple devices (servers) can be aggregated to form a single object storage cluster</strong>. A storage cluster can be <strong>scaled horizontally and almost infinitely</strong> by adding more servers that may be <strong>distributed across multiple locations</strong>.</p>
+
+<p>Generally 3 copys of data is maintained.</p>
+
+<p><code>object</code></p>
+
+<p>Dhe data in a file is broken into <strong>pieces called objects</strong>, each object acts as a self-contained data repository with three components.</p>
+
+<ol>
+  <li>Piece of data from the original file.</li>
+  <li><strong>Rich metadata</strong> that can be customized based on the type of data and its intended use.</li>
+  <li>A <strong>unique identifying number</strong> that enables API access to the object.</li>
+</ol>
+
+<p><code>unstructured data</code> and <code>structured Data</code></p>
+
+<p>Unstructured data is <strong>not organized in any predefined manner</strong>. Instead, the data is stored in its native format and can include text files, images, audio recordings, video surveillance records, and more.</p>
+
+<p>Structured data is “organized into specific fields as part of a schema, with each field having a defined purpose”. Structured data is usually quantitative data stored in a table format or a relational database.</p>
+
+<h2 id="usage-1">Usage</h2>
+
+<p>Cloud, eg, AWS, IBM, AZURE, ORACLE. ALIBABA.</p>
+
+<h1 id="block-storage">Block Storage</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220126163538948.png" alt="image-20220126163538948" /></p>
+
+<h2 id="propority-2">Propority</h2>
+
+<p>Block storage is a data storage methodology that uses <strong>Storage Area Networks (SANs)</strong> to <strong>decouple data from user environments</strong>, allowing for rapid data access and ultra low-latency data retrieval in the cloud.</p>
+
+<p>In a block storage system, data in files are separated into <strong>uniformly-sized chunks known as blocks.</strong> Each block is stored separately, along with a unique identifier code that allows it to be located within the storage system.</p>
+
+<p>When a file is requested from block storage, all of the blocks that comprise the file are accessed <strong>parallelly</strong> from their separate storage locations and reassembled before being presented to the application or user.</p>
+
+<p>Parallely data retrieval from cloud or directly retrieval from local drive offers <strong>lowest possible latency</strong>, also help in keep data consistent.</p>
+
+<h2 id="usage-2">Usage</h2>
+
+<p>It is considered the best data storage option for high-performance applications that require <strong>consistent, low-latency</strong> data retrieval. These applications include <strong>relational databases</strong> like SQL Server or Oracle and ERP solutions like SAP.</p>
+
+<h1 id="compare">Compare</h1>
+
+<h3 id="managing-unstructured-data-at-scale">Managing Unstructured Data at Scale</h3>
+
+<p>When it comes to storing and organizing unstructured data at scale, there’s no better option than cloud object storage.</p>
+
+<p>As file storage systems increase in size, file paths get more complex and data retrieval performance may decline, but object storage avoids this with its flat storage architecture.</p>
+
+<p>Unlimited horizontal scalability is also a key benefit, with organizations more willing to invest in data storage solutions that can expand to meet their needs in the future.</p>
+
+<h3 id="cost-effective-data-storage">Cost-Effective Data Storage</h3>
+
+<p>Most of the unstructured data in the cloud lives in cloud object storage services like Amazon S3. Cloud object storage doesn’t just perform well at scale, it’s also cost-effective with different storage tiers available based on how frequently the data is accessed and how quickly it may need to be recovered.</p>
+
+<h3 id="customizable-metadata">Customizable Metadata</h3>
+
+<p>Objects in cloud storage can be configured with <strong>customizable</strong> metadata. Metadata describes the data in the object file, enhances its searchability in cloud object storage, and may reveal new insights if the data is processed by a machine learning algorithm or predictive analytics engine.</p>
+
+:ET

@@ -1,0 +1,175 @@
+I"�<h1 id="introduction">Introduction</h1>
+
+<p><code>Question</code>: Physical clock is not accurate and it’s easy to synchronize across regions. So how do we order events without physical clocks?</p>
+
+<p><code>Solution</code>:  Using logical clocks.</p>
+
+<h1 id="partial-ordering">Partial Ordering</h1>
+
+<p>Define Happens-Before relationship:</p>
+
+<ul>
+  <li>Within a process, a comes before b then a → b (if a → b and b → c then a → c)</li>
+  <li>if a = send(M), and b = recv(M), then a → b</li>
+</ul>
+
+<p>a /→ b and b /→ a: events are concurrent</p>
+
+<h1 id="logical-clocks">Logical Clocks</h1>
+
+<p>Define a way to assign timestamps to events.</p>
+
+<h2 id="clock-conditions">Clock conditions:</h2>
+
+<ul>
+  <li>if <em>a</em> and <em>b</em> are on the same process <em>i</em>, and <em>a</em> comes before <em>b</em>, then Ci(a) &lt; Ci(b)</li>
+  <li>if <em>a</em> = process <em>i</em> sends <em>M</em>, and <em>b</em> = process <em>j</em> receives <em>M</em>, then Ci(a) &lt; Cj(b)</li>
+</ul>
+
+<h2 id="implementation">Implementation:</h2>
+
+<ul>
+  <li>Keep a local clock T</li>
+  <li>Increment T whenever an event happens</li>
+  <li>Each message carries a timestamp Tm</li>
+  <li>On message receipt: T = max(T, Tm) + 1</li>
+</ul>
+
+<p><img src="imgs/image-20220125164844965.png" alt="image-20220125164844965" style="zoom:50%;" /></p>
+
+<h1 id="order-the-events-totally">Order the events totally</h1>
+
+<h2 id="total-ordering">Total ordering.</h2>
+
+<p>Extends logical clock to a total ordering</p>
+
+<ul>
+  <li>if Ci(a) &lt; Ci(b), then<em>a</em> =&gt; <em>b</em></li>
+  <li>if Ci(a) = Cj(b), then the process with small process ID happends first.</li>
+</ul>
+
+<h2 id="example-usage">Example (usage):</h2>
+
+<p>The use of this total ordering of events can solve the <strong>mutual exclusion problem</strong>.</p>
+
+<h3 id="target"><code>Target</code>:</h3>
+
+<p>Design an algorithm to grant resources to a process that satisfies the following goals:</p>
+
+<ul>
+  <li>Only one process has the resource at a time</li>
+  <li>Grant the resource in request order</li>
+  <li>Requesting processes eventually acquire the resource</li>
+</ul>
+
+<h3 id="assumptions"><code>Assumptions</code>:</h3>
+
+<ul>
+  <li>In-order point-to-point message delivery</li>
+  <li>No failures</li>
+</ul>
+
+<h3 id="algorithms"><code>Algorithms</code>:</h3>
+
+<h4 id="each-nodes-state">Each node’s state:</h4>
+
+<ul>
+  <li>A queue of <em>request</em> messages, ordered by Tm</li>
+  <li>the latest timestamp it has received from each node</li>
+</ul>
+
+<h4 id="each-nodes-action">Each node’s action:</h4>
+
+<ul>
+  <li>On receiving a request:
+    <ul>
+      <li>Record message timestamp</li>
+      <li><strong>Add request to queue</strong> and send an acknowledgement</li>
+    </ul>
+  </li>
+  <li>On receiving a release:
+    <ul>
+      <li>Record message timestamp</li>
+      <li><strong>Remove corresponding request</strong> from queue</li>
+    </ul>
+  </li>
+  <li>On receiving an acknowledge:
+    <ul>
+      <li>Record message timestamp</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="resource-lock-status">Resource (Lock) status:</h4>
+
+<ul>
+  <li>To acquire the lock:
+    <ul>
+      <li>Send <em>requests</em> to everyone, including self.</li>
+    </ul>
+  </li>
+  <li>To release the lock:
+    <ul>
+      <li>Send <em>release</em> to everyone, including self.</li>
+    </ul>
+  </li>
+  <li>The lock is acquired when:
+    <ul>
+      <li><strong>My request is at the head of my queue,</strong> and I’ve received higher-timestamped messages from everyone So my request must be the earliest</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="limitation">Limitation:</h4>
+
+<p>Eg, if a =&gt; b, then a may not -&gt; b . a and b could be concurrent.</p>
+
+<p>Induce some unnecessary ordering constraints.</p>
+
+<h1 id="vector-clock">Vector Clock</h1>
+
+<h2 id="basic-algorithm">Basic algorithm</h2>
+
+<p>Clock is a vector <em>C</em>, length = # of nodes, e.g., (0, 0, 0) for a 3 node system.</p>
+
+<p>For each node <em>i</em>:</p>
+
+<ol>
+  <li>
+    <p>increment <em>C[i]</em> on <strong>each event</strong>, eg., node 0 (3, 5, 2); after event: (4, 5, 2)</p>
+  </li>
+  <li>
+    <p>after receving message:</p>
+
+    <ul>
+      <li>
+        <p>step1: Increment C[i]</p>
+      </li>
+      <li>
+        <p>step2: For each j != i : <strong>C[ i ] = max(C[ i ], Cm[ i ])</strong></p>
+      </li>
+      <li>
+        <p>example:</p>
+        <ul>
+          <li><code>node 0 (4, 5, 2) receives message (2, 7, 0) =&gt; (4+1=5, max(5,7)=7, max(2,0)=2).</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="happen-before-defination">Happen before defination</h2>
+
+<p>x and y are proess. i and j are id of process.</p>
+
+<p>If <em>C<strong>x</strong>[i] &lt; C<strong>y</strong>[i]</em> and <em>C<strong>x</strong>[j] &gt; C<strong>y</strong>[j]</em> for some <em>i</em>, <em>j</em> =&gt;</p>
+
+<p>​	<em>C<strong>x</strong></em> and <em>C<strong>y</strong></em> are concurrent</p>
+
+<p>If <em>C<strong>x</strong>[i] &lt;= C<strong>y</strong>[i]</em> for all <em>i</em>, and there exist <em>j</em> such that <em>C<strong>x</strong>[j] &lt; C<strong>y</strong>[j]</em> =&gt;</p>
+
+<p><em>C<strong>x</strong></em> happens before <em>C<strong>y</strong></em>.</p>
+
+<p><img src="imgs/image-20220125183229886.png" alt="image-20220125183229886" style="zoom:50%;" /></p>
+
+:ET

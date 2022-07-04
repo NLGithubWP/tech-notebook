@@ -1,0 +1,260 @@
+I"3<h1 id="key-features">Key Features</h1>
+
+<ol>
+  <li>
+    <p>Maintain <strong>wait-free data objects</strong> organized hierarchically as in the file system.</p>
+
+    <p>Zookeeper is wait-free because it processes one client’s requests without needing to wait for other clients to take action. This is partially a consequence of the API: despite being designed to support client/client coordination and synchronization, no ZooKeeper API call is defined in a way that would require one client to wait for another.</p>
+
+    <p>In contrast, a system that supported a lock acquire operation that waited for the current lock holder to release the lock would not be wait-free.</p>
+  </li>
+  <li>
+    <p><strong>FIFO client order</strong>: all requests from <strong>a given client</strong> are executed in the order that they were sent by the client.</p>
+
+    <p>So each client can submit requests asynchronously and a client is able to have multiple outstanding operations at a time.</p>
+
+    <p><strong>leader tracking for each client (really session) what number it should next expect. The leader has to keep state per session anyway, each client specifies an order for its operations (reads AND writes), and it increases monotonously. When followers receive a read request while the data in the position of order_id is empty, the follower will wait until there is data before replying to the client. In other words, the follower may block a read until the server has received (from the leader) all of the client’s preceding writes</strong></p>
+
+    <ul>
+      <li>each read executes at a particular point in the write order</li>
+      <li>a client’s successive reads execute at non-decreasing points in the order</li>
+      <li>a client’s read executes after all previous writes by that client</li>
+      <li>a server <strong>may block a client’s read to wait for previous write, or sync()</strong></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Linearizable writes</strong>: all requests that update the state of ZooKeeper are serializable and respect precedence</p>
+
+    <p>The linearizability is ensured with two condition</p>
+
+    <ul>
+      <li>All writing operations of all clients will be sent to the leader</li>
+      <li>use ZAB protocol to replicate the internal status/data. ( clients send writes to the leader, the leader chooses an order, numbered by “zxid”, the leader then sends to replicas, which all execute in zxid order)</li>
+      <li>The linearizability is async-linearizability, where each client can send multiple requests at the same time.</li>
+    </ul>
+  </li>
+  <li>
+    <p>ZooKeeper can handle 10k~100K of transactions per second.</p>
+
+    <ul>
+      <li>Fast read: It allows the client to read from a follower and read may return a stale value. The application which doesn’t require precedence order can use it.  This allows the service to scale linearly as servers are added to the system.</li>
+      <li>Non-fast read: client call <code>sync</code> before send read operation. <code>FIFO + linearizability =&gt; read latest value</code></li>
+      <li>Fuzzy snapshots also help to improve the throughput.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Zookeeper uses a watch mechanism to enable clients to cache data without managing the client cache directly.</p>
+
+    <p>With this mechanism, a client can watch for an update to a given data object, and receive a notification upon an update</p>
+  </li>
+  <li>
+    <p>Zookeeper uses fuzzy snapshots</p>
+
+    <p>A precise snapshot would correspond to a specific point in the log: the snapshot would include every write before that point, and no writes after that point, creation of a precise snapshot requires a way to prevent any writes from happening while the snapshot is being created and written to disk. Blocking writes for the duration of snapshot creation would decrease performance a lot.</p>
+
+    <pre><code>The point of ZooKeeper's fuzzy snapshots is that ZooKeeper creates the
+snapshot from its in-memory database while allowing writes to the
+database. This means that a snapshot does not correspond to a
+particular point in the log -- a snapshot includes a more or less
+random subset of the writes that were concurrent with snapshot
+creation. After reboot, ZooKeeper constructs a consistent snapshot by
+replaying all log entries from the point at which the snapshot
+started. Because updates in Zookeeper are idempotent and delivered in
+the same order, the application-state will be correct after reboot and
+replay---some messages may be applied twice (once to the state before
+recovery and once after recovery) but that is ok, because they are
+idempotent. The replay fixes the fuzzy snapshot to be a consistent
+snapshot of the application state.
+   
+The Zookeeper leader turns the operations in the client API into
+idempotent transactions. For example, if a client issues a conditional
+setData and the version number in the request matches, the Zookeeper
+leader creates a setDataTXN that contains the new data, the new
+version number, and updated time stamps. This transaction (TXN) is
+idempotent: Zookeeper can execute it twice and it will result in the
+same state.
+</code></pre>
+  </li>
+</ol>
+
+<p><a href="http://nil.csail.mit.edu/6.824/2020/notes/l-zookeeper.txt">Reference1</a></p>
+
+<p><a href="http://nil.csail.mit.edu/6.824/2020/papers/zookeeper-faq.txt">Reference2</a></p>
+
+<p><a href="https://pdos.csail.mit.edu/6.824/papers/zookeeper-faq.txt">Reference3</a></p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>Many current services are used designed for a specific need. For example, chubby is a locking service with strong synchronization guarantees. ( R/W go-to leader. ) It is important to design a service for each of the different coordination needs.</p>
+
+<ol>
+  <li>Zookeeper tries to expose users with high abstract APIs, and users can use them to implement their own primitives.</li>
+</ol>
+
+<p>Besides, chubby only allows reading from the leader and has low throughput, while zookeeper relax consistency guarantees to allow read from a follower.</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<ol>
+  <li>propose a wait-free coordination service with relaxed consistency guarantees for use in distributed systems.</li>
+  <li>provides some use cases about how to use zk to implement lock etc.</li>
+  <li>evaluation.</li>
+</ol>
+
+<h1 id="service-overview">Service overview</h1>
+
+<h2 id="data-model">Data Model</h2>
+
+<p>znode is an in-memory data node, and they are organized in a hierarchical namespace referred to as the data tree. There are 2 kinds of nodes</p>
+
+<ol>
+  <li>Regular: persistent znode</li>
+  <li>Ephemeral: temporal node, it is deleted automatically when the client connection terminates.</li>
+</ol>
+
+<h2 id="how-to-use-zk-to-guarantee-strong-consistency">How to use Zk to guarantee strong consistency.</h2>
+
+<p>In the case where we use zk for leader selection.</p>
+
+<ol>
+  <li>
+    <p>The new leader makes the configuration change by deleting ready, updating the various configuration nodes, and creating ready</p>
+
+    <p>While there is still a problem, the client can see the ready node, and begin to read it while the new leader is updating it.</p>
+  </li>
+  <li>
+    <p>The above problem is solved by ordering a guarantee for the notifications.</p>
+
+    <p>if a client is watching for a change, the client will see the notification event before it sees the new state of the system after the change is made</p>
+  </li>
+</ol>
+
+<p>But when two clients can communicate with each other, there is still a problem when client A update cfg at zk, tell client B, and B read from the replica. B may not read them as replication latency.</p>
+
+<ol>
+  <li>
+    <p>the solution is B can issue a write-request (sync API).</p>
+
+    <p>FIFO + linear =&gt; B see the A’s update.</p>
+  </li>
+</ol>
+
+<h1 id="use-cases">Use cases</h1>
+
+<h2 id="config-management">Config Management</h2>
+
+<p>Starting processes obtain their configuration by reading zc with the watch flag set to true. zc store the latest cfgs.</p>
+
+<h2 id="rendezvous">Rendezvous</h2>
+
+<p>master and multiple workers register their own information (address. status) to an ephemeral node in ZK.</p>
+
+<h2 id="group-membership">Group Membership</h2>
+
+<p>Using ephemeral nodes to dynamic update group memberships and use watch mechanism to inform master of the updates.</p>
+
+<h2 id="locks">Locks</h2>
+
+<h3 id="simple-lock">simple lock</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505153345262.png" alt="image-20220505153345262" /></p>
+
+<p>Each client trying to acquire the lock will enter the queue, and be assigned an order number.</p>
+
+<p>Only the client standing at the top of the queue can get the lock.</p>
+
+<h3 id="readwrite-lock">read/write lock</h3>
+
+<p>Read lock need to make sure all write lock is dispear.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505153606837.png" alt="image-20220505153606837" /></p>
+
+<h2 id="double-barrier">Double Barrier</h2>
+
+<p>processes firstly create their <em>ready</em> znodes, and enter the barrier together when the number of znodes exceeds the threshold; they delete their znodes when finishing their work, and exit altogether when all <em>ready</em> znodes are deleted</p>
+
+<h1 id="implementation">Implementation</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505154203054.png" alt="image-20220505154203054" /></p>
+
+<p>Important notes.</p>
+
+<h2 id="request-processor">Request processor</h2>
+
+<p>ZK transforms each write into a transaction.</p>
+
+<ol>
+  <li>it calculates the state after applying the write,</li>
+  <li>generate a transaction that captures the new state. ( the tx has new data, new version number, and updated time.)</li>
+</ol>
+
+<h2 id="atomic-broadcast">Atomic broadcast</h2>
+
+<ol>
+  <li>Zab guarantees that changes broadcast by a leader are delivered in the order they were sent and all changes from previous leaders are delivered to an established leader before it broadcasts its own changes. In brief, the leader would never lose data and keep them in order.</li>
+  <li>WAL: we force writes to be on the disk media before they are applied to the in-memory database</li>
+  <li>write transaciton is idempotent.</li>
+</ol>
+
+<h2 id="replicated-database">Replicated database</h2>
+
+<ol>
+  <li>The replicated database is an in-memory database containing the entire data tree. And the system records the snapshot periodically.</li>
+  <li>ZooKeeper uses periodic snapshots and only requires the redelivery of messages since the start of the snapshot.</li>
+</ol>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>50 servers,</p>
+
+<h2 id="throughput">Throughput</h2>
+
+<ol>
+  <li>
+    <p>35 servers to simulate 250 simultaneous clients.</p>
+  </li>
+  <li>
+    <p>Each client has at least 100 requests outstanding.</p>
+  </li>
+  <li>
+    <p>Each request consists of reading or writing 1K of data.</p>
+  </li>
+</ol>
+
+<p>ZooKeeper uses request throttling to keep servers from being overwhelmed</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505155252484.png" alt="image-20220505155252484" /></p>
+
+<ol>
+  <li>Read throughput is higher than write throughput because reads do not use atomic broadcast</li>
+  <li>The other reason for the longer processing of write requests is that servers must ensure that transactions are logged to a non-volatile store before sending acknowledgments back to the leader.</li>
+</ol>
+
+<h3 id="failure">Failure</h3>
+
+<p>run ZK in 5 machiens. kept the written percentage at a constant 30%.</p>
+
+<p>Periodically we killed some of the server processes. (follower or leader in ZK cluster.)</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505160241068.png" alt="image-20220505160241068" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505160318388.png" alt="image-20220505160318388" /></p>
+
+<h2 id="latency">Latency</h2>
+
+<p>Each worker/sender creates 50k nodes, We calculate the throughput by dividing the number of creating requests completed by the total time it took for all the workers to complete.</p>
+
+<p>The throughput of the single ZooKeeper worker benchmark indicates that the average request latency is 1.2ms for three servers and 1:4ms for 9 servers.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505160846481.png" alt="image-20220505160846481" /></p>
+
+<h2 id="performance-of-barriers">Performance of barriers</h2>
+
+<p>50, 100, and 200 clients entering a number b of barriers in succession, b in. [200; 400; 800; 1600]</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505161150862.png" alt="image-20220505161150862" /></p>
+
+<p>our benchmark code uses is much lower compared to the raw throughput ZooKeeper can achieve  This is due to clients waiting on other clients.</p>
+:ET

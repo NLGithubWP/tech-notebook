@@ -1,0 +1,319 @@
+I"�+<p>IntegriDB: Verifiable SQL for Outsourced Databases</p>
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<h2 id="problems">Problems</h2>
+
+<p>An authenticated data structure (ADS) could be used to verify queried data.</p>
+
+<p><code>Prior work</code> used to construct ADS handling some subset of SQL queries <code>can be classified into two categories</code>:</p>
+
+<ol>
+  <li>Generic approaches:
+    <ul>
+      <li>Data owners first compile database into a program (circuit / RAM-model of computation.) which accepts query as input and return result.</li>
+      <li>Size of circuit is as large as database.</li>
+      <li>Circuit-based approach not allow efficient updates.</li>
+    </ul>
+  </li>
+  <li>Specific approaches:
+    <ul>
+      <li>Tree-based (Merkel tree) / Signature-based (data in server is pre-signed by data owner)</li>
+      <li>Both of them only support single-dimensional range queries.</li>
+      <li>Both of them don’t support updates.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Generic approach taks large memory space, Specific approach is limited in dimension. Both of them <code>don't support short proofs</code> for (join, sum, max, min, count)</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>The paper designing an ADS and an associated system that supports <em>native SQL queries</em> over a relational database, Such a system would be suitable for integration into the most prevalent applications running in the cloud today and could be offered as a software layer on top of any SQL implementation.</p>
+
+<ol>
+  <li>expressive: supports multidimensional range queries and nesting queries.</li>
+  <li>efficient: <code>small proofs</code>(few kb), low verification time, feasible server computation.</li>
+  <li>scalable: can execute on DB table with 6 million rows.</li>
+  <li>cryptographic assumptions: based on crypto-graphic assumptions</li>
+</ol>
+
+<h1 id="preliminaries">PRELIMINARIES</h1>
+
+<h2 id="authenticated-data-structure">Authenticated Data Structure</h2>
+
+<p>Three roles, server, data owner, client</p>
+
+<p>ADS for query Q and U consists of efficient algorithms <code>init, setup, prove, verify, UpdateO, UpdateS</code></p>
+
+<p>D: data, D’: encrypted data, R: Result, pi: Proof, Q: Query, lambda: secure parameter</p>
+
+<ol>
+  <li><code>(data owner)</code> Init:  lambda =&gt; &lt;pk, sk&gt;</li>
+  <li><code>(data owner)</code> Setup: ( D, sk ) =&gt; ( digest, D’ ), and send D’ to server, publish (digest, pk)</li>
+  <li><code>(Server)</code> Prove: ( digest, D’, Q) =&gt; (R, pi)</li>
+  <li><code>(client)</code> Verify: ( digest, Q, R, pi) =&gt; 0 or 1</li>
+  <li><code>UpdateO/UpdateS</code>: Interactive algorithm run by data owner and server.
+    <ul>
+      <li>UpdateO: ( sk, digest, update ) =&gt; ( digest, 0/1 indicting accept or reject )</li>
+      <li>UpdateS:  D’ =&gt; D’</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="sql-queries-supported-by-integridb">SQL queries supported by IntegriDB</h2>
+
+<p><strong>Multidimensional range query</strong></p>
+
+<p>multiple columns and range filter for each column</p>
+
+<pre><code class="language-sql">SELECT * FROM A WHERE (age BETWEEN 22 AND 24) AND (student_ID &gt; 10730)
+</code></pre>
+
+<p>Join, Sum, Max, Min, COunt, Like, Nested Query.</p>
+
+<h1 id="building-blocks">BUILDING BLOCKS</h1>
+
+<p>two authenticated data structures used as building blocks in INTEGRIDB:</p>
+
+<p>one for set operations (that we call <code>ASO</code>),</p>
+
+<p>one for interval trees (that we call <code>AIT</code> )</p>
+
+<h2 id="ads-for-set-operations-with-summation">ADS for set operations with Summation</h2>
+
+<h3 id="set-operations">set operations</h3>
+
+<p>includes: Union, Intersection, Sum.</p>
+
+<h3 id="authenticated-data-structure-1">Authenticated data structure</h3>
+
+<p>Mainly use <code>bilnear accumulator primitive</code> as ADS.</p>
+
+<p>Data owner firstly init (s, g:public key), and then use <code>bilnear accumulator primitive</code> to calculate the <code>digest</code> for each set.</p>
+
+<p><img src="imgs/image-20220226171006104.png" alt="image-20220226171006104" style="zoom:50%;" /></p>
+
+<p>Data Owner can publish g and acc(s).</p>
+
+<h3 id="verify-set-operation">Verify set operation</h3>
+
+<ol>
+  <li>Client get above digest and g</li>
+  <li>server compute:</li>
+</ol>
+
+<p><img src="imgs/image-20220226171610719.png" alt="image-20220226171610719" style="zoom:50%;" /></p>
+
+<ol>
+  <li>
+    <p>the server then releases a1 and a0, compute w1, w2 with g and then realse them also.</p>
+
+    <p><img src="imgs/image-20220226172610947.png" alt="image-20220226172610947" style="zoom:50%;" /></p>
+  </li>
+  <li>
+    <p>client check follows:（<code>SBDH assumption）</code></p>
+
+    <p><img src="imgs/image-20220226172038309.png" alt="image-20220226172038309" style="zoom:50%;" /></p>
+  </li>
+</ol>
+
+<p><strong>Complexity</strong></p>
+
+<p>Proofs are constant size. eg,. query involving d set operations, proof size is O(d)</p>
+
+<h2 id="ads-for-interval-trees">ADS for interval Trees</h2>
+
+<h3 id="interval-tree">Interval tree</h3>
+
+<p>Random function f, <code>binary tree T</code></p>
+
+<ol>
+  <li>Leaf node stores element of dataset S = {(k1,v1)…(kn,vn)}</li>
+  <li>Internal node u stores kv pair,
+    <ol>
+      <li>k = maximum key stored at any node in the left subtree of u</li>
+      <li>v = f(leftNode, rightNode)</li>
+    </ol>
+  </li>
+</ol>
+
+<p>Support queries: Search, RangeCover, Insert, Delete</p>
+
+<h3 id="authenticated-data-structure-2">Authenticated data structure</h3>
+
+<p>Mainly use Merkle tree, where each leaf node is hashed using kv pair. And the root of Merkle tree is a digest of the tree.</p>
+
+<p><strong>Complexity</strong></p>
+
+<p>The size of the minimal covering set output by RangeCover is O(log n)</p>
+
+<p>RnageCover is O(logn), size of proof and complexity of verification for Search, RangeCover, Insert, Delete is O(n).</p>
+
+<h1 id="our-construction">OUR CONSTRUCTION</h1>
+
+<p>ADS used in IntegriDB for different queries</p>
+
+<h2 id="setup">Setup</h2>
+
+<p>For each table, each pair of columns in the table, <code>data owner</code> create an authenticated interval tree.</p>
+
+<p><img src="imgs/image-20220227182455432.png" alt="image-20220227182455432" style="zoom:50%;" /></p>
+
+<p>Leaf Node: store kv of Sij</p>
+
+<p>Internal node U</p>
+
+<ul>
+  <li>Key: minimum key stored at the leaves on the left.</li>
+  <li>Value:</li>
+</ul>
+
+<p><img src="imgs/image-20220227182629776.png" alt="image-20220227182629776" style="zoom:50%;" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228131601138.png" alt="image-20220228131601138" /></p>
+
+<p><img src="imgs/image-20220227185110723.png" alt="image-20220227185110723" /></p>
+
+<p>The accumulation value in each node will be used to handle JOIN and multidimensional range queries.</p>
+
+<p><strong>Complexity</strong></p>
+
+<p>mi = columns and ni = rows in table i.</p>
+
+<p>size of the secret key is O(1)</p>
+
+<h2 id="join-queries">Join Queries</h2>
+
+<p><strong>Scenario</strong></p>
+
+<p>The Join return result: C* = Ci intersect with Cj.</p>
+
+<pre><code class="language-sql">select ... from  T join T' on T.Ci = T'.Cj 
+</code></pre>
+
+<p><strong>Server</strong></p>
+
+<ol>
+  <li>For each value x in C*, the server returns the entire row.</li>
+  <li>Return acc(ci) and acc(cj)</li>
+</ol>
+
+<p><strong>Client</strong></p>
+
+<ol>
+  <li>Hash each row received from server and check each row’s hash value == digest’s hash value.</li>
+  <li>Check acc(ci) or acc(cj) == acc in digest</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228112400906.png" alt="image-20220228112400906" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>proof size and verification time are O(</td>
+      <td>R</td>
+      <td>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="multidimensional-range-queries">Multidimensional Range Queries</h2>
+
+<p><strong>Scenario</strong></p>
+
+<p>2 dimensional range query</p>
+
+<pre><code class="language-sql">select ... from ... where w in [w−, w+] and z in [z−, z+];
+</code></pre>
+
+<p><strong>Server</strong></p>
+
+<p>return value</p>
+
+<p><img src="imgs/image-20220228124541523.png" alt="image-20220228124541523" style="zoom:50%;" /></p>
+
+<p><strong>Client</strong></p>
+
+<p>Verify bu using acc(cn) , and check it acc == acc in digest.</p>
+
+<p>Check row hashes to guarantee that the returned rows have not been altered.</p>
+
+<p><strong>Complexity</strong></p>
+
+<p>The proof size is O(d·log n)</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Verification complexity O(d log n +</td>
+      <td>R</td>
+      <td>).</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="sql-functions">SQL Functions</h2>
+
+<p><strong>Summation</strong></p>
+
+<p>For any column j, client can verify using Acc(cj) in root, The proof size and verification time are both O(1).</p>
+
+<p><strong>Max and min</strong></p>
+
+<p>server compute max value and then convert it to range query.</p>
+
+<pre><code class="language-sql">select max(j) from T =&gt; select * from T where j &gt;= j_max
+</code></pre>
+
+<p><strong>Count</strong></p>
+
+<p>server convert count to sum operation.</p>
+
+<h2 id="updates">Updates</h2>
+
+<p>the data owner and server jointly update the corresponding AIT and ASO using their respective interfaces.</p>
+
+<p>There is a rotation (<code>to maintain a balanced tree</code>) after an update in the interval tree</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228132847669.png" alt="image-20220228132847669" /></p>
+
+<h2 id="nested-queries">Nested Queries</h2>
+
+<h1 id="additional-discussion">ADDITIONAL DISCUSSION</h1>
+
+<h2 id="extensions-and-optimizations">Extensions and Optimizations</h2>
+
+<p>Improve setup time and reduce server storage space.</p>
+
+<p>To do this, we construct a <code>homomorphic Merkle tree</code> over each row, and add a column c to each table that stores the root of the <code>Merkle tree</code> for the corresponding row.</p>
+
+<h2 id="limitations">Limitations</h2>
+
+<p>cannot support agregations, comparsion and join with deplicates in nested query such as</p>
+
+<pre><code class="language-sql">SELECT c1 +2∗c2 FROM . . . 
+</code></pre>
+
+<h1 id="implementation">IMPLEMENTATION</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135341654.png" alt="image-20220228135341654" /></p>
+
+<h1 id="evaluation">EVALUATION</h1>
+
+<h2 id="env">Env</h2>
+
+<p>Awazon EC2, TPC Benchmark.</p>
+
+<h2 id="evaluation-on-tpc-benchmark">Evaluation on TPC Benchmark</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135610701.png" alt="image-20220228135610701" /></p>
+
+<h2 id="performance-on-synthetic-data">Performance on Synthetic Data</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135739435.png" alt="image-20220228135739435" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135835880.png" alt="image-20220228135835880" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135923836.png" alt="image-20220228135923836" /></p>
+:ET

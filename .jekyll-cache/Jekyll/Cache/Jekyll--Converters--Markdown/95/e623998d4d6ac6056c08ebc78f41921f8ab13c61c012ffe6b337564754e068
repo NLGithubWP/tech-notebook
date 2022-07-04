@@ -1,0 +1,124 @@
+I"<h1 id="超参数优化">超参数优化</h1>
+
+<p>常用的超参数优化方法有</p>
+
+<ol>
+  <li>网格搜索（Grid search），</li>
+  <li>随机搜索（Random search），</li>
+  <li>遗传算法，</li>
+  <li>贝叶斯优化（Bayesian Optimization）</li>
+</ol>
+
+<h1 id="核函数">核函数</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220513171159519.png" alt="image-20220513171159519" /></p>
+
+<p>高斯过程，SVM， PCA都是核函数学习的例子</p>
+
+<h2 id="特征映射">特征映射</h2>
+
+<p>把一个数据从低维空间映射到高维空间，使得<strong>高维空间下，数据更容易分类（线性可分的）</strong></p>
+
+<p>如果映射函数是 f(x), 对于任意2条数据，loss函数可能需要算这个2个数据 映射完的内积，即算 <code>f(x1). f(x2)</code></p>
+
+<p>把它定义为核函数， 即  <code>K(x1, x2) = f(x1). f(x2)</code></p>
+
+<p>有了这个定义后，可以直接定义核函数的形式，而不用具体定义f(x) 的形式。</p>
+
+<h1 id="概率图模型">概率图模型</h1>
+
+<p>概率图模型分为三种：<strong>贝叶斯网络，马尔科夫随机场</strong>以及<strong>高斯网络</strong></p>
+
+<h1 id="高斯过程">高斯过程</h1>
+
+<h2 id="高斯分布">高斯分布</h2>
+
+<p>一维高斯分布只需要求出mean和方差，就可以得出方程形式</p>
+
+<p>多维度高斯分布，如果每个变量相互独立，联合分布 = p(x1,x2..xN)</p>
+
+<p>多维度高斯分布， 变量直接相互独立，更容易求出mean和方差矩阵。</p>
+
+<h2 id="高斯过程-1">高斯过程</h2>
+
+<p>高斯过程</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220516141813818.png" alt="image-20220516141813818" /></p>
+
+<h1 id="贝叶斯优化"><a href="https://www.cnblogs.com/marsggbo/p/9866764.html">贝叶斯优化</a></h1>
+
+<h2 id="black-box-optimization">black-box optimization</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220513212019154.png" alt="image-20220513212019154" /></p>
+
+<ol>
+  <li>init sample</li>
+  <li>init mode</li>
+  <li>get acquisition function</li>
+  <li>optimize x_next = argmax(af)</li>
+  <li>sample new data and update the model.</li>
+  <li>repeat</li>
+</ol>
+
+<p>黑盒优化问题本质上是给定一组D，求他的分布。</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220514180411584.png" alt="image-20220514180411584" /></p>
+
+<p>给定一组数据D，想拟合一个函数，使得函数可以代表数据的分布。 函数中有超参数 theta。解法有2种。</p>
+
+<p>频率派和贝叶斯派</p>
+
+<ol>
+  <li>
+    <p>频率派求最大似然函数 (MLE)</p>
+
+    <table>
+      <tbody>
+        <tr>
+          <td>Theta = argmax log P( D</td>
+          <td>theta )</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>贝叶斯派, 它假设 theta 也是一个分布，采用贝叶斯展开式展开</p>
+
+    <p>先验概率 = p(theta)</p>
+
+    <table>
+      <tbody>
+        <tr>
+          <td>likelyhood = p( D</td>
+          <td>theta )</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>衡量后验概率 MAP</p>
+
+    <table>
+      <tbody>
+        <tr>
+          <td>原本的贝叶斯预测要求 p(theta</td>
+          <td>D) , 然后可以计算 p ( x_new</td>
+          <td>D ) , 但是分母的积分不好求。所有才用MAP来代替。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220514185448982.png" alt="image-20220514185448982" /></p>
+  </li>
+</ol>
+
+<h2 id="bayesian-optimization">Bayesian optimization</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220513165947325.png" alt="image-20220513165947325" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220511113932104.png" alt="image-20220511113932104" /></p>
+
+<ol>
+  <li></li>
+</ol>
+
+:ET

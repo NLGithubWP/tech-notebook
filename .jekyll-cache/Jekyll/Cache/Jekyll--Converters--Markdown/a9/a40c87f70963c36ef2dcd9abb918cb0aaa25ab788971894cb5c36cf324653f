@@ -1,0 +1,106 @@
+I"><h1 id="introduction">Introduction</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p><strong>Training DNN in parallel</strong> can reduce the training time, but it is inconvenient due to cumbersome cluster management and overprovisioning of resources.</p>
+
+<p>Some good features of serverless architecture could solve those problems but it’s still inefficiency due to communication costs and CPU-only limitations. One alternative way is to use serverless containers since they can use GPU and can directly communicate with each other. but it still has overprovisioning issues.  As a result, using serverless in distributed training requires some effort in system design. Platform examples:</p>
+
+<ol>
+  <li>MLaaS: Azure ML, AWS SageMaker.</li>
+  <li>Serverless container: Azure Container Instances (ACI): execute containers in a serverless fashion</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220628152649626.png" alt="image-20220628152649626" /></p>
+
+<p>Existing distributed training systems like MXNet and Pytorch didn’t design for the serverless platform, they cannot handle workers on serverless compute <strong>dynamically joining and leaving during training.</strong> While other serverless-based training systems are less efficient.</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>The paper designed a distributed training system on the serverless platform with <strong>higher throughput-per-dollar</strong>,  it combines the following features in a well-designed pattern.</p>
+
+<ol>
+  <li>Hybrid parallel training: data-parallel and model parallel =&gt; improve the training speed.</li>
+  <li>Serverless container: use container instead of functions =&gt; directly communicate &amp; GPU &amp; fine grained scaling &amp; pay on use &amp; manage free</li>
+  <li>Dynamic Worker Scaling: dynamically add or leave workers during training.</li>
+</ol>
+
+<p>In conclusion, it combines serverless containers with hybrid-parallel training and supports dynamic worker scaling to achieve high throughput and low cost.</p>
+
+<h1 id="system-design">System design</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220628162358080.png" alt="image-20220628162358080" /></p>
+
+<p>Overall, the whole system has three components,</p>
+
+<ul>
+  <li>planner:
+    <ul>
+      <li>determines the model partitioning and hybrid-parallel strategy selection</li>
+      <li>monitor memory usage and send it to the coordinator.</li>
+    </ul>
+  </li>
+  <li>worker: each worker has 3 threads, computation, gradient communications, prefetching training data</li>
+  <li>coordinator:
+    <ul>
+      <li>start workers’ tasks with cfgs.</li>
+      <li>gather worker information.</li>
+      <li>adjust resources when worker number changes.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="planner--parallelism">Planner &amp; Parallelism</h2>
+
+<p>The system combines both data parallelism and model parallelism, so it must determine how many shards to partition the model and what batch sizes or micro-batch sizes to use.</p>
+
+<p><strong>The planner will run a partitioning algorithm to partition the model into many shards in a way that minimizes the total training time of a minibatch of inputs.</strong></p>
+
+<ol>
+  <li>It first profiles the model by recording the model’s per-layer computing time, output size, and speed.</li>
+  <li>formate the problem</li>
+  <li>for different batch sizes, it calculates the best partition number using dynamic programming.</li>
+  <li>Finally, it found a global best combination of partition size and batch size.</li>
+</ol>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>It evaluates the Throughput vs hardware/serverless pattern to confirm the benefits of using a container-based serverless approach.</p>
+
+<p>Then it measures the throughput vs parallelism strategy to confirm the correctness of the planner.</p>
+
+<p>Throughput: Number of inputs processed per second. T</p>
+
+<p>Throughput-per-dollar: Number of inputs the system can process per dollar spent. T/C. where C is the per-second cost of running the system.</p>
+
+<h2 id="throughput">Throughput</h2>
+
+<p><strong>Single</strong> worker GPU + directly communicate &gt; CPU + directly communicate &gt; CPU + in-directly communicate.</p>
+
+<p>HL: scale poorly since in-direct communication is overhead. (S3)</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220628172617639.png" alt="image-20220628172617639" /></p>
+
+<p>It also compares the system with the cloud platform inner library.</p>
+
+<p>The system has a lower cost. The training occurs on GPU, only a fraction of that memory is used. Hydrozoa uses <strong>profiling data to allocate no more resources than needed.</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220628173802690.png" alt="image-20220628173802690" /></p>
+
+<h2 id="planner">Planner</h2>
+
+<p>Hydrozoa’s partitioning algorithm is able to produce partitions that scale throughput effectively</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220628174309784.png" alt="image-20220628174309784" /></p>
+
+<h2 id="auto-scaling">Auto scaling</h2>
+
+<p>When the worker increase, the coordinator can adjust the resources.</p>
+
+<p>In experiments, it starts with one worker and increases to 16 workers.</p>
+
+<p>The result shows dynamic worker scaling in Hydrozoa can bring significant benefits in training efficiency and cost.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220628174644511.png" alt="image-20220628174644511" /></p>
+
+:ET
