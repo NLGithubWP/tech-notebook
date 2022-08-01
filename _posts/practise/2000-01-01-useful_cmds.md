@@ -17,13 +17,13 @@ pip install --user some_pkg
 
 export 
 
-note: check the path is exist, if not, check if pyhton3.6 is correct folder name
+note: check if the path exists; if not, check if pyhton3.6 is the correct folder name
 
 ```bash
 export PYTHONPATH=$(python -c "import site, os; print(os.path.join(site.USER_BASE, 'lib', 'python3.6', 'site-packages'))"):$PYTHONPATH
 ```
 
-run 
+run
 
 ```
 python ...
@@ -68,6 +68,23 @@ eg:
 git fetch origin pull/611/head:pull_611
 git checkout pull_611
 ```
+
+## Git submodule
+
+Git submodule 添加后删了.gitsubmoduel, 导致无法再添加。 
+
+```bash
+rm -rf .git/modules
+git rm --cached path_to_modules
+然后运行
+git submodule add https://github.com:meltwater/served.git third_party/served
+```
+
+
+
+
+
+
 
 # Linux cmds
 

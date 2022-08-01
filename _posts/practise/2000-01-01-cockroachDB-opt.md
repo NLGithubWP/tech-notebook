@@ -15,11 +15,11 @@ Database -> schema -> (tables, views, sequences)
 
 ## Schema best practices
 
-If need multiple tables with same name, do so in different schema in same DB
+If need multiple tables with the same name, do so in the different schema in the same DB
 
-use **schema_name.table_name** to access table
+use **schema_name.table_name** to access the table
 
-Make transactions smaller by operating on less data per transaction. This will offer fewer opportunities  for transactions' data access to overlap.
+Make transactions smaller by operating on fewer data per transaction. This will offer fewer opportunities for transactions' data access to overlap.
 
 [Split the table across multiple ranges](https://www.cockroachlabs.com/docs/v21.1/split-at) to distribute its data across multiple nodes for better load balancing of some write-heavy workloads.
 
@@ -53,7 +53,7 @@ Values exceeding 1MB can lead to write amplification（写放大） and cause pe
 
    ![image-20211028154437616](https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211028154437616.png)
 
-4. l Avoid **define pk over a single column of sequential data, eg. auto-incrementing INT or timestamp value**
+4. l Avoid **defining pk over a single column of sequential data, eg. auto-incrementing INT or timestamp value**
 
 5. l If must define in sequential keys, use hash-sharded index. 
 
@@ -101,11 +101,11 @@ https://www.cockroachlabs.com/docs/v21.1/column-families
 
 ### Partial index
 
-Add index to part of rows and cols
+Add an index to part of rows and cols
 
 ### Spatial index
 
-### Multiple region
+### Multiple regions
 
 # 2. Write data/read data
 
@@ -119,9 +119,9 @@ Do not include multi-row insert statements with an explicit tx
 
 Must use where.
 
-Use batch-update loop to update many rows (https://www.cockroachlabs.com/docs/v21.1/bulk-update-data)
+Use a batch-update loop to update many rows (https://www.cockroachlabs.com/docs/v21.1/bulk-update-data)
 
-Wrap the update with retry (https://www.cockroachlabs.com/docs/v21.1/error-handling-and-troubleshooting#transaction-retry-errors)
+Wrap the update with a retry (https://www.cockroachlabs.com/docs/v21.1/error-handling-and-troubleshooting#transaction-retry-errors)
 
 ## Follower read 
 
@@ -132,10 +132,10 @@ Follower reads are a mechanism that CockroachDB uses to provide faster reads in 
 Requirements
 
 1. Read latency is low, but write latency is higher
-2. Read can be historical (4.8 second or more in past)
+2. Read can be historical (4.8 seconds or more in past)
 3. Available during region failure
 
-# 3. Manage Txs
+# 3. Manage Tx
 
 ![image-20211028155026069](https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211028155026069.png)
 
@@ -145,7 +145,7 @@ Requirements
 
 System automatic retry
 
-​	Require the insert/update/delete without ”returning”, and have small returned 	result size.
+​	Require the insert/update/delete without ”returning”, and have a small returned result size.
 
 ​	If returned result is greater than 16kb, cannot retry
 
