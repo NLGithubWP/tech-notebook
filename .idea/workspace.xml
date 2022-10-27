@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c072b138-5ed6-4317-af8c-87d62def1e84" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-10-25-89.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-10-25-89.md" afterDir="false" />
-    </list>
+    <list default="true" id="c072b138-5ed6-4317-af8c-87d62def1e84" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,7 +25,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/js" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -43,11 +41,22 @@
       <option name="presentableId" value="Default" />
       <updated>1652626992035</updated>
       <workItem from="1652626994933" duration="100000" />
-      <workItem from="1666844981590" duration="1631000" />
+      <workItem from="1666844981590" duration="1989000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
