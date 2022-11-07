@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="c072b138-5ed6-4317-af8c-87d62def1e84" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-10-23-86.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-10-23-86.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-10-25-88.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-10-25-88.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-10-25-89.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-10-25-89.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-08-03-77.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-08-03-77.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +31,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/js" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -39,6 +40,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/js" />
     </key>
   </component>
@@ -51,7 +53,10 @@
       <option name="presentableId" value="Default" />
       <updated>1652626992035</updated>
       <workItem from="1652626994933" duration="100000" />
-      <workItem from="1666844981590" duration="2730000" />
+      <workItem from="1666844981590" duration="3257000" />
+      <workItem from="1666973290960" duration="2037000" />
+      <workItem from="1666975610864" duration="1583000" />
+      <workItem from="1666977713216" duration="696000" />
     </task>
     <servers />
   </component>

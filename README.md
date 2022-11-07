@@ -8,5 +8,10 @@
 * [2022-07-19 [VLDB-2019] ForkBase An Efficient Storage Engine for Blockchain and Forkable Applications](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-07-19-74.md)
 * [2022-08-01 [CVPR-2021] AttentiveNAS Improving Neural Architecture Search via Attentive Sampling](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-08-01-75.md)
 
+* [2022-08-02 [CVPR-2021] ](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-08-01-75.md)
+
+* [2022-08-03 [ASPLOS-2022] NASPipe High Performance and Reproducible Pipeline Parallel Supernet Training via Causal Synchronous Parallelism](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-08-03-77.md)
+* 
+
 
 
