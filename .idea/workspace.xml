@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c072b138-5ed6-4317-af8c-87d62def1e84" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/post.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-07-19-74.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-07-19-74.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-08-03-77.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-08-03-77.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-08-24-79.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-08-24-79.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-08-25-80.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-08-25-80.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-05-90.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-05-90.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-07-92.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-07-92.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +56,7 @@
       <workItem from="1666975610864" duration="1583000" />
       <workItem from="1666977713216" duration="696000" />
       <workItem from="1667830742442" duration="94000" />
+      <workItem from="1667977709867" duration="301000" />
     </task>
     <servers />
   </component>
