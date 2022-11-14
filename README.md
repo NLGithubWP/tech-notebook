@@ -9,6 +9,7 @@
 * [2022-08-23 [NIPS-2021] How Powerful are Performance Predictors in Neural Architecture Search](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-08-23-78.md)
 * [2022-08-24 [NIPS-2021] Neural Architecture Search A Survey](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-08-24-79.md)
 * [2022-08-25 [re-read] Practical Byzantine Fault Tolerance](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-08-25-80.md)
+* [2022-08-26 [summary] Byzantine Consensus and Application](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-08-26.pdf)
 * [2022-09-20 [AFT-2020] Streamlet Textbook Streamlined Blockchains](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-09-20-81.md)
 * [2022-10-18 [OSDI-2021] Retrofitting High Availability Mechanism to Tame Hybrid Transaction/Analytical Processing](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-10-18-82.md)
 * [2022-10-20 [SIGMOD-2022] ByteHTAP ByteDance HTAP System with High Data Freshness and Strong Data Consistency](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-10-20-83.md)
