@@ -5,10 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c072b138-5ed6-4317-af8c-87d62def1e84" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_bastar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_binarybastar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_committeevote.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_commoncoin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_countvotes.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_processmsg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_reduction.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_sortition.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_verifysort.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/algorand_protocol.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/implementation_params.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/a_img_store/subusers.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-15-76.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-15-76.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-16-99.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-16-99.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-17-72.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-17-72.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-21-100.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-21-100.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +40,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/img/a_img_store" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -39,6 +49,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/img/a_img_store" />
+      <recent name="$PROJECT_DIR$/_posts/paper-notebook" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/js" />
     </key>
@@ -58,7 +70,7 @@
       <workItem from="1666977713216" duration="696000" />
       <workItem from="1667830742442" duration="94000" />
       <workItem from="1667977709867" duration="4896000" />
-      <workItem from="1668157589544" duration="9710000" />
+      <workItem from="1668157589544" duration="9963000" />
     </task>
     <servers />
   </component>
