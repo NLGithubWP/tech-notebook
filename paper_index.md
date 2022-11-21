@@ -90,15 +90,22 @@ layout: home
 * [2022-11-09 [summary] Summary of the model parallelism-based training and optimization](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-09-94.md)
 * [2022-11-10 [ASPLOS-2021] Neural Architecture Search as Program Transformation Exploration](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-10-95.md)
 
+* [2022-11-15 [VLDB-2020] LedgerDB A Centralized Ledger Database for Universal Audit and Verification](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-15-97.md)
+* [2022-11-16 Byzantine Agreement Made Trivial - Silvio Micali](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-16-99.md)
+* [2022-11-17 [SOSP-2017] Algorand Scaling Byzantine Agreements for Cryptocurrencies](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-17-98.md)
 
 
 
 
 
 
-* [2022-01-31 [TPAMI-2020] Auto-PyTorch Tabular: Multi-Fidelity Meta Learning for Efficient and Robust AutoDL](24.md)
+
+
+
+* [2022-01-31 [TPAMI-2020] Auto-PyTorch Tabular: Multi-Fidelity Meta-Learning for Efficient and Robust AutoDL](24.md)
 * [2022-02-03 [ICLR-2020] NAS-BENCH-201: EXTENDING THE SCOPE OF REPRODUCIBLE NEURAL ARCHITECTURE SEARCH](24.md)
-* [2022-02-05 [arXiv-2022] Unifying and Boosting Gradient-Based Training-Free Neural Architecture Search](18.md) -->
+* [2022-02-05 [arXiv-2022] Unifying and Boosting Gradient-Based Training-Free Neural Architecture Search](18.md)
 
 * [2022-01-15 [OSDI-2021] A Unified Architecture for Accelerating Distributed DNN Training in Heterogeneous GPU/CPU Clusters](14.md)
-* [2020-02-25 [SIGMOD-2020] A TRANSACTIONAL PERSPECTIVE ON EXECUTE-ORDER-VALIDATE BLOCKCHAINS](
+* [2020-02-25 [SIGMOD-2020] A TRANSACTIONAL PERSPECTIVE ON EXECUTE-ORDER-VALIDATE BLOCKCHAINS]()
+
