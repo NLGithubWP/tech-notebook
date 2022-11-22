@@ -33,6 +33,13 @@
 
 1. HTTPs redeployment. 
 
+# 11-22
+
+1. khjk
+2. kjh
+3. jh
+4. kjh
+
 
 
 

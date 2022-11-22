@@ -5,19 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c072b138-5ed6-4317-af8c-87d62def1e84" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_bastar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_binarybastar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_committeevote.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_commoncoin.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_countvotes.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_processmsg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_reduction.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_sortition.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/alg_verifysort.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/algorand_protocol.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/implementation_params.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/a_img_store/subusers.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-21-100.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/paper-notebook/2022-11-21-100.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +57,7 @@
       <workItem from="1666977713216" duration="696000" />
       <workItem from="1667830742442" duration="94000" />
       <workItem from="1667977709867" duration="4896000" />
-      <workItem from="1668157589544" duration="9963000" />
+      <workItem from="1668157589544" duration="10290000" />
     </task>
     <servers />
   </component>
