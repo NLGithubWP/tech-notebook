@@ -31,16 +31,15 @@
 
 # 11-18
 
-1. HTTPs redeployment. 
+1. HTTPS redeployment. 
 
 # 11-22
 
-1. khjk
-2. kjh
-3. jh
-4. kjh
+1. Nothing
 
+# 11-25
 
+1. [Naili] Parse word document to IP content.
 
 
 
