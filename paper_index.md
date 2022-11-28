@@ -89,13 +89,13 @@ layout: home
 * [2022-11-08 [ICML-2020] Memory Efficient Pipeline-Parallel DNN Training.](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-08-93.md)
 * [2022-11-09 [summary] Summary of the model parallelism-based training and optimization](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-09-94.md)
 * [2022-11-10 [ASPLOS-2021] Neural Architecture Search as Program Transformation Exploration](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-10-95.md)
-
 * [2022-11-15 [VLDB-2020] LedgerDB A Centralized Ledger Database for Universal Audit and Verification](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-15-97.md)
 * [2022-11-16 Byzantine Agreement Made Trivial - Silvio Micali](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-16-99.md)
 * [2022-11-17 [SOSP-2017] Algorand Scaling Byzantine Agreements for Cryptocurrencies](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-17-98.md)
-
-* [2022-11-21 [SIGMOD-2017-tutorial] Hybrid Transactional Analytical Processing A Survey](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-21-101.md)
-* [2022-11-22 [ATC-2022] TETRIS Memory efficient Serverless Inference through Tensor Sharing](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-22-102.md)
+* [2022-11-18 [SIGMOD-2017-tutorial] Hybrid Transactional Analytical Processing A Survey](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-18-96.md)
+* [2022-11-21 [ATC-2022] TETRIS Memory efficient Serverless Inference through Tensor Sharing](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-21-101.md)
+* [2022-11-22 [VLDB-2022] Serving Deep Learning Models with Deduplication from Relational Databases](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-22-102.md)
+* [2022-11-24 [ATC-2019] MArk Exploiting Cloud Services for Cost-Effective and SLO-Aware Machine Learning ](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/2022-11-24-103.md)
 
 
 
