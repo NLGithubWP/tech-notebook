@@ -8,9 +8,9 @@
 
 1. [phx] Test pipeline.
 2. [phx] User management: 
-   1. Refine documents. Public => subscribe user (login and subscribed) => paid user (login and paied) => collaborator => owner & institute admin. Level 1~5.
+   1. Refine documents. Public => subscribe user (login and subscribed) => paid user (login and paid) => collaborator => owner & institute admin. Level 1~5.
    2. Auto convert to un-publish if collaborator edits IP contents. (is publish = true only if the user is owner or institute admin.)
-3. [phx] Once one user is editing the IP,  others cannot edit it. (lock timestamp)
+3. [phx] Once one user is editing the IP,  others cannot. (lock timestamp)
    1. Collaborator update with auto-save as a heart-beat message. / The login-in token has a 1-hour time-out.
 4. [phx] Create NFT by saving a PDF
    1. Accepting data-URL string from the front end.
@@ -27,7 +27,7 @@
    4. Cache Search./NFT cache with the lease.
 8. [phx] Bug fix:
    1. Double quote error.
-   2. length errors.
+   2. Length errors.
 
 # 11-18
 
@@ -41,17 +41,22 @@
 
 1. [Naili] Parse word document to IP content.
 
+# 11-29
 
+1. pass
 
+# 12-02
 
+1. Transfer, SuperAdmin, user 
+2. SuperAdmin can sign 
+3. Account user
+   1. Collaborators edit the draft. 
+   2. Collaborator, public, the restricted user. 
 
+4. Collaborator
+   1. non-concurrent. 
+   2. Save the draft, and IP manager receives a notification. 
+5. Search, recommendations
 
-
-
-
-
-
-
-
-
+6. SBIP usage.
 
