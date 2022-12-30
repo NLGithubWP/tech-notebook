@@ -55,8 +55,18 @@
 
 4. Collaborator
    1. non-concurrent. 
-   2. Save the draft, and IP manager receives a notification. 
+   2. Save the draft, and the IP manager receives a notification. 
 5. Search, recommendations
 
 6. SBIP usage.
 
+# 12-06
+
+1. Discuss notification with ZhongKai.
+2. Collolator notify.
+4. Super-admin has all user accounts.
+
+# 12-09
+
+1. add new tag collaborator.
+2. 
