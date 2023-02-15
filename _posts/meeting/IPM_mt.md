@@ -69,4 +69,78 @@
 # 12-09
 
 1. add new tag collaborator.
-2. 
+
+# 2023-01-03
+
+**dashboard**
+
+1. Ip. Lab. The startup,  How many are created monthly?
+2. One organization, How many Views, likes, and subscribers?
+
+# 01-06
+
+1. Word file heading/re-parse.
+2. Word Image matching to each section
+3. Add coordinator and password, 
+4. trending:
+   1. Update, viewed.
+
+# 01-20
+
+IPM => create Super Admin => 
+
+1. Role
+
+   1. super-admin:
+      1.  **add manager &  add inventor.**
+   2. manager
+      1. Add collaborator ( **cross-institute.** )
+      2. Create IP 
+      3. `Publish IP`
+      4. `Transfer IP`
+      5. Modify IP
+   3. Inventor: (机构用户)
+      1. Add collaborator ( **cross-institute.** )
+      2. Create IP
+      3. Modify IP
+      4. `Assign IP to manager`
+   4. publish user:
+      1. registered public user
+         1. 付费功能
+      2. un-registered public user. 
+
+2. Relation: Collaborator
+
+   1. nothing can do with role management. 
+
+3. TASK
+
+   1. 加一个 role inventor. (hx)
+
+      1. Add collaborator must user exist and has instituted. （hx）
+
+      2. super admin adds user 的时候，显示是manager or inventor. 
+
+         1. get user and get inventor (hx)
+
+         1. inventor
+
+         1. inventor add collaborator.  (hx)
+
+   1. 自动发送邮件 (not now)
+   2. feature projects: 
+      1. like 最多的.  (hx 测试)
+   3. related：（NL  ： 对接ai API）
+      1. 同机构 weight 高，同类型，内部随机
+      2. 用similarity， 
+      3. AI 的 API
+   4. A public user cannot enter the page. (frontend)
+   5. My post adds like,(frontend)
+
+4. IP
+
+   1. Public content => all users can visit
+   2. Private to buyer
+
+# 2-14
+
