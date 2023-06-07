@@ -83,11 +83,11 @@ Now if another client read it, the client can read from primary.
 
 ## Solution of Question 4
 
-Read-only transaction don't need add lock. It's safe for serializability if we add `timestamp` 
+Read-only transactions don't need add lock. It's safe for serializability if we add `timestamp` 
 
-The reason is read-only transaciton doesn't modify the system status.  
+The reason is read-only transactions doesn't modify the system status.  
 
-In implementation, when the data is being modified by one client, the data is labelled as "unreadable." and the read-only transaction can read the stable version of the data (timestamp data).
+In an implementation, when the data is being modified by one client, the data is labelled as "unreadable." and the read-only transaction can read the stable version of the data (timestamp data).
 
 But if there no timestamp or WAL, Dirty read may happens. For example, one transaction contains many writes. And after writting done, user decided to abort.  Since the data is all written in database. Before the data is deleting according to abort request, read-only may read them. It cause dirty read. 
 
