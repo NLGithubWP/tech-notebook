@@ -1,3 +1,12 @@
+---
+title: python memory bug reports
+date: 2021-08-12
+layout: post
+active: journal
+header-img: "img/postcover/post02.jpg"
+categories: [practise]
+---
+
 # Python Memory
 
 ```python
