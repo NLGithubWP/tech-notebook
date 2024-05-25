@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/162/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/162/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>synchronous Data Dissemination and its Applications - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/162/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">synchronous Data Dissemination and its Applications</h1>
+                    
+                    <span class="meta">Posted on October 12, 2023</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+10 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h1 id="introduction">Introduction</h1>
+
+<h2 id="problem">Problem</h2>
+
+<p>Asynchronous Data Dissemination (ADD) Problem:</p>
+
+<ul>
+  <li>in an <strong>asynchronous</strong> network, n nodes with <strong>t nodes malicious.</strong></li>
+  <li>The goal is to disseminate a <strong>data blob from a subset of honest nodes</strong> to <strong>all honest nodes</strong>, despite the presence of some malicious nodes</li>
+  <li>Formally, the goal is that a subset of <strong>at least t +1 honest nodes</strong> start with a common message <strong>blob M</strong>, and t hen all honest nodes output M at the end of the protocol.</li>
+</ul>
+
+<h2 id="solution">Solution</h2>
+
+<p>The paper designs a simple and efficient ADD protocol that is</p>
+
+<ul>
+  <li>information-theoretically secure: it does not rely on any cryptographic assumption</li>
+  <li>tolerates up to 1/3 of malicious nodes. i.e., n &gt;= 3t + 1</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>communication cost of O(n</td>
+          <td>M</td>
+          <td>+ n^2) to disseminating a message M.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<p>The protocol can be used to improve <strong>Asynchronous reliable broadcast (RBC)</strong>, and then the improved RBC can improve the communication cost of</p>
+
+<ul>
+  <li>Asynchronous atomic broadcast and Asynchronous distributed key generation protocol (ADKG)</li>
+  <li>Asynchronous Verifiable Secret Sharing (AVSS),</li>
+  <li>Asynchronous Complete Secret Sharing (ACSS),</li>
+  <li>Dual-threshold ACSS from O(kn^2logn) to O(kn^2) without using any trusted setup.</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+  <li>RBC: an asynchronous reliable broadcast protocol implements a broadcast channel in an asynchronous network and ensures that all honest nodes in the network deliver the same message <strong>if any honest node delivers or if the broadcaster is honest.</strong></li>
+</ul>
+
+<h1 id="methods">Methods</h1>
+
+<h2 id="overview-of-the-solution">Overview of the solution</h2>
+
+<ol>
+  <li>The input message M is transformed into n symbols using the Error-Correcting Code.</li>
+  <li>Each node has one encoded symbol, e.g., i-th node takes the i-th symbol</li>
+  <li>If a node doesn’t have input, it can obtain the symbol by receiving it from i+1 nodes that have input message M.</li>
+  <li>Once every node i has its symbol, it disseminates or disperses it to other nodes.</li>
+  <li>Honest nodes are then collected symbols. Once an honest node collects 2t+1 symbols, it can reconstruct a new message M’.</li>
+  <li>The node then encodes M′ again using the same error-correcting code, turning it into a set of symbols. Then the node checks whether this new set of encoded symbols contains at least 2t+1 symbols that match the originally received symbols.</li>
+  <li>If matching, the <strong>node outputs the reconstructed message.</strong> This is a verification step.</li>
+</ol>
+
+<h2 id="improved-rbc">Improved RBC</h2>
+
+<p>It combines Bracha’s classic RBC protoco with the propose ADD to improved RBC</p>
+
+<ul>
+  <li>running Bracha’s RBC protocol on the has digest of M can establish exactly the initial condition for ADD</li>
+</ul>
+
+<h1 id="system-model">System model</h1>
+
+<p><strong>Cryptographic assumptions</strong></p>
+
+<ul>
+  <li>hash(.) denote the collision resistant hash function.</li>
+  <li>k denote the size of the cryptographic object.</li>
+</ul>
+
+<p><strong>Network and adversarial assumptions</strong></p>
+
+<ul>
+  <li>Async network n&gt;= 3t + 1, at most t malicious nodes</li>
+  <li>Adversary can delay or reorder messages between honest nodes, but must eventually deliver every message.</li>
+</ul>
+
+<p><strong>Encodes</strong></p>
+
+<ul>
+  <li>RSEnc(M, m, k): encode message <strong>M</strong> with <strong>k symbols</strong> and outputs <strong>m evaluations</strong>.</li>
+  <li>RSDec(k, r, T): Takes inputs a set of symbols T, outputs <strong>k symbols</strong> by correcting up to <strong>r errors in T</strong>
+if |T| &gt; k + 2r, it can work.</li>
+</ul>
+
+<h1 id="async-data-dissemination">Async data dissemination</h1>
+
+<p>Number of <strong>honest sender</strong> node must be at least <strong>t+1</strong></p>
+
+<p>Simple solutions</p>
+
+<ul>
+  <li>t+1 honest senders just send M to all others, and others once receive <strong>t+1 matching message M</strong>, it outputs <strong>M</strong>.</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>this is <strong>not communication efficient</strong>, since totla communication cost os O(n^2</td>
+          <td>M</td>
+          <td>)</td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td>Specifically, one node sends (n-1)</td>
+          <td>M</td>
+          <td>to all other nodes. n nodes send out n(n-1)</td>
+          <td>M</td>
+          <td>messages. Thus totally, n^2</td>
+          <td>M</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<p>The paper solution</p>
+
+<ul>
+  <li>n &gt;= 3t + 1: information theoretically secure.</li>
+  <li>n &gt;= 2t + 1: needs a collision resistant hash function.</li>
+</ul>
+
+<h2 id="n--3t--1-solution">n &gt;= 3t + 1 solution</h2>
+
+<p>Three phases: <strong>encoding phase</strong>, <strong>dispersal phase</strong>, and <strong>reconstruction phase</strong>.</p>
+
+<p><strong>Encoding phase:</strong></p>
+
+<ul>
+  <li>Every sender (with messsage M) encodes M using (n, t+1) <strong>Reed-Solomon code</strong>, that is M includes t + 1 symbols, but outputs n symbols.</li>
+  <li>The encoded message M’ = [m_1 …. m_n] of n symbols, and the size of symbol is 
+<strong>|M’|</strong> = n|M| / (t + 1) =&gt; |M’| / n = <strong>|M| / (t + 1)</strong>
+here each simple has size of |M| / (1+t), while |M’| is the sume of the n symbols, thus it’s above</li>
+</ul>
+
+<p><strong>Dispersal phase</strong>:</p>
+
+<ul>
+  <li>Aftering encoding M =&gt;M’, every node sender sends the message &lt;disperse, mj&gt; to node j.</li>
+  <li>Node j, once received t + 1 matching disperse message for a symbol mj’, it sets mj’ as the reconstruction symbol mj*.</li>
+</ul>
+
+<p><strong>Reconstruction Phase</strong></p>
+
+<ul>
+  <li>Every node sends &lt;reconstruct, i, mi*&gt; to all other nodes.</li>
+  <li>Every recipient, upon receiving enough symbols, uset he online error correcting algirithm to reconstruct it.
+    <ul>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>wait until</td>
+              <td>T</td>
+              <td>&gt;=2t + r + 1.</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>let pr(.) := RSDec(t + 1, r, T).</li>
+      <li>if reconstructed polynomial agrees with <strong>2t+1</strong> points in the reconstruct message, the recipient outputs the decoded message.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="../../img/a_img_store/image-20231014141427793.png" alt="image-20231014141427793" /></p>
+
+<h1 id="anaylsis">Anaylsis</h1>
+
+<p>This it prove that Alg1 can solve ADD problem</p>
+
+<ul>
+  <li>Every honest node will hold the <strong>correct reconstruction symbol</strong> at the end of <strong>dispersal phase.</strong></li>
+  <li>Every honest node can successfully reconsructs the message M.</li>
+</ul>
+
+<p><strong>LEMMA 3.2.</strong> After the dispersal phase each honest node j holds <strong>mj</strong>* where mj* is the j-th coordinate of M′= RSEnc(M,n,t + 1)</p>
+
+<ul>
+  <li>RSEnc is <strong>determinstic</strong>, and  <strong>t + 1</strong> honest node must send out.</li>
+  <li><strong>Eventually</strong>, node must receivet <strong>t + 1</strong> messages , and then will hold mj* at the end of the dispersal phase.</li>
+</ul>
+
+<p><strong>Lemma 3.3.</strong> At the end of the reconstruction phase of Algorithm 1, every honest node outputs M.</p>
+
+<ul>
+  <li>An honest recipient node will never output a wrong message.
+    <ul>
+      <li>Logic:
+        <ul>
+          <li>There are 2t+1 honest nodes.</li>
+          <li>Eaech recipient will receive 2t+1 symbols from the last phase, and then construct <strong>𝑝𝑟(·)</strong></li>
+          <li>Among the recipient, there are t+1 honest sender, which has ground truth <strong>𝑝(·)</strong></li>
+          <li>The polynomials has the same degree, thus if <strong>𝑝(·)</strong> and <strong>𝑝𝑟(·)</strong> are matching, they are same.</li>
+        </ul>
+      </li>
+      <li><strong>𝑝𝑟(·)</strong>: This represents a polynomial that <code class="language-plaintext highlighter-rouge">node 𝑖</code> <strong>produces</strong> (or outputs) during the 𝑟th iteration. It is what the node believes to be the correct message during that specific iteration.</li>
+      <li><strong>𝑝(·)</strong>: This represents the <strong>actual correct polynomial</strong> (or message) that nodes are trying to determine or agree upon. It’s the “target” polynomial that an honest node should produce.</li>
+      <li><strong>𝑇𝑟</strong>: This is the set of <strong>symbols</strong> (or data points) that <code class="language-plaintext highlighter-rouge">node 𝑖</code> used to come up with its <strong>polynomial 𝑝𝑟(·)</strong> during the 𝑟th iteration.</li>
+    </ul>
+  </li>
+  <li>Honest recipient will eventually output a message
+    <ul>
+      <li>Every honest will eventually receives 2t+1 correct symbols, and at most t correct symbols.</li>
+      <li>RSDec algorithm (RSDec(k, r, T) is able to correct up to <strong>r errors in T</strong> )</li>
+      <li>Thus, honest nodes will sucuessfully reconstruct the original message M</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Lemma 3.4</strong>: Total communication cost: <strong>Cumulative amount of data transmitted and received among entities</strong></p>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>It’s O(n</td>
+          <td>M</td>
+          <td>+ N^2)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Each sender nodes sends a message of size</td>
+          <td>M’</td>
+          <td>/n + O(1) to n nodes,</td>
+          <td> </td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td>thus it’s communication cost is n(</td>
+          <td>M’</td>
+          <td>/n + O(1)),  n nodes will do this a this step, thus it’s (t+1)*n(</td>
+          <td>M’</td>
+          <td>/n + O(1))</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>At the construction phase, each node sends a message of size</td>
+          <td>M’</td>
+          <td>/n + O(1) to others, for one node, comm cost is n*(</td>
+          <td>M’</td>
+          <td>/n + O(1) )</td>
+        </tr>
+        <tr>
+          <td>For n nodes, the total is n^2(</td>
+          <td>M’</td>
+          <td>/n + O(1) ) =&gt; O(n</td>
+          <td>M’</td>
+          <td>+ n^2)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Here O(1) is a constant overhead of sending each message.</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Theorem 3.5:</strong> In an asynchronous network of 𝑛 = 3𝑡 + 1 nodes, of which up to 𝑡 nodes can be malicous, Algorithm 1 solves ADD with a communication complexity of 𝑂(𝑛</td>
+      <td>𝑀</td>
+      <td>+𝑛 2 ).</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>Derived from Lemma3.2, 3.3, and 3.4</li>
+</ul>
+
+<p>Communicaiton cost:</p>
+
+<ul>
+  <li>encoding stepL O(n^2) operations. (additions and multiplications)</li>
+  <li>reconstruct: decode t times, each with O(npolylog(n))</li>
+</ul>
+
+<h1 id="reliable-broadcast">Reliable Broadcast</h1>
+
+<p>The paper propose two RBC for long messges</p>
+
+<ul>
+  <li>Simpler and use Bracha’s RBC and ADD in a modular way, but requires two additional rounds of communication than Bracha’s RBC.</li>
+  <li>Second one merges the Bracha’s RBC and ADD and matches the round complexity of RBC.</li>
+</ul>
+
+<h2 id="defination">Defination</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>A protocol for a set of nodes {1, ….,n}, where a distinguished node called the broadcaster holds an initial input M of size</td>
+      <td>M</td>
+      <td>, is a reliable broadcast protocol, if the following properties hold</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li><strong>Agreement</strong>: If a honest node outputs a message M’, another output M’’, then M’ == M’’</li>
+  <li><strong>Validity</strong>: one broadcaster is honest, all others eventually output M.</li>
+  <li><strong>Totality</strong>: One honest node outputs a message, then every honest node eventually outputs a message;</li>
+</ul>
+
+<h2 id="brachas-rbc">Bracha’s RBC</h2>
+
+<ul>
+  <li>quorum intersection (ECHO message) =&gt; for agreement</li>
+  <li>vote amplification of ready message =&gt; totality.</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>including M in each message, leading to O(n^2</td>
+          <td>M</td>
+          <td>) commnication cost.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Why 2t + 1 in the 1st phase? t+1 in 2nd, 2t+1 in 3rd?
+    <ul>
+      <li></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cachin-tessaro-rbc">Cachin Tessaro RBC</h2>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Attaching Merkle Path Proofs in the message, incurs a commnication cost of O(n</td>
+          <td>M</td>
+          <td>+ kn^2logn)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<h2 id="the-proposed-first-rbc-protocol">The Proposed First RBC protocol</h2>
+
+<ul>
+  <li>Run Bracha’s RBC only on the hash of the message M, <strong>disseminate</strong> the message M using ADD.</li>
+  <li>Question:
+    <ul>
+      <li>why needs ADD after using hash?</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="analysis-of-alg3">Analysis of Alg3</h2>
+
+<p><strong>Lemma 4.2</strong>: If any honest node executes ADD(𝑀), then there are at least 2𝑡 + 1 nodes, among which at least 𝑡 + 1 are honest nodes, that receive 𝑀 from the broadcaster and send ⟨ECHO, ℎ⟩ to all other nodes where ℎ = hash(𝑀).</p>
+
+<p><strong>Lemma 4.3</strong>: If any honest node executes ADD(𝑀), then <strong>at least 𝑡 + 1 honest nodes execute ADD(𝑀)</strong> and the rest of the honest nodes execute ADD(⊥).</p>
+
+<ul>
+  <li>if one honest node execute ADD(M), it means the node receive 2t+1 matching receive M and send &lt;ECHO,h&gt;. Then since any two 2t+1 must interacte at one honest node, and it doesn’y lie. Thus no other 2t+1 send other msg != M.</li>
+  <li>t + 1 honest nodes: After the two rounds of ready voting, all honest nodes will eventually receive 2t+1 Ready Message, and execute ADD(.), since they can either execute ADD(M) or ADD(None),.
+Since Lemma 4.2, at least t+1 honest node receive M from broadcaster, thus the t+1 nodes execute the ADD(M)</li>
+</ul>
+
+<h1 id="application-avss">Application-AVSS</h1>
+
+<p>Previous SOTA AVSS</p>
+
+<ul>
+  <li>Without a trusted setup had a communication costs of <strong>O(kn^2logn)</strong></li>
+  <li>With a trusted setup had a communication cost of <strong>O(kn^2)</strong></li>
+</ul>
+
+<p>System Model</p>
+
+<ul>
+  <li>Defination5.1: Async Verifiable Secret Sharing
+    <ul>
+      <li>(Sh, Rec) is a pair of protocols, Dealer L shares s secret s using Sh and other ndoes using Rec to recover the shared secret.</li>
+      <li>(Sh, Rec) is <strong>t-resilient AVSS scheme</strong> if the following properties hold with probability 1-negl(k).
+        <ul>
+          <li>Termination, Correctness, Secrecy.</li>
+          <li>negl(k):
+A particular event is so improbable that it can be considered virtually impossible within the constraints of the security model.</li>
+          <li>“𝑡-resilient” if it can tolerate up to ‘t’ number of faulty or malicious participants and still function correctly.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Defination 5.2 Asynchronous Complete Secret Sharing.
+    <ul>
+      <li>It additionally satisify completeness.</li>
+    </ul>
+  </li>
+  <li>Dual-threshold ACSS
+    <ul>
+      <li>The construct threshold l can be any value in range [t, n-t).</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Async Verifiable Secret Sharing</p>
+
+<ul>
+  <li>s</li>
+</ul>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/161/" data-toggle="tooltip" data-placement="top" title="Multidimensional agreement in Byzantine systems">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/163/" data-toggle="tooltip" data-placement="top" title="Balanced Byzantine Reliable Broadcast with Near-Optimal Communication and Improved Computation">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

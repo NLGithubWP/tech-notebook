@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/26/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/26/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>IntegriDB Verifiable SQL for Outsourced Databases - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/26/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">IntegriDB Verifiable SQL for Outsourced Databases</h1>
+                    
+                    <span class="meta">Posted on February 25, 2022</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+7 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <p>IntegriDB: Verifiable SQL for Outsourced Databases</p>
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<h2 id="problems">Problems</h2>
+
+<p>An authenticated data structure (ADS) could be used to verify queried data.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Prior work</code> used to construct ADS handling some subset of SQL queries <code class="language-plaintext highlighter-rouge">can be classified into two categories</code>:</p>
+
+<ol>
+  <li>Generic approaches:
+    <ul>
+      <li>Data owners first compile database into a program (circuit / RAM-model of computation.) which accepts query as input and return result.</li>
+      <li>Size of circuit is as large as database.</li>
+      <li>Circuit-based approach not allow efficient updates.</li>
+    </ul>
+  </li>
+  <li>Specific approaches:
+    <ul>
+      <li>Tree-based (Merkel tree) / Signature-based (data in server is pre-signed by data owner)</li>
+      <li>Both of them only support single-dimensional range queries.</li>
+      <li>Both of them don’t support updates.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Generic approach taks large memory space, Specific approach is limited in dimension. Both of them <code class="language-plaintext highlighter-rouge">don't support short proofs</code> for (join, sum, max, min, count)</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>The paper designing an ADS and an associated system that supports <em>native SQL queries</em> over a relational database, Such a system would be suitable for integration into the most prevalent applications running in the cloud today and could be offered as a software layer on top of any SQL implementation.</p>
+
+<ol>
+  <li>expressive: supports multidimensional range queries and nesting queries.</li>
+  <li>efficient: <code class="language-plaintext highlighter-rouge">small proofs</code>(few kb), low verification time, feasible server computation.</li>
+  <li>scalable: can execute on DB table with 6 million rows.</li>
+  <li>cryptographic assumptions: based on crypto-graphic assumptions</li>
+</ol>
+
+<h1 id="preliminaries">PRELIMINARIES</h1>
+
+<h2 id="authenticated-data-structure">Authenticated Data Structure</h2>
+
+<p>Three roles, server, data owner, client</p>
+
+<p>ADS for query Q and U consists of efficient algorithms <code class="language-plaintext highlighter-rouge">init, setup, prove, verify, UpdateO, UpdateS</code></p>
+
+<p>D: data, D’: encrypted data, R: Result, pi: Proof, Q: Query, lambda: secure parameter</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">(data owner)</code> Init:  lambda =&gt; &lt;pk, sk&gt;</li>
+  <li><code class="language-plaintext highlighter-rouge">(data owner)</code> Setup: ( D, sk ) =&gt; ( digest, D’ ), and send D’ to server, publish (digest, pk)</li>
+  <li><code class="language-plaintext highlighter-rouge">(Server)</code> Prove: ( digest, D’, Q) =&gt; (R, pi)</li>
+  <li><code class="language-plaintext highlighter-rouge">(client)</code> Verify: ( digest, Q, R, pi) =&gt; 0 or 1</li>
+  <li><code class="language-plaintext highlighter-rouge">UpdateO/UpdateS</code>: Interactive algorithm run by data owner and server.
+    <ul>
+      <li>UpdateO: ( sk, digest, update ) =&gt; ( digest, 0/1 indicting accept or reject )</li>
+      <li>UpdateS:  D’ =&gt; D’</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="sql-queries-supported-by-integridb">SQL queries supported by IntegriDB</h2>
+
+<p><strong>Multidimensional range query</strong></p>
+
+<p>multiple columns and range filter for each column</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">A</span> <span class="k">WHERE</span> <span class="p">(</span><span class="n">age</span> <span class="k">BETWEEN</span> <span class="mi">22</span> <span class="k">AND</span> <span class="mi">24</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">student_ID</span> <span class="o">&gt;</span> <span class="mi">10730</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Join, Sum, Max, Min, COunt, Like, Nested Query.</p>
+
+<h1 id="building-blocks">BUILDING BLOCKS</h1>
+
+<p>two authenticated data structures used as building blocks in INTEGRIDB:</p>
+
+<p>one for set operations (that we call <code class="language-plaintext highlighter-rouge">ASO</code>),</p>
+
+<p>one for interval trees (that we call <code class="language-plaintext highlighter-rouge">AIT</code> )</p>
+
+<h2 id="ads-for-set-operations-with-summation">ADS for set operations with Summation</h2>
+
+<h3 id="set-operations">set operations</h3>
+
+<p>includes: Union, Intersection, Sum.</p>
+
+<h3 id="authenticated-data-structure-1">Authenticated data structure</h3>
+
+<p>Mainly use <code class="language-plaintext highlighter-rouge">bilnear accumulator primitive</code> as ADS.</p>
+
+<p>Data owner firstly init (s, g:public key), and then use <code class="language-plaintext highlighter-rouge">bilnear accumulator primitive</code> to calculate the <code class="language-plaintext highlighter-rouge">digest</code> for each set.</p>
+
+<p><img src="imgs/image-20220226171006104.png" alt="image-20220226171006104" style="zoom:50%;" /></p>
+
+<p>Data Owner can publish g and acc(s).</p>
+
+<h3 id="verify-set-operation">Verify set operation</h3>
+
+<ol>
+  <li>Client get above digest and g</li>
+  <li>server compute:</li>
+</ol>
+
+<p><img src="imgs/image-20220226171610719.png" alt="image-20220226171610719" style="zoom:50%;" /></p>
+
+<ol>
+  <li>
+    <p>the server then releases a1 and a0, compute w1, w2 with g and then realse them also.</p>
+
+    <p><img src="imgs/image-20220226172610947.png" alt="image-20220226172610947" style="zoom:50%;" /></p>
+  </li>
+  <li>
+    <p>client check follows:（<code class="language-plaintext highlighter-rouge">SBDH assumption）</code></p>
+
+    <p><img src="imgs/image-20220226172038309.png" alt="image-20220226172038309" style="zoom:50%;" /></p>
+  </li>
+</ol>
+
+<p><strong>Complexity</strong></p>
+
+<p>Proofs are constant size. eg,. query involving d set operations, proof size is O(d)</p>
+
+<h2 id="ads-for-interval-trees">ADS for interval Trees</h2>
+
+<h3 id="interval-tree">Interval tree</h3>
+
+<p>Random function f, <code class="language-plaintext highlighter-rouge">binary tree T</code></p>
+
+<ol>
+  <li>Leaf node stores element of dataset S = {(k1,v1)…(kn,vn)}</li>
+  <li>Internal node u stores kv pair,
+    <ol>
+      <li>k = maximum key stored at any node in the left subtree of u</li>
+      <li>v = f(leftNode, rightNode)</li>
+    </ol>
+  </li>
+</ol>
+
+<p>Support queries: Search, RangeCover, Insert, Delete</p>
+
+<h3 id="authenticated-data-structure-2">Authenticated data structure</h3>
+
+<p>Mainly use Merkle tree, where each leaf node is hashed using kv pair. And the root of Merkle tree is a digest of the tree.</p>
+
+<p><strong>Complexity</strong></p>
+
+<p>The size of the minimal covering set output by RangeCover is O(log n)</p>
+
+<p>RnageCover is O(logn), size of proof and complexity of verification for Search, RangeCover, Insert, Delete is O(n).</p>
+
+<h1 id="our-construction">OUR CONSTRUCTION</h1>
+
+<p>ADS used in IntegriDB for different queries</p>
+
+<h2 id="setup">Setup</h2>
+
+<p>For each table, each pair of columns in the table, <code class="language-plaintext highlighter-rouge">data owner</code> create an authenticated interval tree.</p>
+
+<p><img src="imgs/image-20220227182455432.png" alt="image-20220227182455432" style="zoom:50%;" /></p>
+
+<p>Leaf Node: store kv of Sij</p>
+
+<p>Internal node U</p>
+
+<ul>
+  <li>Key: minimum key stored at the leaves on the left.</li>
+  <li>Value:</li>
+</ul>
+
+<p><img src="imgs/image-20220227182629776.png" alt="image-20220227182629776" style="zoom:50%;" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228131601138.png" alt="image-20220228131601138" /></p>
+
+<p><img src="imgs/image-20220227185110723.png" alt="image-20220227185110723" /></p>
+
+<p>The accumulation value in each node will be used to handle JOIN and multidimensional range queries.</p>
+
+<p><strong>Complexity</strong></p>
+
+<p>mi = columns and ni = rows in table i.</p>
+
+<p>size of the secret key is O(1)</p>
+
+<h2 id="join-queries">Join Queries</h2>
+
+<p><strong>Scenario</strong></p>
+
+<p>The Join return result: C* = Ci intersect with Cj.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="p">...</span> <span class="k">from</span>  <span class="n">T</span> <span class="k">join</span> <span class="n">T</span><span class="s1">' on T.Ci = T'</span><span class="p">.</span><span class="n">Cj</span> 
+</code></pre></div></div>
+
+<p><strong>Server</strong></p>
+
+<ol>
+  <li>For each value x in C*, the server returns the entire row.</li>
+  <li>Return acc(ci) and acc(cj)</li>
+</ol>
+
+<p><strong>Client</strong></p>
+
+<ol>
+  <li>Hash each row received from server and check each row’s hash value == digest’s hash value.</li>
+  <li>Check acc(ci) or acc(cj) == acc in digest</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228112400906.png" alt="image-20220228112400906" /></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>proof size and verification time are O(</td>
+      <td>R</td>
+      <td>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="multidimensional-range-queries">Multidimensional Range Queries</h2>
+
+<p><strong>Scenario</strong></p>
+
+<p>2 dimensional range query</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="p">...</span> <span class="k">from</span> <span class="p">...</span> <span class="k">where</span> <span class="n">w</span> <span class="k">in</span> <span class="p">[</span><span class="n">w</span><span class="err">−</span><span class="p">,</span> <span class="n">w</span><span class="o">+</span><span class="p">]</span> <span class="k">and</span> <span class="n">z</span> <span class="k">in</span> <span class="p">[</span><span class="n">z</span><span class="err">−</span><span class="p">,</span> <span class="n">z</span><span class="o">+</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p><strong>Server</strong></p>
+
+<p>return value</p>
+
+<p><img src="imgs/image-20220228124541523.png" alt="image-20220228124541523" style="zoom:50%;" /></p>
+
+<p><strong>Client</strong></p>
+
+<p>Verify bu using acc(cn) , and check it acc == acc in digest.</p>
+
+<p>Check row hashes to guarantee that the returned rows have not been altered.</p>
+
+<p><strong>Complexity</strong></p>
+
+<p>The proof size is O(d·log n)</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Verification complexity O(d log n +</td>
+      <td>R</td>
+      <td>).</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="sql-functions">SQL Functions</h2>
+
+<p><strong>Summation</strong></p>
+
+<p>For any column j, client can verify using Acc(cj) in root, The proof size and verification time are both O(1).</p>
+
+<p><strong>Max and min</strong></p>
+
+<p>server compute max value and then convert it to range query.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="k">max</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">from</span> <span class="n">T</span> <span class="o">=&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">T</span> <span class="k">where</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">j_max</span>
+</code></pre></div></div>
+
+<p><strong>Count</strong></p>
+
+<p>server convert count to sum operation.</p>
+
+<h2 id="updates">Updates</h2>
+
+<p>the data owner and server jointly update the corresponding AIT and ASO using their respective interfaces.</p>
+
+<p>There is a rotation (<code class="language-plaintext highlighter-rouge">to maintain a balanced tree</code>) after an update in the interval tree</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228132847669.png" alt="image-20220228132847669" /></p>
+
+<h2 id="nested-queries">Nested Queries</h2>
+
+<h1 id="additional-discussion">ADDITIONAL DISCUSSION</h1>
+
+<h2 id="extensions-and-optimizations">Extensions and Optimizations</h2>
+
+<p>Improve setup time and reduce server storage space.</p>
+
+<p>To do this, we construct a <code class="language-plaintext highlighter-rouge">homomorphic Merkle tree</code> over each row, and add a column c to each table that stores the root of the <code class="language-plaintext highlighter-rouge">Merkle tree</code> for the corresponding row.</p>
+
+<h2 id="limitations">Limitations</h2>
+
+<p>cannot support agregations, comparsion and join with deplicates in nested query such as</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">c1</span> <span class="o">+</span><span class="mi">2</span><span class="err">∗</span><span class="n">c2</span> <span class="k">FROM</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> 
+</code></pre></div></div>
+
+<h1 id="implementation">IMPLEMENTATION</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135341654.png" alt="image-20220228135341654" /></p>
+
+<h1 id="evaluation">EVALUATION</h1>
+
+<h2 id="env">Env</h2>
+
+<p>Awazon EC2, TPC Benchmark.</p>
+
+<h2 id="evaluation-on-tpc-benchmark">Evaluation on TPC Benchmark</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135610701.png" alt="image-20220228135610701" /></p>
+
+<h2 id="performance-on-synthetic-data">Performance on Synthetic Data</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135739435.png" alt="image-20220228135739435" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135835880.png" alt="image-20220228135835880" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220228135923836.png" alt="image-20220228135923836" /></p>
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/25/" data-toggle="tooltip" data-placement="top" title="Paxos Made Simple">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/28/" data-toggle="tooltip" data-placement="top" title="INFaaS Automated Model-less Inference Serving">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

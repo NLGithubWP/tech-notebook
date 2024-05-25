@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NoteBook</title>
+    <description>It's the niceties that make the difference fate gives us the hand, and we play the cards.</description>
+    <link>https://nlgithubwp.github.io/tech-notebook/</link>
+    <atom:link href="https://nlgithubwp.github.io/tech-notebook/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+    <lastBuildDate>Sat, 25 May 2024 09:06:48 +0000</lastBuildDate>
+    <generator>Jekyll v3.9.5</generator>
+    
+      <item>
+        <title></title>
+        <description>
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-05-20-215/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-05-20-215/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;Query-driven and data-driven methods&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;query-driven: it basically train a model to predict CE.&lt;/li&gt;
+  &lt;li&gt;data-driven: it basically learn a join distribution among columns and then sampling bsaed on that, and use the sampled data to estimate the basic staisitcs. Default optimizer will then use those statistics to estimate CE.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Existing work:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cannot combine both query-driven and data-driven methods.&lt;/li&gt;
+  &lt;li&gt;Cannot handle dynamic workloads that mix queries and data manipulation statements including inserts, deletes and updates.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ALECE is less sensitive to data changes&lt;/p&gt;
+
+&lt;h1 id=&quot;techniques&quot;&gt;Techniques&lt;/h1&gt;
+
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-05-14-213/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-05-14-213/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;This is the latest SOTA&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;Propose a new task: Multi-Model dialogue response generation: given the dialogue context, the model should not only generate a pure text response but also have the capacity to generate a multimodal response (e.g., containing both image and text).&lt;/p&gt;
+
+&lt;p&gt;Challenges:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;the training is over-fitted to the training datasets, and cannot generalize to the new domain.&lt;/li&gt;
+  &lt;li&gt;not easy to collect enough training data for a new domain.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Ideas:&lt;/p&gt;
+
+&lt;p&gt;make parameters that rely on multimodal dialogues small and independent by &lt;strong&gt;disentangling&lt;/strong&gt; textual response generation and image response generation, and thus we can learn the major part of the generation model from text-only dialogues and image_description+image, pairs that are much easier to be obtained.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../../img/a_img_store/image-20240318185701629.png&quot; alt=&quot;image-20240318185701629&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Problem formulation:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;(dialogue context U, response R) =&amp;gt; learned model P(R&lt;/td&gt;
+      &lt;td&gt;U; \theta)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;U and R may contains images.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Unified representations of both text and images =&amp;gt; express image in form of sequence tokens.
+    &lt;ol&gt;
+      &lt;li&gt;Texts =&amp;gt; BPE-encoded tokens&lt;/li&gt;
+      &lt;li&gt;Images =&amp;gt; each token is a discrete Auto-Encoder&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;This paper designs and implements PilotScop with a programming model to facilitate the integration of AI into DB.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;data collections: cardinality, plan cost, execution time,&lt;/li&gt;
+  &lt;li&gt;inject ML task into database&lt;/li&gt;
+  &lt;li&gt;ML environment to support the execution&lt;/li&gt;
+  &lt;li&gt;interaction between ML and database at runtime.&lt;/li&gt;
+  &lt;li&gt;AI and DB can developed independently.&lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;Query rewrite transforms a SQL query into an &lt;strong&gt;equivalent&lt;/strong&gt; one but with &lt;strong&gt;higher&lt;/strong&gt; &lt;strong&gt;performance&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Existing problems&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How to represent the large search space or rewrite order.&lt;/li&gt;
+  &lt;li&gt;how to define the order? The order of applying different rewrite rules significantly affects the query performance.&lt;/li&gt;
+  &lt;li&gt;How to estimate the cost reduction of a rewrite? Rewriting rules functions differently for different queries.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This paper propose a query rewritten system, which accept (query + rewrite rules) =&amp;gt; optimal rewrite order + query&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Model possible orders as a policy tree, root = input query. path = an rewritten order.&lt;/li&gt;
+  &lt;li&gt;Note utility:
+    &lt;ul&gt;
+      &lt;li&gt;cost between latency of executing original and current node + access pattern.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Monte Carlo Tree Search to explore the policy tree to find the optimal node&lt;/li&gt;
+  &lt;li&gt;Cost estimation
+    &lt;ul&gt;
+      &lt;li&gt;M_R[i,j]: cost reduction of applying rule j to operator i&lt;/li&gt;
+      &lt;li&gt;Q_C[i,j]: operator i contains columsn j&lt;/li&gt;
+      &lt;li&gt;M_R[i,j]: index, distinct value&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;It focus on developing efficient query evaluation techniques that increase the robustness of query plans.&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;QO-based approach may have key limitations related to generalization.&lt;/p&gt;
+
+&lt;p&gt;Optimizations: Join order, Physical Operators (Index scan, Sequential scan, Hash join, Nested loop join, Merge join)&lt;/p&gt;
+
+&lt;p&gt;Balsa, Bao as baselines, it shwos Balsa trained on the cannot generalize to unseen workloads.&lt;/p&gt;
+
+&lt;p&gt;Solutions: combine Lookahead Information Passing (LIP), Adaptive Join Algorithm (AJA) to buidl a new adaptive query processing optimizatioin mechanisms.&lt;/p&gt;
+
+&lt;p&gt;Lookahead Information Passing:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Execute the most selective join operation firstreduce the tuples passed to the subsequent join operations.&lt;/li&gt;
+  &lt;li&gt;lookahead bloom filters to pre-filter the rows, makeing the query execution not sensitive to the join orders.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;join orders selected by Balsa contribute more towards improved performance, making join order selection a critical contribution of&lt;/p&gt;
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;Meta-leaner is trained on a &lt;strong&gt;distribution&lt;/strong&gt; of similar tasks, in the hopes of generalization to &lt;strong&gt;novel but related tasks&lt;/strong&gt; by learning a high-level strategy that captures the essence of the problem it is asked to solve.&lt;/p&gt;
+
+&lt;p&gt;Recent meta-learning approaches are extensively hand-designed, either using architectures specialized to a particular application, or hard-coding algorithmic components that constrain how the meta-learner solves the task.&lt;/p&gt;
+
+&lt;p&gt;This paper propose a simple and generic meta-learner architectures.&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-189/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-189/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;h1 id=&quot;insights&quot;&gt;Insights&lt;/h1&gt;
+
+&lt;p&gt;RL models system tasks as a sequential decision-making problem and provides a feedback for exploring the space&lt;/p&gt;
+
+&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;meta-learning + bootstrapping =&amp;gt; quickly adapt to various workloads.&lt;/p&gt;
+
+&lt;p&gt;safe and robust RL exploration.&lt;/p&gt;
+
+&lt;h2 id=&quot;challenges-of-applying-rl-to-production&quot;&gt;Challenges of applying RL to production&lt;/h2&gt;
+
+&lt;p&gt;First, a learned RL policy is workload-specific and infrastructure-specific, 
+Nontrivial retraining is needed to adapt to new workloads and environment shifts in each problem domain, which is a critical problem in making RL practical in production&lt;/p&gt;
+
+&lt;p&gt;Without timely retraining, the online policy-serving performance of the RL agent fluctuates and leads to undesired degradation.&lt;/p&gt;
+
+&lt;p&gt;RL training is through trial and error, and&lt;/p&gt;
+
+&lt;h2 id=&quot;objective&quot;&gt;Objective&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;fast-adapting, effective, and robust RL-based solutions under the constraints s of production cloud systems&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;RL model trained in a robust manner.&lt;/p&gt;
+
+&lt;p&gt;RL policy can be adapted to new workloads without significant retraining.&lt;/p&gt;
+
+&lt;p&gt;The online RL model policy-serving performance can be kept stable.&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Fast model adaptation: meta-learning to model RL agent as &lt;strong&gt;base-learner&lt;/strong&gt; + &lt;strong&gt;meta-learner&lt;/strong&gt; for learning to generalize to new app/env shifts.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;With the embedding, fewer retraining iterations are needed for new, previously unseen workloads.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Stable online RL policy-serving performance.&lt;/p&gt;
+
+    &lt;p&gt;continuous monitoring, retraining detection, and trigger mechanisms.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Safe exploration. RL bootstrapping module that combines offline and online training.&lt;/p&gt;
+
+    &lt;p&gt;Heuristics-based controller by comparing rewards, the agent continues to be trained online.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Sat, 25 May 2024 09:06:48 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-12-188/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-12-188/</guid>
+        
+        
+      </item>
+    
+  </channel>
+</rss>

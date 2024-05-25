@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/non-block-thread-sync/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/non-block-thread-sync/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>non-blocking thread synchronization - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/non-block-thread-sync/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li class="active"><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">non-blocking thread synchronization</h1>
+                    
+                    <span class="meta">Posted on August 12, 2021</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+5 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/operation system/" data-toggle="tooltip" title="Other posts filed in operation system category" rel="tag">operation system</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <p>non-blocking thread synchronization</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<p>From <a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm">wiki</a></p>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>The traditional approach to multi-threaded programming is to use <a href="https://en.wikipedia.org/wiki/Lock_(computer_science)">locks</a> to synchronize access to shared <a href="https://en.wikipedia.org/wiki/Resource_(computer_science)">resources</a>. Synchronization primitives such as <a href="https://en.wikipedia.org/wiki/Mutual_exclusion">mutexes</a>, <a href="https://en.wikipedia.org/wiki/Semaphore_(programming)">semaphores</a>, and <a href="https://en.wikipedia.org/wiki/Critical_section">critical sections</a> are all mechanisms by which a programmer can ensure that certain sections of code do not execute concurrently if doing so would corrupt shared memory structures. If one thread attempts to acquire a lock that is already held by another thread, the thread will block until the lock is free.</p>
+
+<p>Other problems are less obvious. For example, certain interactions between locks can lead to error conditions such as <a href="https://en.wikipedia.org/wiki/Deadlock">deadlock</a>, <a href="https://en.wikipedia.org/wiki/Livelock">livelock</a>, and <a href="https://en.wikipedia.org/wiki/Priority_inversion">priority inversion</a>.</p>
+
+<p>Using locks also involves a trade-off between</p>
+
+<ol>
+  <li>coarse-grained locking, which can significantly reduce opportunities for <a href="https://en.wikipedia.org/wiki/Parallel_computing">parallelism</a></li>
+  <li>fine-grained locking, which requires more careful design, increases locking overhead and is more prone to bugs.</li>
+</ol>
+
+<p>non-blocking algorithms do not suffer from these downsides, and in addition, are safe for use in <a href="https://en.wikipedia.org/wiki/Interrupt_handler">interrupt handlers</a></p>
+
+<ol>
+  <li>even though the <a href="https://en.wikipedia.org/wiki/Pre-emptive_multitasking">preempted</a> thread cannot be resumed, progress is still possible without it.</li>
+  <li>In contrast, global data structures protected by mutual exclusion cannot safely be accessed in an interrupt handler, as the preempted thread may be the one holding the lock—but this can be rectified easily by masking the interrupt request during the critical section.</li>
+</ol>
+
+<p>A lock-free data structure can be used to improve performance. A lock-free data structure increases the amount of time spent in parallel execution rather than serial execution, improving performance on a <a href="https://en.wikipedia.org/wiki/Multi-core_processor">multi-core processor</a>, because access to the shared data structure does not need to be serialized to stay coherent.</p>
+
+<h2 id="implementation">Implementation</h2>
+
+<p>With few exceptions, non-blocking algorithms use <a href="https://en.wikipedia.org/wiki/Linearizability">atomic</a> <a href="https://en.wikipedia.org/wiki/Read-modify-write">read-modify-write</a> primitives that the hardware must provide, the most notable of which is <a href="https://en.wikipedia.org/wiki/Compare-and-swap">compare and swap (CAS)</a>. <a href="https://en.wikipedia.org/wiki/Critical_section">Critical sections</a> are almost always implemented using standard interfaces over these primitives (in the general case, critical sections will be blocked, even when implemented with these primitives). In the 1990s all non-blocking algorithms had to be written “natively” with the underlying primitives to achieve acceptable performance. However, the emerging field of <a href="https://en.wikipedia.org/wiki/Software_transactional_memory">software transactional memory</a> promises standard abstractions for writing efficient non-blocking code.</p>
+
+<ol>
+  <li>Using atomic primitives</li>
+  <li>Using non-blocking data structure without atomic primitives.
+    <ul>
+      <li>a single-reader single-writer <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a> <a href="https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)">FIFO</a>, with a size that evenly divides the overflow of one of the available unsigned integer types, can unconditionally be <a href="https://en.wikipedia.org/wiki/Producer–consumer_problem#Without_semaphores_or_monitors">implemented safely</a> using only a <a href="https://en.wikipedia.org/wiki/Memory_barrier">memory barrier</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Read-copy-update">Read-copy-update</a> with a single writer and any number of readers. (The readers are wait-free; the writer is usually lock-free until it needs to reclaim memory).</li>
+      <li>Read-copy-update with multiple writers and any number of readers. (The readers are wait-free; multiple writers generally serialize with a lock and are not obstruction-free).</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Optimizing compiler and CPUs often re-arrange operations, In c++ we can use atomic to tell the compiler not to re-arrange such instructions. and to insert the appropriate memory barriers.</p>
+
+<h1 id="内存屏障">内存屏障</h1>
+
+<p>程序在运行时内存实际的访问顺序和程序代码编写的访问顺序不一定一致，这就是内存乱序访问。内存乱序访问行为出现的理由是为了提升程序运行时的性能。内存乱序访问主要发生在两个阶段：</p>
+
+<ol>
+  <li>编译时，编译器优化导致内存乱序访问（指令重排）</li>
+  <li>运行时，多 CPU 间交互引起内存乱序访问</li>
+</ol>
+
+<p>Memory barrier 能够让 CPU 或编译器在内存访问上有序。一个 Memory barrier 之前的内存访问操作必定先于其之后的完成。Memory barrier 包括两类：</p>
+
+<ol>
+  <li>编译器 barrier</li>
+  <li>CPU Memory barrier</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220504114649377.png" alt="image-20220504114649377" /></p>
+
+<h1 id="algorithms">Algorithms</h1>
+
+<p>There are two types of <a href="http://en.wikipedia.org/wiki/Non-blocking_synchronization">non-blocking thread synchronization</a> algorithms - lock-free, and wait-free.</p>
+
+<h2 id="lock-free-algorithms">Lock-free algorithms</h2>
+
+<p>Any particular computation can be blocked for some period of time. All CPUs are able to continue performing other computations.</p>
+
+<p>A given thread might be blocked by other threads in a lock-free system, all CPUs can continue doing other useful work without stalls. Lock-free algorithms increase the overall throughput of a system by occasionally increasing the latency of a particular transaction. Most high-end database systems are based on lock-free algorithms, to varying degrees.</p>
+
+<h3 id="implementation-1">Implementation</h3>
+
+<ol>
+  <li>completing one’s own operation,</li>
+  <li>assisting an obstructing operation,</li>
+  <li>aborting an obstructing operation,</li>
+  <li>waiting</li>
+</ol>
+
+<h2 id="wait-free-algorithm">Wait-free algorithm</h2>
+
+<p>By contrast, wait-free algorithms ensure that in addition to all CPUs continuing to do useful work, no computation can ever be blocked by another computation. Wait-free algorithms have stronger guarantees than lock-free algorithms and ensure a high throughput without sacrificing the latency of a particular transaction. They’re also much harder to implement, test, and debug. The <a href="http://lwn.net/Articles/291826/">lockless page cache</a> patches to the Linux kernel are an example of a wait-free system.</p>
+
+<h3 id="implementation-2">Implementation</h3>
+
+<p>Wait-free algorithms were rare until 2011, both in research and in practice. However, in 2011 Kogan and <a href="https://en.wikipedia.org/wiki/Erez_Petrank">Petrank</a>[<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm#cite_note-wf-queue-18">18]</a> presented a <strong>wait-free queue building on the <a href="https://en.wikipedia.org/wiki/Compare-and-swap">CAS</a> primitive</strong>, generally available on common hardware. Their construction expanded the lock-free queue of Michael and Scott,[<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm#cite_note-lf-queue-19">19]</a> which is an efficient queue often used in practice. A follow-up paper by Kogan and Petrank[<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm#cite_note-wf-fpsp-20">20]</a> provided a method for making wait-free algorithms fast and used this method to make the wait-free queue practically as fast as its lock-free counterpart. A subsequent paper by Timnat and Petrank[<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm#cite_note-wf-simulation-21">21]</a> provided an automatic mechanism for generating wait-free data structures from lock-free ones. Thus, wait-free implementations are now available for many data structures.</p>
+
+<h2 id="compare">Compare</h2>
+
+<p>In a situation where a system handles dozens of concurrent transactions and has <a href="http://en.wikipedia.org/wiki/Real-time_computing#Hard_and_soft_real-time_systems">soft latency requirements</a>, lock-free systems are a good compromise between development complexity and high concurrency requirements. A database server for a website is a good candidate for a lock-free design. While any given transaction might block, there are always more transactions to process in the meantime, so the CPUs will never stay idle. The challenge is to build a transaction scheduler that maintains a good mean latency, and a well-bounded standard deviation.</p>
+
+<p>In a scenario where a system has roughly as many concurrent transactions as CPU cores or has hard real-time requirements, the developers need to spend the extra time to build wait-free systems. In these cases blocking a single transaction isn’t acceptable - either because there are no other transactions for the CPUs to handle, minimizing the throughput, or a given transaction needs to complete within a well-defined non-probabilistic time period. Nuclear reactor control software is a good candidate for wait-free systems.</p>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/linux_ops/" data-toggle="tooltip" data-placement="top" title="linux some basic">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/storage/" data-toggle="tooltip" data-placement="top" title="storage (object, file, block)">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

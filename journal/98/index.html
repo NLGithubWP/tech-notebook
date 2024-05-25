@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/98/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/98/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>Algorand Scaling Byzantine Agreements for Cryptocurrencies - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/98/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">Algorand Scaling Byzantine Agreements for Cryptocurrencies</h1>
+                    
+                    <span class="meta">Posted on November 17, 2022</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+8 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <ul id="markdown-toc">
+  <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
+  <li><a href="#how-to-handle-various-threats" id="markdown-toc-how-to-handle-various-threats">How to handle various threats</a></li>
+  <li><a href="#liveness-and-safety" id="markdown-toc-liveness-and-safety">Liveness and Safety</a>    <ul>
+      <li><a href="#liveness" id="markdown-toc-liveness">Liveness</a></li>
+      <li><a href="#safety" id="markdown-toc-safety">Safety</a></li>
+    </ul>
+  </li>
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a>    <ul>
+      <li><a href="#background--motivation" id="markdown-toc-background--motivation">Background &amp; Motivation</a></li>
+      <li><a href="#gap" id="markdown-toc-gap">Gap</a></li>
+      <li><a href="#goal" id="markdown-toc-goal">Goal</a></li>
+      <li><a href="#challenge" id="markdown-toc-challenge">Challenge</a></li>
+      <li><a href="#solutions-overview" id="markdown-toc-solutions-overview">Solutions Overview</a></li>
+    </ul>
+  </li>
+  <li><a href="#protocol-summary" id="markdown-toc-protocol-summary">Protocol summary</a></li>
+  <li><a href="#technique-details" id="markdown-toc-technique-details">Technique details</a>    <ul>
+      <li><a href="#goal-and-assumptions" id="markdown-toc-goal-and-assumptions">Goal and Assumptions</a></li>
+      <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+      <li><a href="#cryptographic-sortition" id="markdown-toc-cryptographic-sortition">CRYPTOGRAPHIC SORTITION</a></li>
+      <li><a href="#block-proposal" id="markdown-toc-block-proposal">BLOCK PROPOSAL</a></li>
+      <li><a href="#bastar" id="markdown-toc-bastar">BASTAR</a>        <ul>
+          <li><a href="#two-phases" id="markdown-toc-two-phases">Two phases</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#evaluation" id="markdown-toc-evaluation">Evaluation</a></li>
+</ul>
+
+<h1 id="questions">Questions</h1>
+
+<ol>
+  <li>Why the user has sub-users j?</li>
+  <li>When is the block chosen?</li>
+  <li>Vote for the user of the vote for value. Why does the user receive a vote?</li>
+  <li>Why P = tal/W</li>
+  <li>Does every run the r run select Protocol?</li>
+  <li>Why are there sub-user? Users and sub-users?</li>
+  <li>If only the committee could vote, how to make sure the committee has honest? How many dishonest members were used?</li>
+  <li>Reduction already reaches a consensus on some value. Why still need Binary BA?</li>
+  <li>Some users’ xs are quickly committed, while others’ TXs are not committed soon.</li>
+  <li>Only the committee votes or all users count votes.</li>
+  <li>Is it possible for some users whose local TXs may always be preempted by others?</li>
+  <li>How to select the fisrt seed.</li>
+  <li>Does step 2 in reduction phase necessary?</li>
+  <li>Why three steps in BinaryBA* protocol?  what each step is for?</li>
+</ol>
+
+<h1 id="how-to-handle-various-threats">How to handle various threats</h1>
+
+<ul>
+  <li>
+    <p>Sybil attacks =&gt; are addressed by using weighted users.</p>
+  </li>
+  <li>
+    <p>Cryptographic sortition =&gt; select committee in a private and non-interactive manner =&gt; attacker doesn’t know who to attack until the user starts participating in BAstar.</p>
+  </li>
+  <li>
+    <p>Each committee member only speaks once (in other words, replace a new committee in each step ) =&gt; the user becomes relevant to BAstar, attacker targets on committee member once the member sends a message in BAstar.</p>
+  </li>
+</ul>
+
+<p>In short, the attacker doesn’t know who to attack, and once he knows, the committee may not be the committee anymore.</p>
+
+<ul>
+  <li>
+    <p>Replacing committee members =&gt; Reduce Dos attacks.</p>
+  </li>
+  <li>
+    <p>Avoiding fork =&gt;</p>
+    <ul>
+      <li>Two kinds of consensus, namely, final and tentative consensus.</li>
+      <li>Periodically invokes BAstar to reach a consensus on which fork should be used going forward.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="liveness-and-safety">Liveness and Safety</h1>
+
+<h2 id="liveness">Liveness</h2>
+
+<ul>
+  <li>Assume strong synchrony.</li>
+</ul>
+
+<h2 id="safety">Safety</h2>
+
+<ul>
+  <li>Assume weak synchrony.</li>
+</ul>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="background--motivation">Background &amp; Motivation</h2>
+
+<p>Cryptographic currencies enable new applications such as smart contracts and fair protocols. It also avoids trusted centralized authorities.</p>
+
+<h2 id="gap">Gap</h2>
+
+<p>However, current proposals suffer from a <strong>trade-off between latency and confidence.</strong></p>
+
+<ul>
+  <li>Achieving high confidence requires an hour-long wait ( An hour to confirm a transaction in Bitcoin, wait for six bocks; Otherwise, there are double-spending problems. )</li>
+  <li>It achieves 1 MByte block of transactions in 22 seconds with 50,000 users.</li>
+</ul>
+
+<h2 id="goal">Goal</h2>
+
+<p>This paper presents Algorand, a new cryptocurrency designed to confirm <strong>transactions on the order of one minute.</strong> It mainly relies on the BA protocol, BASTAR, to reach a consensus on a new block with low latency and without the possibility of forks.</p>
+
+<p><strong>Highlights</strong></p>
+
+<ul>
+  <li>Proof of Stake based Cryptocurrency</li>
+  <li>High throughput: ~1 min to confirm transactions vs. an hour in Bitcoin</li>
+  <li>Public ledger with <strong>low probability of forks</strong></li>
+  <li>Assumes 2/3-honest stake majority</li>
+</ul>
+
+<h2 id="challenge">Challenge</h2>
+
+<ul>
+  <li>Avoid Sybil attacks</li>
+  <li>Be able to scale to millions of users.</li>
+  <li>Be resilient to denial-of-service attacks.</li>
+</ul>
+
+<h2 id="solutions-overview">Solutions Overview</h2>
+
+<ul>
+  <li><strong>Weighted users:</strong>
+    <ul>
+      <li>Assign a weight to each user; As long as the majority weighted fraction of the users is honest, consensus can be reached. (avoid fork and double-spending)</li>
+      <li><strong>To prevent Sybil’s attacks.</strong></li>
+    </ul>
+  </li>
+  <li><strong>Consensus by committee</strong>
+    <ul>
+      <li>Select a subset of users as committee</li>
+      <li><strong>Ensure good scalability.</strong></li>
+    </ul>
+  </li>
+  <li><strong>Cryptographic sortition:</strong>
+    <ul>
+      <li>Each system user independently determines if they are chosen to be on the committee by computing a function VRF.</li>
+      <li><strong>Non-interactive  =&gt; to prevent an adversary from targeting committee members.</strong></li>
+    </ul>
+  </li>
+  <li><strong>Participant replacement</strong>
+    <ul>
+      <li>Each user only speaks once.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="protocol-summary">Protocol summary</h1>
+
+<p><strong>POW</strong></p>
+
+<ul>
+  <li>Wait for six blocks to confirm one tx due to the possibility of forks.</li>
+</ul>
+
+<p><strong>Byzantine consensus</strong></p>
+
+<ul>
+  <li>Requires a fixed set of servers to be determined ahead of time; allowing anyone to join could open up to Sybil’s attacks.</li>
+  <li>It cannot scale to a large set of users.</li>
+  <li>Some optimization protocols: BFT2F, Honey Badger, Bitcoin-NG, Hybrid consensus, ByzCoin, and Stellar.</li>
+</ul>
+
+<p><strong>POS</strong></p>
+
+<ul>
+  <li>Avoid the computation overhead of POW.</li>
+  <li>Hard to realize. Since no work is involved in generating blocks, a malicious leader can attack.</li>
+  <li>Some optimization protocols: Ouroboros,</li>
+</ul>
+
+<p><strong>Trees and DAGs</strong></p>
+
+<ul>
+  <li>
+    <p>Replace the underlying chain structured ledger with a tree or DAG.</p>
+  </li>
+  <li>
+    <p>GHOST, SPECTRE, Meshcash</p>
+  </li>
+</ul>
+
+<h1 id="technique-details">Technique details</h1>
+
+<h2 id="goal-and-assumptions">Goal and Assumptions</h2>
+
+<p><strong>Assumptions:</strong></p>
+
+<ul>
+  <li>Public-key signatures and hash functions.</li>
+  <li>Honest users run bug-free software.</li>
+  <li>The fraction of money held by honest users is above some threshold <strong>(a constant greater than 2/3)</strong></li>
+  <li>An adversary can corrupt targeted users, but an adversary cannot corrupt many users that hold a significant fraction of the money.</li>
+</ul>
+
+<p><strong>Goals:</strong></p>
+
+<ul>
+  <li>Liveness: Make progress under various network reachability.
+    <ul>
+      <li>Achieved by assuming strong synchrony; 95% of honest users can communicate with time-bound; no network partition.</li>
+    </ul>
+  </li>
+  <li>Safety: If an honest user accepts one tx A, then all tx accepted by others will be in the log containing A
+    <ul>
+      <li>Achieved by assuming weak synchrony; the network can be asynchronous in a long bound time;</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="overview">Overview</h2>
+
+<p>Each user submits a tx to <strong>gossip protocol</strong> and then collects a <strong>block of pending Txs</strong> they hear about.</p>
+
+<ul>
+  <li>Gossip protocol: Each user selects a small random set of peers to gossip messages to. And the message is signed using PK to prevent it from being forged.</li>
+</ul>
+
+<p>Then it uses BASTAR to reach a consensus on <strong>one of those blocks.</strong></p>
+
+<p>BASTAR can produce two kinds of consensus:</p>
+
+<ul>
+  <li>Final consensus: Once a block reaches the final consensus, all Txs are confirmed.</li>
+  <li>Tentative consensus:
+    <ul>
+      <li>When the network is strongly synchronous, one successor block will eventually reach a final consensus.</li>
+      <li>When the network is weakly synchronous, the fork may happen. Algorand periodically invokes BASTAR to reach a consensus on which fork should be used.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cryptographic-sortition">CRYPTOGRAPHIC SORTITION</h2>
+
+<p>This is to choose a random <strong>subset of users</strong> according to per-user <strong>weights</strong> in each round. And the randomness comes from seeds.</p>
+
+<p><strong>Sortition</strong></p>
+
+<p>The Algorand mainly uses VRF to choose users randomly. 
+\(hash,  proof = VRF_{sk}(x)\)</p>
+
+<ul>
+  <li>
+    <p><strong>Hash</strong> is to decide how many sub-users under this user are selected.</p>
+  </li>
+  <li>
+    <p><strong>Proof</strong> is verifying if the user is selected; this is achieved by verifying that the hash corresponds to x using the public key. And verify the number of chosen sub-users is publicly verifiable.</p>
+  </li>
+</ul>
+
+<p><strong>Choose Seed</strong></p>
+
+<p>Sortition requires a seed chosen at random and publicly known in each round, and the seed is determined using VRF with the source of the previous round r-1.</p>
+
+<p><strong>Choose SK</strong></p>
+
+<p>Choose SK before generating the seed, such that even selected user is malicious, the resulting source is random.</p>
+
+<h2 id="block-proposal">BLOCK PROPOSAL</h2>
+
+<p>This is to choose a subset of users as proposers, such that there exists some block in each round. The paper decides on 26 proposers in practice.</p>
+
+<p><strong>Reduce communication cost</strong></p>
+
+<p>The block with the highest priority will reach a consensus among users. The sortition hash is used to prioritize block proposals to reduce the communication costs caused by sending local leagues to others for each user.
+\(priority = Max(Hash(hash_{sortition} + Index_{subuser0})...Hash(hash_{sortition} + Index_{subuserJ}))\)
+Algorand gossips two kinds of messages</p>
+
+<ul>
+  <li>Msg1: It only contains priority and is proofs and sent to all users. Each user uses it to discard blocks with low priority.</li>
+  <li>Msg2: It contains the entire block</li>
+</ul>
+
+<p><strong>Waiting for block proposals</strong></p>
+
+<p>Waiting too short will result in an empty block, and waiting for too long will increase confirmation latency. 
+\(WaitingTime = \lambda_{stepvar} + \lambda_{priority}\)</p>
+
+<h2 id="bastar">BASTAR</h2>
+
+<h3 id="two-phases">Two phases</h3>
+
+<ul>
+  <li>Phsae1 - Reduction (2 steps):
+    <ul>
+      <li>Reduce the problem of reaching a consensus on a block into an agreement on one of two options.</li>
+      <li>This is to ensure at most; one non-empty block hash is passed to BinaryBAstart by all honest users.</li>
+    </ul>
+  </li>
+  <li>Phsae2 - BinaryBAstart (2-11 steps):
+    <ul>
+      <li>Reaches agreement on one of these options: either agreeing on a proposed block or an empty block.</li>
+      <li>Two steps if the highest-priority block proposer was honest (sent the same block to all users) and expected 11 degrees when facing a malicious proposer.</li>
+      <li>When it’s an honest proposer, firstly, each committer votes for some value, and then all user count votes.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="../../img/a_img_store/image-20221122205820060.png" alt="image-20221122205820060" /></p>
+
+<p>Specifically, BA* is shown in following:</p>
+
+<p><img src="../../img/a_img_store/image-20221122205843680.png" alt="image-20221122205843680" /></p>
+
+<p><img src="../../img/a_img_store/image-20221117185619521.png" alt="image-20221117185619521" /></p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>Measure latency</p>
+
+<ul>
+  <li>Vary the user from 5K to 50K.</li>
+  <li>Vary the bandwidth ( scale-out.)</li>
+</ul>
+
+<p>Mesure throughput</p>
+
+<ul>
+  <li>Vary block size .</li>
+</ul>
+
+<p>Resource costs</p>
+
+<ul>
+  <li>Measure CPU, network, and storage usage.</li>
+</ul>
+
+<p>Misbehaving users</p>
+
+<ul>
+  <li>Latency over increasing malicious users.</li>
+</ul>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/72/" data-toggle="tooltip" data-placement="top" title="PolarDB Serverless A cloud Native Database for Disaggregated Data Centers">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/96/" data-toggle="tooltip" data-placement="top" title="Hybrid Transactional Analytical Processing A Survey">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

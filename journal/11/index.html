@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/11/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/11/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>Building Scalable and Flexible Cluster Managers Using Declarative Programming - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/11/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">Building Scalable and Flexible Cluster Managers Using Declarative Programming</h1>
+                    
+                    <span class="meta">Posted on December 29, 2021</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+4 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h1 id="abstract--introduction">Abstract &amp;&amp; Introduction</h1>
+
+<h2 id="problem">Problem:</h2>
+
+<p>A cluster manager solves a challenging combinatorial optimization problem of finding configurations that satisfy hard constraints while minimizing violations of soft constraints.</p>
+
+<p>But it is not easy to design dute to :</p>
+
+<ol>
+  <li>Heuristics design are hard to scale to cluster with thousands of nodes as the design require purpose built and pre-computing to remain tractable.</li>
+  <li>Naive heuristics is not efficiently when facing many schedule decision constraints.</li>
+  <li>heuristics design leads to complex code and hard to extend.</li>
+</ol>
+
+<p>the paper try to solve those problems by introducing a new system .</p>
+
+<h2 id="contributations">Contributations</h2>
+
+<p>This paper propose a new method (<em>Declarative Cluster Managers</em> (DCM)) and developers only need to specify the constraint using high level declarative language like SQL to specify cluster management policies .</p>
+
+<ol>
+  <li>The DCM maintain cluster state in a relation database, and declaratively specify the constraints that the cluster manager should enforece using SQL.</li>
+  <li>With the specification, DCM generate a program which can pull the latest cluster state from database and encode the user’s requests into a optimization problem.</li>
+  <li>DCM solve it and make changes to the cluster.</li>
+</ol>
+
+<p>Main propority of the system:</p>
+
+<ol>
+  <li>DCM significantly lowers the barrier to building cluster managers that achieve all three of <em>scalability</em>, <em>high decision quality</em>, and <em>extensibility</em> when adding new features and policies.</li>
+  <li>Scalability: reduce the P99 placement latency by 53% in 500 nodes over K8s cluster.</li>
+  <li>Decision quality: guarantees optimal solutions for specified problems.</li>
+  <li>Extensibility:  whole architecture make it easy to add new constraints and new features.</li>
+</ol>
+
+<p>Experiemnts :</p>
+
+<p>Build scheduler on top of Kubernetes.  And it mainly <strong>measure pod placement latency</strong> (time to find a pod placement, and time to preempts pods)</p>
+
+<ol>
+  <li>Testing on 500 nodes on AWS, DCM improves p95 <strong>pod placement</strong> latency upto 2x.</li>
+  <li>The scheduler can also be extended to place VMS.</li>
+</ol>
+
+<h1 id="background-motivation">Background &amp;Motivation</h1>
+
+<p>Kubernetes supports hard(must be satisfied) and soft versions of <strong>placement</strong> constraints.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220106175057526.png" alt="image-20220106175057526" /></p>
+
+<p>k8s use greedy, best-effort heuristic to place one pod at a time, drawn from a pod queue.  It then select nodes with hard constraints and score the nodes with soft constraints and pick the best-scored node.</p>
+
+<p>Limitiations:</p>
+
+<ol>
+  <li>To remain performant, the Kubernetes scheduler only considers a random subset of nodes when scheduling a pod, which might miss feasible nodes.</li>
+  <li>K8s doesn’t support simultaneously reconfigure arbitrary groups of pods. Schedule one node may requires evict other node.</li>
+  <li>K8s scheduler policy requires tracking making it very hard to scale and scheduler’s data struct is not easy to change.</li>
+</ol>
+
+<h1 id="system-architecutre">System Architecutre</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107153000292.png" alt="image-20220107153000292" /></p>
+
+<h2 id="workflow">Workflow:</h2>
+
+<ol>
+  <li>
+    <p>Scheduler stores cluster state in an SQL database.</p>
+  </li>
+  <li>
+    <p>Developer specified the <strong>constraint sql</strong> and the <strong>schema sql</strong>.</p>
+  </li>
+  <li>
+    <p>Compiler generates encoder based on <strong>developer specified constraints and schema.</strong></p>
+  </li>
+  <li>
+    <p>The generated encoder pulls the required cluster state from the database, produces and solves an optimization model that is parameterized by that state, and outputs the required scheduling decisions.</p>
+  </li>
+</ol>
+
+<h2 id="cluster-state-database">Cluster state database:</h2>
+
+<p>In k8s, all states of pods and nodes are stored in an etcd cluster, and k8s maintain a cache of relevant parts of stats locally.</p>
+
+<p>In DCM, they replace the cache with in-memory embedded SQL database to represent the cluster state. Specifically,  it uses 18 tables and 12 views to describe the set of pods, nodes, volumes, container images, pod labels, node labels, and other cluster state.</p>
+
+<p>A placement decision of a pod on a node is represented by the table.</p>
+
+<p>Schema.sql:</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107181408660.png" alt="image-20220107181408660" /></p>
+
+<h2 id="constraints">Constraints.</h2>
+
+<p>Constraint.sql:</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107181443625.png" alt="image-20220107181443625" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107181743448.png" alt="image-20220107181743448" /></p>
+
+<h2 id="compiler-and-runtime">Compiler and runtime</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107182534678.png" alt="image-20220107182534678" /></p>
+
+<p>the model solve return a copy of pod_to_assign table with node_name reflecting the optimal placement. The scheduler then use this data to issue placement cmd for each pod via k8s scheduling API.</p>
+
+<p>It computes scheduling decisions for a batch of pods at a time.(the pods are specificed in the schema.sql)</p>
+
+<h1 id="challenges-dcm-complier">Challenges-DCM complier</h1>
+
+<h2 id="complier-work-flow">Complier work flow:</h2>
+
+<ol>
+  <li>SQL parser first extracts all table and view definitions from the supplied database schema, and produces <strong>syntax trees</strong> for all the hard and soft constraints. It then decides which part should be evaluated in the database and which part should be left for solver.</li>
+  <li>converts the query to an intermediate representation (IR)</li>
+  <li>Generate program that produces an optimization model by intereacting with interfaces exposed by ILP solver (eg, <em>OR-tools CP-SAT</em>)</li>
+</ol>
+
+<h2><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107184030107.png" alt="image-20220107184030107" /></h2>
+
+<h2 id="how-to-make-compile-process-faster">How to make compile process faster</h2>
+
+<p>Rewrite to use fixed arity.</p>
+
+<h1 id="experiments">Experiments:</h1>
+
+<h2 id="implementation-and-steps">Implementation and steps:</h2>
+
+<p>User cases</p>
+
+<ol>
+  <li>Scheduler run as a pod within kubernetes cluster and uses the same API to get cluster status.</li>
+  <li>VM load balancer,</li>
+  <li>distributed transactional datastore</li>
+</ol>
+
+<p>Measurement: testing scalability, decision quality and extendibility.</p>
+
+<ol>
+  <li>Scalability: 500 node cluster on AWS using workload fro Azure, and also they scale up tp 10k nodes</li>
+  <li>Decision quality: test the k8s scheduler and load balancer’s quality.</li>
+  <li>Extensibility: express all cluster management policies in all three use cases.</li>
+</ol>
+
+<h2 id="resules">Resules:</h2>
+
+<p>For scalability:</p>
+
+<p>End-to-end latency: measure from when the workload generator issues a pod creation command to when the pod first changes its status to Running</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107193820570.png" alt="image-20220107193820570" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107194344382.png" alt="image-20220107194344382" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107200313217.png" alt="image-20220107200313217" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220107200332969.png" alt="image-20220107200332969" /></p>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/10/" data-toggle="tooltip" data-placement="top" title="NASI Label and Data-agnostic Neural Architecture Search at Initialization">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/12/" data-toggle="tooltip" data-placement="top" title="Microsecond Consensus for Microsecond Applications">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

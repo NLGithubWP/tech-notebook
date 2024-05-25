@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/6/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/6/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>Programmable Calendar Queues for High-speed Packet Scheduling - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/6/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">Programmable Calendar Queues for High-speed Packet Scheduling</h1>
+                    
+                    <span class="meta">Posted on October 24, 2021</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+6 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h1 id="introduction">Introduction</h1>
+
+<p>Dynamic priority is required in network scheduling algorithms.</p>
+
+<h2 id="current-problems">Current Problems:</h2>
+
+<ol>
+  <li>The switches schedule package is mainly based on coarse-grained queue-level priorities, which is insufficient** to support a broad class of scheduling algorithms that require the importance of packets to change as a function of the time** it has spent inside the network.</li>
+  <li><strong>Switch-level support</strong> for <strong>multiple fine-grained priority levels</strong> can help the realizaitonrealization of the scheduling algorithms. But still has challenges.
+    <ol>
+      <li>implementing strict and fine-grained priority levels is expensive</li>
+      <li>Switch-level support for priorities does not allow for dynamic changes to the importance of a packet during its stint inside the switch buffer.</li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="solutions">Solutions:</h2>
+
+<p>Introduce calendar queue abstraction, which is fit for scheduling algorithms that require prioritization and performs dynamic escalation of packet priorities.</p>
+
+<h1 id="background">Background</h1>
+
+<h2 id="reconfigurable-switches">Reconfigurable switches</h2>
+
+<p>Assume that the <strong>programmable</strong> <strong>scheduling</strong> is used in conjunction with a reconfigurable switch. Eg, Reconfigurable Match Table (RMT) model:</p>
+
+<ol>
+  <li>The package arrives at the switch</li>
+  <li>Header files are extracted via <strong>the user-defined programmable</strong> parser</li>
+  <li>fields are passed into the pipeline of user-defined <strong>programmable</strong> M+A stages.</li>
+  <li>Each stage matches a subset of extractedremovedextracted removed headers and performs a simple process on the header.</li>
+</ol>
+
+<p>Switch also provide several hardware features:</p>
+
+<p>​	Stateful memory, computation primitives, the ability to recirculate or generate special datapath packets using <em>timers</em></p>
+
+<p>Switch metadata:</p>
+
+<p>​	queue lengths, congestion status, and bytes transmttedtransmitted can also be used in packet processing</p>
+
+<h2 id="traffic-manager">Traffic Manager</h2>
+
+<p>Responsible for two tasks</p>
+
+<ol>
+  <li>
+    <p>Buffering packets when <strong>many input ports</strong> agree trying to <strong>send packets to the same output port</strong> simultaneously</p>
+
+    <p>Each output port has <strong>a fixed number er FIFO buffers</strong>.</p>
+
+    <p>Once a packet is transmitted from <strong>the ingress ingress buffer to the **FIFO queue</strong>, it cannot be dropped.</p>
+  </li>
+  <li>
+    <p>Schedule packets at each output port so another server can receive them.</p>
+
+    <p>Since each output port has multiple FIFO buffers, TM uses a combination of factors to determine which queue to dequeue from.</p>
+
+    <ol>
+      <li>Each queue has a priority</li>
+      <li>.Within a priority level, lines are scheduled in weighted round-robin-robin order.</li>
+      <li>Each line can be limited to a maximum rate and can be moved or paused.</li>
+    </ol>
+  </li>
+</ol>
+
+<p>TM maintains each queue’s status such that TM can use them to perform buffering and scheduling</p>
+
+<h2 id="programmable-scheduling-prior-work">.Programmable Scheduling (prior work)</h2>
+
+<p>Recent proposals for programmable scheduling propose additional switch hardware in the TM <strong>to make the scheduling decision programmable</strong>.</p>
+
+<p>PIFOs enable programmable scheduling using a programmable priority queue** to express custom scheduling algorithms. And the rank determines the packet’s order in the priority queue.</p>
+
+<h1 id="packet-scheduling-using-programmable-calendar-queues">Packet Scheduling using Programmable Calendar Queues</h1>
+
+<h2 id="drawbacks-of-existing-priority-queue-schemes">Drawbacks of existing priority queue schemes:</h2>
+
+<p>Many scheduling algorithms cannot be realized using fine-grained priority queuing schemes methods if the computed rank needs to fall within a finite range. E.g., fair queue or earliest deadline first (EDF)</p>
+
+<h2 id="programmable-calendar-queues-mcqs">Programmable Calendar Queues (MCQs)</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211026221338708.png" alt="image-20211026221338708" /></p>
+
+<p>Calendar Queue abstraction has a fixed number of buckets or FIFO queues, each of which stores packets scheduled for the the ext N periods.</p>
+
+<p>Scheduling algorithms using CQ will do the following:</p>
+
+<ol>
+  <li>choose a future period from [0, N-1] to enqueue the packet int.</li>
+  <li>pPeriodicallydecideperiodically decide when a period is over and moves on to the next period.</li>
+  <li>When when the CQ advances to the next period, the pipeline state has to be suitably modified to ensure the <strong>appropriate computation of ranks for incoming packets</strong>.</li>
+</ol>
+
+<p>Interface methods</p>
+
+<ol>
+  <li>CQ.enqueue(n): Used by the ingress pipeline to schedule the current packet <em>n</em> periods into the future.</li>
+  <li>CQ.dequeue(): Used by the egress pipeline to obtain a buffered packet, if any, for the current period.</li>
+  <li>CQ.rotate(): Used by the pipelineschannels to advance the CQ so that it can start transmitting packets for the next period.</li>
+</ol>
+
+<h2 id="programmable-scheduling-using-ng-mcqs">Programmable Scheduling using ng MCQs</h2>
+
+<p>various scheduling algorithms can be realized using Calendar Queues in conjunction with a pro- grammable packet processing pipeline.</p>
+
+<h3 id="weighted-fair-queueing">Weighted Fair Queueing</h3>
+
+<h3 id="earliest-deadline-first">Earliest Deadline First</h3>
+
+<h3 id="leaky-bucket-filter">Leaky Bucket Filter</h3>
+
+<h2 id="implementing-pcqs-in-hardware">Implementing PCQs in Hardware</h2>
+
+<p>Calendar Queues can be implemented on programmable switches using mutable switch state, multiple FIFO queues, the ability to create and recirculate packets selectively, and the ability to pause/resume queueslinesqueues lines or alter queue priorities directly in the data plane.</p>
+
+<h3 id="implementation-overview">Implementation overview:</h3>
+
+<p>Each <em>period</em> in the CQ is mapped to a single FIFO queue within a set of queueslinesqueues lines associated with the outgoing port</p>
+
+<p>.The ingress pipeline computes which <em>pe- riod</em> or queue each incoming packet is enqueued into</p>
+
+<p>The queue corresponding to the <strong>current period has the highest priority level</strong>, this; this queue is the head queue</p>
+
+<p>.The queue corresponding to the next period has a lower priority level and is <strong>active/unpaused</strong>.</p>
+
+<h3 id="implementation-details">Implementation details:</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211026225624032.png" alt="image-20211026225624032" /></p>
+
+<ol>
+  <li>Initiate Rotation</li>
+</ol>
+
+<p><strong>When:</strong> initiate rotation when the head queue is empty.</p>
+
+<p><strong>How:</strong> Check the queue id from which the packet was dequeued to infer whether the head queue is empty</p>
+
+<ol>
+  <li>
+    <p>Drain queue</p>
+
+    <p><strong>when</strong>:  When a rotation begins, we recirculate a particular rotate packet to the ingress pipeline so that it stops enqueuing packets in the head queue and begins draining it. andAndand it also ensures that the head queue is completely drained, and no more packets are enqueued into it till the rotation finishes.</p>
+
+    <p><strong>How</strong>:  the ingress enqueues a particular <strong>marker</strong> packet into the head queue <strong>after updating</strong> the head of the calendar queue</p>
+  </li>
+  <li>
+    <p>Finish Rotation</p>
+
+    <p><strong>when</strong>: <strong>marker</strong> packet is the last packet to be enqueued into the head queue, and its arrival at the egress pipeline means the queue in queue line is completely drained.</p>
+
+    <p><strong>How</strong> :</p>
+
+    <ol>
+      <li>The marker packet is recirculated back to the ingress pipeline, informing the ingress pipeline that it is safe to reuse the queue for future periods.</li>
+      <li>The ingress changes the priority of the justemptiedjust emptied queue to the owest and alsopausesalso pauses it, essentially pushing the queue line to the end of the CQ.</li>
+    </ol>
+  </li>
+</ol>
+
+<h3 id="analysis">Analysis</h3>
+
+<p>First, CQs maintain a state at the granularity of physical switch queues instead of individual packets or flows.</p>
+
+<p>At any given point in time, there is a designated head queue that is responsible for providing the packets that are to be transmitted.</p>
+
+<p>The rotation operation involves changing just the metadata of the queue and that of at most three lines. This combination of factors allows us to bolt-onboltonbolt-on bolt on the PCQ abstraction onto a traditional TM.</p>
+
+<h2 id="extensions">Extensions</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027141118965.png" alt="image-20211027141118965" /></p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>Evaluate the practical feasibility, expressiveness, and per- formanceperformance of Calendar Queues by implementing them on a <strong>programmable Barefoot Tofino switch</strong> and realizing two clasclass- SoCal classical scheduling algorithms using CQs.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027141908456.png" alt="image-20211027141908456" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027141923029.png" alt="image-20211027141923029" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027142006637.png" alt="image-20211027142006637" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211027142027559.png" alt="image-20211027142027559" /></p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Programmable Calendar Queues enables enable the efficient realization of several classical scheduling algorithms</p>
+
+<p>.It is implemented efficiently on today’s programmable switches by dynamically changing the priority of queues.</p>
+
+<p>PCQsMCQs can realize interesting LSTF, Fair Queueing, and fabric fabric variants to provide stronger delay guarantees, burst-friendly fairness, and starvation-free prioritization of short flows, respectively.</p>
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/5/" data-toggle="tooltip" data-placement="top" title="A High-Speed Load-Balancer Design with Guaranteed Per-Connection-Consistency">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/8/" data-toggle="tooltip" data-placement="top" title="Privacy Preserving Vertical Federated Learning for Tree-based Models">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

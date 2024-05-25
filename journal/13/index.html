@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/13/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/13/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>PipeSwitch Fast Pipelined Context Switching for Deep Learning Applications - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/13/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">PipeSwitch Fast Pipelined Context Switching for Deep Learning Applications</h1>
+                    
+                    <span class="meta">Posted on January 12, 2022</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+12 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h2 id="problems-not-solves">Problems not solves:</h2>
+
+<ol>
+  <li>How to only load model structure (small), not the model parameters ?</li>
+  <li>Inference job can preempt the training job, if the model is the same, can it be used in online learning?</li>
+</ol>
+
+<h1 id="abstract--introduction">Abstract &amp; Introduction</h1>
+
+<h2 id="background">Background</h2>
+
+<p>GPU clusters are often over-provisioned based on the peak load of inference and the cluster has limited sharing between applications and task types. eg.</p>
+
+<ol>
+  <li>Inference tasks cannot be served with training clusters under flash crowds,</li>
+  <li>Training tasks cannot utilize inference clusters when the inference load is low.</li>
+  <li>Even for inference itself, production systems are typically provisioned to each application on per-GPU to limit the interference between applications</li>
+</ol>
+
+<p><strong>challenge 1:</strong>  GPU has high overhead when switching between tasks. eg. If a GPU switches to a DNN model (<em>e.g.,</em> ResNet) that has not been preloaded onto the GPU, it can take <strong>multiple seconds</strong> before serving the first inference request.</p>
+
+<p><strong>challenge 2:</strong> NVIDIA Multiple Process Sharing (MPS) and Salus allow multiple processes to use the same GPU, they require all processes’ data (e.g., DNN models) to be <strong>preloaded into the GPU memory</strong>. But GPU memory is limited.</p>
+
+<h2 id="problems">Problems</h2>
+
+<p>How to quickly <strong>switch the contents on GPU memory</strong> such that each one of the applications (that can be multiplexed ) is able to use the entire GPU compute and memory resources during its time slice?</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<p>They present PipeSwitch, a system that enables <strong>unused cycles of an inference application to be filled by training or other inference applications.</strong></p>
+
+<p>Overall, <strong>the system leverages pipelined model transmission, unified memory management, and active-standby worker switching to achieves millisecond-scale context switching latencies and high throughput</strong>.</p>
+
+<ol>
+  <li>They proposed PipeSwitch, a system that enables GPU- efficient fine-grained time-sharing for multiple DL applications, and <strong>achieves millisecond-scale context switching latencies and high throughput</strong>.</li>
+  <li>They introduce <em>pipelined context switching</em>, which exploits the characteristics of DL applications, and <strong>leverages pipelined model transmission, unified memory management, and active-standby worker switching to minimize switching overhead and enforce process-level isolation</strong>.</li>
+  <li>They implement a system prototype and integrate it with PyTorch. Experiments on a variety of DL models and GPU cards show that PipeSwitch only incurs a task startup over- head of 3.6–6.6 ms and a total overhead of 5.4–34.6 ms (10–50× better than NVIDIA MPS), and achieves near 100% GPU utilization.</li>
+</ol>
+
+<h1 id="system-overview">System Overview</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113165732459.png" alt="image-20220113165732459" /></p>
+
+<p>Controller: contains two threads, TCP thread and scheduler thread ( together with memory daemon).</p>
+
+<p>Memory daemon: it manages the GPU memory and the DNN models.</p>
+
+<ol>
+  <li>before starting a task, user register the model in scheduler.</li>
+  <li>It <strong>allocates the GPU memory to the active worker,</strong></li>
+  <li>It <strong>transfers the model from the host memory (scheduler) to the GPU memory</strong>.</li>
+</ol>
+
+<p>Active worker: A process that executes a task on one GPU. it contains two threads.</p>
+
+<ol>
+  <li>Termination thread: receive termination signal from controller and notifies main thread.</li>
+  <li>Main thread: manages DNN models and performs computation for inference or training</li>
+  <li>Worker only loads model structure (small), not the model parameters</li>
+</ol>
+
+<p>StandBy worker: idle process, is initializing a new task or cleaning its environment for previous task.</p>
+
+<p>Execution steps:</p>
+
+<ol>
+  <li>Controller queues a set of tasks received from clients.</li>
+  <li>Uses a scheduling policy to decide which task to execute next.</li>
+  <li>To start a new task, the controller either waits for the current task to finish (e.g., if it is inference) or preempts it by notifying the active worker to stop (e.g., if it is training). At the same time, controller notifies an idle standby worker to initialize its environment for the new task.</li>
+  <li>Active worker completes a task</li>
+  <li>Controller notifies <strong>memory daemon</strong> and standby worker to load task to GPU to execute with pipelined model transmission (if the model are the same, may be no need to transfer, online learning?).</li>
+  <li>Memory daemon <strong>allocates memory to standby worker, and trasmits the model from memory to GPU</strong></li>
+  <li>Standby worker become active worker to execute the new task</li>
+  <li>Active worker become standby worker and clean envs for previous task</li>
+</ol>
+
+<h2 id="pipeswitch-design">PipeSwitch Design</h2>
+
+<h2 id="profiling-task-switching-overhead">Profiling task switching overhead</h2>
+
+<p>On scenario that typical scenario that a server stops a training task running on the GPU, and then starts an inference task.</p>
+
+<p>model: ResNet152</p>
+
+<p>Measure: time to start and execute it on GPU.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113172005325.png" alt="image-20220113172005325" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113172047563.png" alt="image-20220113172047563" /></p>
+
+<p>All the components take considerable time compared to the inference time, so all those components should be optimized.</p>
+
+<h2 id="profiling-model-transmission">Profiling model transmission</h2>
+
+<p>The PCIe bandwidth is the physical limit on how fast an arbitrary task can be loaded to the GPU.  In another words, transmitting a task from CPU to GPU is bounded by the PCIe bandwidth.</p>
+
+<p>In DNN,  a task does not need to wait for the entire model to be transmitted to the GPU before beginning the computation.  <strong>Instead, the task can start the computation of a layer as soon as the layer is loaded in the GPU and the input of the layer is ready</strong> (i.e., the previous layers have finished their computation), regardless of its following layers.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113194904406.png" alt="image-20220113194904406" /></p>
+
+<p><strong>Optimal model-aware grouping</strong></p>
+
+<p>Why grouping layers for transmission?  (minimize these two sources of overhead.)</p>
+
+<ol>
+  <li>Transmission overhead of large amount of data is dominated by data size</li>
+  <li>Transmission overhead of layer-by-layer is dominated by too many PCIe calls.</li>
+</ol>
+
+<p>How to choose group size? two insights:</p>
+
+<ol>
+  <li>First group cannot be to large (F3.a).</li>
+  <li>Other than first group, we can safely pack multiple layers in a group <strong>based on progress of computation</strong> without affecting pipeline efficiency (F3.b).</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114164630688.png" alt="image-20220114164630688" /></p>
+
+<p>The algorithm runs <em>offline</em> to find the strategy, and the resulting strategy is used online by PipeSwitch for context switching.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113220259314.png" alt="image-20220113220259314" /></p>
+
+<h2 id="unified-memory-management">Unified Memory Management</h2>
+
+<p>By default:</p>
+
+<ol>
+  <li>NVIDIA provides <strong>cudaMalloc</strong> to allocate memory on GPU.</li>
+  <li>NVIDIA also provides <strong>CUDA unified memory</strong> to automatically handle <strong>memory movement between the host memory and the GPU memory for applications</strong></li>
+</ol>
+
+<p>Two characteristics of DL applications:</p>
+
+<ol>
+  <li>The amount of memory allocated to the DNN model is fixed, and does not change during task execution.
+(structure is fixed, so parameter num is fixed = &gt; memory is fixed. )</li>
+  <li>The intermediate results (output of each layer) change do not cause <em>memory fragmentation</em>.
+    <ol>
+      <li>In inference, after the next layer is computed, they are no longer needed and can be safely freed.</li>
+      <li>In training, they cannot be immediately freed, because they are also used by the backward pass to update the weights. (but the intermediate results are consumed first-in-last-out style.)</li>
+    </ol>
+  </li>
+</ol>
+
+<p><strong>New design:</strong></p>
+
+<p><strong>=&gt; Minimize memory allocation overhead:</strong></p>
+
+<p>The <strong>memory daemon uses <code class="language-plaintext highlighter-rouge">cudaMalloc</code> to obtain the GPU memory</strong> when the system starts, and then dynamically allocates the memory to the workers at runtime.</p>
+
+<ol>
+  <li>Eliminates the overhead for each worker to use <code class="language-plaintext highlighter-rouge">cudaMalloc</code> to get memory.</li>
+  <li>Memory daemon only pass memory pointers to workers.</li>
+  <li>Memory daemon ensure only one worker owns GPU memory to guarantee memory isolation between workers.</li>
+</ol>
+
+<p><strong>=&gt; Minimize memory copies overhead:</strong></p>
+
+<p>The memory daemon stores the models, and it can directly transfer model to GPU for task startup.</p>
+
+<p><strong>=&gt; Minimize IPC overhead:</strong></p>
+
+<p>After model is transmitted to GPU, memory daemon needs to notify workers and <strong>export GPU memory handler to workers</strong>, which requires IPC APIs.  (<code class="language-plaintext highlighter-rouge">cudaIpcOpenMemHandle</code> for NVIDIA GPUs).</p>
+
+<p><code class="language-plaintext highlighter-rouge">cudaIpcOpenMemHandle</code> incur high overhead, memory daemon uses the GPU IPC once to initialize the worker, and then uses cheap CPU IPCs to notify the worker which pipeline group has been transmitted.</p>
+
+<p><strong>=&gt; Pin memory</strong>:</p>
+
+<p>The OS would swap a memory page to disk if the page is inactive for a certain amount of time. We pin the pages of the memory daemon to the host memory, to eliminate this overhead</p>
+
+<h2 id="active-standby-worker-switching">Active-Standby worker Switching</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220113225019317.png" alt="image-20220113225019317" /></p>
+
+<p>Two process: Each process need to clean GPU envs and warm-up GPU.</p>
+
+<p>One process: Although new task can reuse warm CUDA context, but current task has to clean its status and it does not provide process-level isolation between tasks.</p>
+
+<p>Active-standby:</p>
+
+<ol>
+  <li><strong>Each worker initializes its own GPU environment (i.e., CUDA context) when it is first created. eliminates the GPU environment initialization overhead when a new task is assigned to a worker</strong></li>
+  <li>When a task is stopped, a major job is to clear asynchronous CUDA functions queued on GPU. The paper insert synchronization points into training tasks. So the number of queued function are limited and can be quickly cleared.</li>
+  <li>When a task is stopped, another job is to free memory, in this paper, they <strong>only deletes the pointers</strong> pointing to the tensor data rather than freeing the actual data. Therefore, it is <strong>safe for the new task to transmit its model to the GPU memory at the same time</strong>. In other words, we can <strong>parallelize the task cleaning of the current task and the pipelined model transmission of the new task,</strong> to hide the task cleaning overhead.</li>
+</ol>
+
+<p>When task arrives, there sould be an idle worker waiting for the task, every standby worker needs to maintain its own CUDA context, which consumes a few hundred MB GPU memory.</p>
+
+<p>Two standby workers are sufficient to ensure at least one idle worker, which eliminates the waiting time and has moderate GPU memory consumption.</p>
+
+<h1 id="implementation">Implementation</h1>
+
+<p>3600 lines of code in C++ and Python,</p>
+
+<p>Integrated it with PyTorch including adding functions for allocating GPU memory, sharing the GPU memory to workers through CUDA IPC API and getting the shared GPU memory.</p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p><strong>Setup</strong></p>
+
+<p>conducts on AWS, PCIe 3.0 ×8, and 32 GB memory. The software environment includes PyTorch-1.3.0, torchvision- 0.4.2, scipy-1.3.2, and CUDA-10.1.</p>
+
+<p><strong>Workloads</strong></p>
+
+<p>Models used: ResNet152, Incep- tion_v3, and Bert_base.</p>
+
+<p>The default batch size for training is 32, and that for inference is 8.</p>
+
+<p><strong>Training tasks periodically checkpoint their models to the host memory, and restart from the latest checkpoint after preemption</strong>, and <strong>checkpointing frequency</strong> of training tasks is set <strong>according to the scheduling cycle</strong> to minimize checkpointing overhead</p>
+
+<p><strong>Metrics</strong></p>
+
+<p>Measure throughput and latency.</p>
+
+<h2 id="end-to-end-experiments">End-to-End Experiments</h2>
+
+<p>Experiment: A client sends an inference task to a GPU server, and the GPU server preempts the training task to execute the inference task and sends a reply back to the client.</p>
+
+<p>Measure end to end latency and compare with</p>
+
+<ol>
+  <li>Ready model: no training task, lowest latency for inference task.</li>
+  <li>Stop-and-start:
+    <ol>
+      <li>preempt the train task and start inference task .</li>
+      <li>this is slowest, main source of the overhead is <strong>CUDA context initialization</strong> and <strong>first-time library loading operations in PyTorch</strong>.</li>
+    </ol>
+  </li>
+  <li>NVIDIA MPS:
+    <ol>
+      <li>multi-process support from NVIDIA which allows the inference process to share the GPU with the training process, and training task occupies the entire GPU memory and does not stop when inference tasks come. CUDA unified memory is used for memory swapping.</li>
+      <li>One source of the overhead is the contentions both on the computation and memory of the GPU, as the training task do not stop when an inference task comes. Another source is GPU memory swapping.</li>
+    </ol>
+  </li>
+  <li>PipeSwitch:
+    <ol>
+      <li>Perform the best and is close to lower bound. 10ms overhead for most apps.</li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114150714453.png" alt="image-20220114150714453" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114151330625.png" alt="image-20220114151330625" /></p>
+
+<p>Measure end to end throughput and latency with different scheduling cycle.</p>
+
+<p>We only use ResNet152 for both training and inference on eight p3.2xlarge instances, and <strong>switch between these two tasks after each scheduling cycle</strong>.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114151734730.png" alt="image-20220114151734730" /></p>
+
+<h2 id="pipelined-model-transmission">Pipelined Model Transmission</h2>
+
+<p>Experiment: we keep all other components of PipeSwitch the same, and compare the following mechanisms.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114152604801.png" alt="image-20220114152604801" /></p>
+
+<p>Grouped transmission improves no optimization by combining the layers of the model into one big tensor and transmitting it in one group.</p>
+
+<p>Per-layer pipeline overlaps transmission and computation at the granularity of layer. But because it has <strong>PCIe overhead</strong> and <strong>synchronization overhead for every layer,</strong> for the models with <strong>many layers but relatively light computation</strong> such as ResNet152 and Inception, it can perform <strong>worse than grouped transmission and sometimes even no pipeline.</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114152847244.png" alt="image-20220114152847244" /></p>
+
+<p>This experiments proves that pruning speeds up the algorithm 1.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114153608942.png" alt="image-20220114153608942" /></p>
+
+<h2 id="unified-memory-management-1">Unified Memory Management</h2>
+
+<p>Experiment: we keep all other components of PipeSwitch the same, and compare the following five mechanisms.</p>
+
+<ol>
+  <li>No unified memory management: Each worker uses <strong>cudaMalloc</strong> to allocate GPU memory, and transmits the model to GPU by its own.</li>
+  <li>No IPC optimization: The memory daemon handles GPU memory allocation and model transmission, but creates and <strong>sends GPU memory handlers to workers</strong>. To compare, <strong>PipeSwitch simply sends an 64-bit integer offset for the shared GPU memory to workers.</strong></li>
+  <li>No pin memory: It has all optimizations on unified memory management except that the <strong>pages</strong> of the memory daemon are <strong>not pinned</strong> to the main memory.</li>
+  <li>CUDA unified memory: Each worker allocates GPU memory with cudaMallocManaged, and CUDA automatically transmits the model to GPU when needed.</li>
+  <li>PipeSwitch: It is the unified memory management mechanism used by PipeSwitch.</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114154316377.png" alt="image-20220114154316377" /></p>
+
+<p>All the optimizations on memory management are effective.</p>
+
+<h2 id="active-standby-worker-switching-1">Active-Standby Worker Switching</h2>
+
+<p>Experiment:  Keep all other components of PipeSwitch the same, and compare the following mechanisms.</p>
+
+<ol>
+  <li>Two processes:
+    <ol>
+      <li>The process of the old task cleans the GPU environment, and then another process is created and initialized for the new task.</li>
+      <li>The new process needs to create a new CUDA environment, which dominates the total time</li>
+    </ol>
+  </li>
+  <li>One process.
+    <ol>
+      <li>The process cleans the GPU environment for the old task, and reuses the environment for the new task.</li>
+      <li>One process reuses the CUDA environment, but still pays the overhead to clean the environment.</li>
+    </ol>
+  </li>
+  <li>PipeSwitch:
+    <ol>
+      <li>It is the active-standby workers switching mechanism used by PipeSwitch.</li>
+      <li>parallelize old task cleaning and new task initialization</li>
+    </ol>
+  </li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220114160055499.png" alt="image-20220114160055499" /></p>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/12/" data-toggle="tooltip" data-placement="top" title="Microsecond Consensus for Microsecond Applications">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/14/" data-toggle="tooltip" data-placement="top" title="OrdTime, Clocks, and the Ordering of Events in a Distributed System">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/158/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/158/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>An Improved Distributed Algorithm for Maximal Independent Set Moh - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/158/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">An Improved Distributed Algorithm for Maximal Independent Set Moh</h1>
+                    
+                    <span class="meta">Posted on September 11, 2023</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+9 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h1 id="backgrounds">Backgrounds</h1>
+
+<p>Degree of the graph:</p>
+
+<ul>
+  <li>the “degree” of a vertex (or node) is the number of edges that are incident to it.</li>
+  <li>Degree (Graph) = highest degree of any vertex in the graph.</li>
+</ul>
+
+<p>Maximal Independent Set:</p>
+
+<ul>
+  <li>In graph theory, an Independent Set (IS) of a graph is a set of vertices where no two vertices are adjacent (they don’t share a common edge). The Maximum Independent Set (MIS) problem is about finding the largest IS in a graph</li>
+</ul>
+
+<p>Some concepts</p>
+
+<ul>
+  <li><strong>Local Complexity</strong>: Focuses on the time it takes for <strong>a single node</strong> to make its decision or terminate its part of the algorithm.</li>
+  <li><strong>Global Complexity</strong>: Focuses on the <strong>total time it takes</strong> for all nodes in the entire system to terminate or complete the algorithm.</li>
+  <li><strong>Termination</strong> for a node might mean it has decided whether it is part of the Maximum Independent Set or not.</li>
+  <li><strong>Complete</strong>: means that the entire Maximum Independent Set has been identified throughout the distributed system.</li>
+</ul>
+
+<h1 id="introduction">Introduction</h1>
+
+<p>This paper presents a very <strong>simple randomized alg</strong> for this problem,</p>
+
+<ul>
+  <li>Providing a near-optimal local complexity</li>
+  <li>near-optimal global complexity when combined with some known techniques.</li>
+</ul>
+
+<p>Specifically, This paper proposes a very simple and clean algorithm that guarantees for each node v that after O(log ∆+log 1/ε) rounds, with probability at least 1 − ε, node v has terminated and it knows whether it is in the (eventual) MIS or it has a neighbor in the (eventual) MIS.</p>
+
+<p>Work Model: standard distributed computation model: LOCAL</p>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Network: G = (V, E), V =</td>
+          <td>n</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Each node <strong>only knows</strong> its neighbors and can <strong>only communicate with its graph</strong> <strong>neighbor</strong> in <strong>sync</strong> rounds.</li>
+  <li><strong>O(log n)-hop Neighborhood</strong>: In certain scenarios, a node doesn’t need to be aware of the entire network to make its decision. Instead, it only needs to look at a neighborhood that’s proportional to the logarithm of the total number of nodes <em>n</em>. This is interesting because, in large networks,  log(<em>n</em>) is much smaller than <em>n</em>, so this implies a more efficient process.</li>
+</ul>
+
+<h2 id="question---local-compleixty">Question - local compleixty</h2>
+
+<p>How long does it take till each particular node v terminates, and knows whether it is in the (eventual) MIS or not, with probability at least 1 − ε?</p>
+
+<p>Theorem 1.1: P(v have not make decision after first O(log(dev(v) + log1/ε) &lt;= ε</p>
+
+<h2 id="question---global-complexity">Question - global complexity</h2>
+
+<p>In the global complexity,  how to determine the best possible upper limit (upper bound) for a MIS problem in graph theory, given known lower limits? The best know bound prior is <em>O</em>(<em>l<strong>o</strong>g</em>2∆)+2<em>O</em>(√<em>l<strong>o</strong>g<strong>l</strong>o<strong>g</strong>n</em>)</p>
+
+<p><strong>General Strategy</strong>: There’s a common method used in these problems:</p>
+
+<ul>
+  <li>Run a randomized algorithm. Over time, nodes in the graph get probabilistically removed.</li>
+  <li>After a while, the graph <strong>breaks into smaller components</strong>. This is called the “shattering” phenomenon.</li>
+  <li>Once shattered, a <strong>deterministic algorithm</strong> (a set, predictable method) is used to solve the problem for these small pieces.</li>
+</ul>
+
+<p>Current SOTA work takes O(log2∆) rounds to reach the threshold of shattering and then takes log ∆ · 2O(√log log n) rounds of determinations to solve this.</p>
+
+<p>This paper improves this and can reach a shattering threshold after O(log ∆) rounds. Also, it reduces the deterministic alg complexity from log ∆ · 2O(√log log n) to 2O(√log log n).</p>
+
+<p>Theorem1.2: Randomized distributed MIS algs which can terminates after <em>O</em>(<em>l<strong>o</strong>g</em>∆)+2<em>O</em>(√<em>l<strong>o</strong>g<strong>l</strong>o<strong>g</strong>n</em>) rounds with probability at least 1 - 1/n</p>
+
+<h2 id="lubys-algorithm">Luby’s Algorithm</h2>
+
+<h3 id="progress">Progress</h3>
+
+<ul>
+  <li>In each round, every node chooses a random number between 0 and 1.</li>
+  <li>Nodes that have the smallest number among their neighbors are added to the MIS and then removed from the graph along with their neighbors.</li>
+  <li>Implementing a round requires two communication rounds: one to exchange the random numbers and another to inform neighbors of nodes that have joined the MIS</li>
+</ul>
+
+<h3 id="analysis">Analysis</h3>
+
+<ul>
+  <li>
+    <p>The challenge is to analyze how fast the algorithm simplifies local neighborhoods. Ideally, as the algorithm progresses, each node’s degree (the number of its direct connections) should decrease.</p>
+  </li>
+  <li>
+    <p>One might expect that after a few rounds, a node’s degree would halve. But, complications arise because a node’s degree reduction can be <strong>delayed</strong> if its neighbors’ degrees don’t decrease as anticipated. The degree reductions across different nodes can be interdependent, which complicates the analysis.</p>
+
+    <p>(The randomness in Luby’s algorithm can lead to scenarios where some nodes consistently don’t get selected for the MIS even if they have low degrees because their neighbors might always be picking smaller random numbers. These nodes thus keep getting “unlucky” due to the choices of their neighbors, leading to delays in their removal).</p>
+  </li>
+</ul>
+
+<h1 id="proposed-algorithm">Proposed Algorithm</h1>
+
+<p>This paper proposes a very simple and clean algorithm that guarantees for each node v that after O(log ∆+log 1/ε) rounds, with probability at least 1 − ε, node v has terminated and it knows whether it is in the (eventual) MIS or it has a neighbor in the (eventual) MIS.</p>
+
+<p>This is meant to be an improvement over Luby’s algorithm, which had difficulties when determining a node’s progress in the graph due to complex interdependencies with other nodes.</p>
+
+<h3 id="intuition">Intuition</h3>
+
+<p>Problem of the Luby algs: The challenge in Luby’s algorithm was that a node <em>v</em>’s progress could be influenced by its neighbors, and those neighbors could be influenced by their neighbors, leading to a cascading chain of dependencies.</p>
+
+<p>The authors aim to decouple a node’s progress from nodes that are more than two steps (or edges) away from it.</p>
+
+<p>Two main ways a node <em>v</em> can be removed from consideration:</p>
+
+<ul>
+  <li>Either it tries to join the MIS and doesn’t have too much competition from its neighbors.</li>
+  <li>Or, many of its neighbors are trying to join the MIS and they don’t face much competition, so it’s likely one of them will join the MIS, causing node <em>v</em> to be removed.</li>
+</ul>
+
+<p>The Algorithm:</p>
+
+<ol>
+  <li>Each node <em>v</em> has a <strong>“desire-level</strong>” <em>p_t</em>(<em>v</em>) which indicates how strongly it wants to join the MIS. It starts at 0.5.</li>
+  <li>A node’s “<strong>effective-degree</strong>” <em>d_t</em>(<em>v</em>) is the sum of the desire-levels of its neighbors.</li>
+  <li>Over time, the <strong>desire levels</strong> change based on conditions related to the effective degree.</li>
+  <li>In each round, node v gets marked with probability p_t(v) and if no neighbor of v is marked, v joins the MIS and gets removed along with its neighbors5</li>
+</ol>
+
+<p>The Analysis:</p>
+
+<ol>
+  <li>The correctness of the algorithm is clear: those that join the MIS form an independent set, and a node stops only if it or one of its neighbors is in the MIS.</li>
+  <li>There are certain “<strong>golden rounds</strong>” which are particularly good for a node:
+    <ul>
+      <li>Either its effective degree is less than 2 or its desire-level is 0.5.</li>
+      <li>Or it has enough low-degree neighbors trying to join the MIS.</li>
+    </ul>
+  </li>
+  <li>These golden rounds are essential because, during them, there’s a higher likelihood of the node joining the MIS or one of its neighbors joining, thus removing the node</li>
+</ol>
+
+<p>Lemmas (Supporting Statements):</p>
+
+<ol>
+  <li>
+    <p>Lemma 3.1</p>
+
+    <p>By a certain number of rounds, either a node has joined the MIS, or it has had many golden rounds.</p>
+
+    <ul>
+      <li>The proof uses the definitions of the golden rounds and effective degrees to show that either a node joins the MIS or has many golden rounds.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Lemma 3.2</p>
+
+    <p>In each golden round, there’s a good probability that the node or one of its neighbors joins the MIS.</p>
+
+    <ul>
+      <li>The proof calculates probabilities using the <strong>desired level</strong> and <strong>effective degree</strong> to argue that during golden rounds, there’s a high chance of a node being removed from consideration.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>The proposed algorithm tries to make nodes in a graph decide if they’ll join the MIS or if one of their neighbors will. This decision is influenced by their <strong>desire level</strong> and <strong>effective degree</strong>. The algorithm is designed to have nodes spend a lot of time in scenarios where they are likely to make a decision, termed golden rounds. These golden rounds have a higher probability of ensuring a node’s removal, and the algorithm ensures that nodes either join the MIS or experience many golden rounds in a logarithmic number of rounds.</p>
+
+<h1 id="improved-global-complexity">Improved Global Complexity</h1>
+
+<p>The aim is to design a distributed MIS algorithm with a global complexity (how many rounds it takes) of O(logΔ)+2<em>O</em>(<em>l<strong>o</strong>g</em>Δ)+2<em>O</em>(<em>l<strong>o</strong>g<strong>l</strong>o<strong>g</strong>n</em>)</p>
+
+<h3 id="algorithm-basics">Algorithm Basics:</h3>
+
+<ol>
+  <li>Run the algorithm from a previous section for <em>O</em>(<em>l<strong>o</strong>g</em>Δ) rounds.</li>
+  <li>Achieve a “shattering threshold” after <em>O</em>(<em>l<strong>o</strong>g</em>Δ) rounds. This seems to be a state in which the graph has been sufficiently broken down into smaller components.</li>
+</ol>
+
+<p><strong>Key Lemmas and Ideas</strong>:</p>
+
+<ul>
+  <li><strong>Lemma 4.1</strong>: It says that if you have a set of nodes that are far apart from each other (at least 5 nodes apart), the probability that they all remain undecided after running the algorithm for a while is quite low.</li>
+  <li><strong>Lemma 4.2</strong>: After running the algorithm for some rounds, two things are likely to happen:
+    <ul>
+      <li>(P1) We don’t have large connected subgraphs.</li>
+      <li>(P2) Each connected part of our graph is small.</li>
+    </ul>
+  </li>
+  <li><strong>Shattering Phenomena</strong>: Graph gets broken down or “shattered” into smaller components. The “2hop randomness locality” concept helps achieve this shattering.</li>
+  <li><strong>Finish-off Algorithm</strong>: This is the final phase of the algorithm where we’ve “shattered” the graph into smaller components. Now, we want to solve the MIS problem for these smaller parts. They do so by:
+    <ol>
+      <li>Running the base MIS algorithm for a few more rounds.</li>
+      <li>Grouping nodes into clusters.</li>
+      <li>Contracting these clusters to form a new, simpler graph.</li>
+      <li>Applying a known MIS algorithm to this simpler graph.</li>
+    </ol>
+  </li>
+</ul>
+
+<p><strong>Concluding Result</strong>: By following the given strategy and using the outlined “finish-off” algorithm, they achieve a global complexity for the MIS problem of <em>O</em>(<em>l<strong>o</strong>g</em>Δ)+2<em>O</em>(<em>l<strong>o</strong>g</em>Δ)+2<em>O</em>(<em>l<strong>o</strong>g<strong>l</strong>o<strong>g</strong>n</em>)</p>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/157/" data-toggle="tooltip" data-placement="top" title="Maximal Independent Set">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/159/" data-toggle="tooltip" data-placement="top" title="Atomic Cross-Chain Swaps">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

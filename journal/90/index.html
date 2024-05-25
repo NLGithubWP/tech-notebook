@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/90/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/90/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>Dorylus Affordable, Scalable and Accurate GNN Training with Distributed CPU Servers and Serverless Threads - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/90/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">Dorylus Affordable, Scalable and Accurate GNN Training with Distributed CPU Servers and Serverless Threads</h1>
+                    
+                    <span class="meta">Posted on November 5, 2022</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+5 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <ul id="markdown-toc">
+  <li><a href="#question" id="markdown-toc-question">Question</a></li>
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a>    <ul>
+      <li><a href="#background--motivation" id="markdown-toc-background--motivation">Background &amp; Motivation</a></li>
+      <li><a href="#gap" id="markdown-toc-gap">Gap</a></li>
+      <li><a href="#challenge" id="markdown-toc-challenge">Challenge</a></li>
+      <li><a href="#goal" id="markdown-toc-goal">Goal</a></li>
+    </ul>
+  </li>
+  <li><a href="#system-design-and-contribution" id="markdown-toc-system-design-and-contribution">System Design and Contribution</a>    <ul>
+      <li><a href="#tasks-and-pipelining" id="markdown-toc-tasks-and-pipelining">Tasks and pipelining</a></li>
+      <li><a href="#bounded-asynchrony" id="markdown-toc-bounded-asynchrony">Bounded Asynchrony</a></li>
+      <li><a href="#lambda-management" id="markdown-toc-lambda-management">Lambda Management</a></li>
+    </ul>
+  </li>
+  <li><a href="#evaluation" id="markdown-toc-evaluation">Evaluation</a></li>
+</ul>
+
+<h1 id="question">Question</h1>
+
+<ol>
+  <li>
+    <p>Why is using serverless cheaper than using a cluster of CPUs?</p>
+
+    <p>=&gt; Users not only pay for computing but also pay for unneeded resources. (storage)</p>
+
+    <p>Note that Lambdas are a perfect fit for GNNs’ tensor computations. While one could also employ regular CPU instances for computing, using such instances would incur a <strong>much higher monetary cost to provide the same level of burst parallelism</strong> (e.g., 2.2× in our experiments) since users not only pay for the compute but also other unneeded resources (e.g., storage).</p>
+  </li>
+  <li>
+    <p>The system updates the weight and gathers the graph in a bounded asynchrony manner, thus maintaining multiple versions for weight. When syncing the weights?</p>
+
+    <p>=&gt; Periodically broadcast.</p>
+  </li>
+</ol>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="background--motivation">Background &amp; Motivation</h2>
+
+<p>GNN family (e,g. GCN) has gained lots of success. It’s essential to train GNN in an affordable, scalable, and accurate manner.</p>
+
+<h2 id="gap">Gap</h2>
+
+<p>Training GNN requires lots of GPUs, but:</p>
+
+<ul>
+  <li>Using GPU in the cloud is costly.</li>
+  <li>GPU has limited memory, hindering scalability.</li>
+</ul>
+
+<p>CPU-based training and graph sampling are used to solve those two issues (high cost and poor scalability.)  But:</p>
+
+<ul>
+  <li>CPU has poor parallelism computation and thus has poor efficiency.</li>
+  <li>Graph sampling incurs time overheads and reduces the accuracy of trained GNN.</li>
+</ul>
+
+<h2 id="challenge">Challenge</h2>
+
+<p>Using serverless can scale with low cost, but it’s challenging to adopt it to DNN training:</p>
+
+<ul>
+  <li>
+    <p>How to make computation fit into lambda’s limited compute resources:</p>
+
+    <ul>
+      <li>A lambda thread is too weak to execute a tensor kernel on large data. (large data =&gt; high FLOPs =&gt; longer time)</li>
+      <li>Breaking data into tiny mini-batches incurs high-data transfer overhead.</li>
+    </ul>
+  </li>
+  <li>
+    <p>How to minimize the negative impact of Lambda’s network latency.</p>
+
+    <ul>
+      <li>
+        <p>One-thrid of time on communication.</p>
+
+        <p>E.g., When the number of Lambdas it launches reaches 100, the per-Lambda bandwidth drops to 200Mbps.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="goal">Goal</h2>
+
+<p>This paper proposes <strong>affordable, scalable, and accurate</strong> GNN training.</p>
+
+<ul>
+  <li>Affordable: low-cost.</li>
+  <li>Scalable: billion-edge graphs.</li>
+  <li>Accurate: higher than the sampling-based method.</li>
+</ul>
+
+<p>Details:</p>
+
+<ul>
+  <li>Use serverless computing and CPU servers.
+    <ul>
+      <li>It overcomes the above challenges by <strong>dividing</strong> the training pipeline into tasks and executing them with appropriate resources.</li>
+      <li>Graph operations =&gt; CPU</li>
+      <li>Tensor computation =&gt; Lambdas.</li>
+    </ul>
+  </li>
+  <li>The bounded pipeline asynchronous communication (BPAC) model reduces communication overhead.
+    <ul>
+      <li>Different tasks overlap each other.</li>
+      <li>Allow <strong>asynchrony</strong> in parameter update and data gathering process. And also bounds the degree of asynchrony.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="system-design-and-contribution">System Design and Contribution</h1>
+
+<p>GNN forward can be divided into four computation stages: <strong>Gather, ApplyVertex, Scatter, and ApplyEdge.</strong></p>
+
+<p>The graph is partitioned into the edge-cut algorithm.</p>
+
+<h2 id="tasks-and-pipelining">Tasks and pipelining</h2>
+
+<p><strong>Goal:</strong> This is about how to decompose tasks into fine-grained tasks such that</p>
+
+<ul>
+  <li>The computation can be fit in Lambda.</li>
+  <li>Tasks can be <strong>Overlap</strong></li>
+</ul>
+
+<ol>
+  <li>Fine-grained tasks =&gt; fix task into lambda.</li>
+</ol>
+
+<ul>
+  <li>Graph computation (adjacency matrics) =&gt; on graph sever.</li>
+  <li>Tensor data computation =&gt; on Lambda to benefit massive parallelism.</li>
+  <li>Weight-update =&gt; on PSs.</li>
+</ul>
+
+<ol>
+  <li>Pipelining enables <strong>overlapping</strong> such that the communication cost can be hidden.</li>
+</ol>
+
+<ul>
+  <li>Vertices are partitioned into groups called intervals.</li>
+  <li>Each interval computes GA using one thread in GSs. Once the GA is done, the results are pushed into Lambda for AV.</li>
+  <li><strong>Overlap</strong> the graph-parallel of <strong>one interval</strong> and tensor-parallel computations of <strong>another interval</strong>.</li>
+</ul>
+
+<h2 id="bounded-asynchrony">Bounded Asynchrony</h2>
+
+<p><strong>Goal:</strong> Async training may use more epochs to reach one acc, but each epoch uses less time. Exp shows the total efficiency is higher.</p>
+
+<p>Two kinds of asynchrony</p>
+
+<ul>
+  <li>Asynchrony weight Updates (using weight stashing technique)
+    <ul>
+      <li>Each Lambda sends a local gradient to PS and then fetches a new weight from PS. PS update directly without waiting for other workers’ updates. It requires multiple versions for each vertical group/interval.</li>
+      <li>Fully replicate the latest weight overall PS servers to enable load balancing.</li>
+      <li>Partition versions to multiple PS to reduce the memory usage of each PS.</li>
+      <li>PS periodically broadcasts its latest weight to do the <strong>weight aggregation.</strong></li>
+    </ul>
+  </li>
+  <li>Asynchrony Gather
+    <ul>
+      <li>Vertex intervals progress independently using <strong>stale</strong> vertex values of their neighbors without waiting for their update.</li>
+      <li>A fast-moving vertex interval is allowed at most S epochs away from the slowest-moving interval. Otherwise, the fast-moving vertex will stop GA and wait for the slow-moving vertex to update</li>
+    </ul>
+  </li>
+</ul>
+
+<p>The paper also discusses their converge guarantee.</p>
+
+<ul>
+  <li>As for the proof of converge of Weight Update, it mainly cites the previous paper.</li>
+  <li>As for the convergence of asynchronous Gather with bounded staleness S, it proposes a new algorithm and assumes N (iteration) =&gt; infinite.</li>
+</ul>
+
+<h2 id="lambda-management">Lambda Management</h2>
+
+<p>Each Graph server maintains a lambda controller.</p>
+
+<p><strong>Optimizations:</strong></p>
+
+<ul>
+  <li>Task Fusion:
+    <ul>
+      <li>Merge ApplyVertex and gradient calculating of the laster layer together.</li>
+      <li>Save the communication between Lambda and GS.</li>
+    </ul>
+  </li>
+  <li>rematerialization
+    <ul>
+      <li>Re-calculate AHW.</li>
+    </ul>
+  </li>
+  <li>Lambda-internal streaming:
+    <ul>
+      <li>Overlaps computation with communications.</li>
+      <li>Retrieve the first half of the data to compute, and fetch another part simultaneously.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Autotuning Lambda nums</strong></p>
+
+<ul>
+  <li>Autotuner auto-adjusts the number of Lambdas by monitoring the CPU’s task queue.</li>
+</ul>
+
+<p><img src="../../img/a_img_store/image-20221107213644718.png" alt="image-20221107213644718" /></p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>Measure Metrics:</p>
+
+<ul>
+  <li><strong>Value</strong> == Performance-per-dollar, V = 1/(T+C), T == Training time, C == Cost</li>
+</ul>
+
+<p>Exp:</p>
+
+<ul>
+  <li>Measure the instance types to determine the cloud resources yielding optimal <strong>value</strong> for each backend.
+    <ul>
+      <li>Compare 2 CPU instances over two datasets, and indicating C5n is always better than another CPU in an example,</li>
+      <li>Compare one dataset over 2 GPU instances, indicating P3 gives the best value.</li>
+    </ul>
+  </li>
+  <li>Measure synchronous and asynchronous.
+    <ul>
+      <li>Async training requires more epochs to converge to the same accuracy as sync training, but each epoch uses less time. Overall, async can improve efficiency.</li>
+      <li>Experimentally decide staleness values S (When the quicker will wait for slower. )</li>
+    </ul>
+  </li>
+  <li>Measure <strong>value, performance, and scalability</strong> on effects of Lambdas and compare with CPU and GPU-only implementations.
+    <ul>
+      <li>GPU-only, CPU-only,</li>
+    </ul>
+  </li>
+  <li>Compared with the existing system
+    <ul>
+      <li>Compare accuracy with sampling-based.</li>
+      <li>Compare speed to reach a test accuracy.</li>
+      <li>Performance-per-dollar.</li>
+    </ul>
+  </li>
+</ul>
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/89/" data-toggle="tooltip" data-placement="top" title="A Stochastic Optimization Strategy for Parallel Sparse FastTucker Decomposition on GPU Platform">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/91/" data-toggle="tooltip" data-placement="top" title="Bamboo Making Preemptible Instances Resilient for Affordable Training of Large DNNs">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

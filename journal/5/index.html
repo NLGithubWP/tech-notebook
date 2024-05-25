@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/5/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/5/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>A High-Speed Load-Balancer Design with Guaranteed Per-Connection-Consistency - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/5/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">A High-Speed Load-Balancer Design with Guaranteed Per-Connection-Consistency</h1>
+                    
+                    <span class="meta">Posted on October 22, 2021</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+11 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h1 id="introduction">Introduction</h1>
+
+<h2 id="load-balancer-requirements">Load balancer requirements:</h2>
+
+<ol>
+  <li><strong>Uniform load distribution</strong> of the incomming connections across the servers.</li>
+  <li>Per-connection consisency (PCC), <strong>same packets</strong> belonging to the <strong>same connection</strong> to the <strong>same server.</strong>  <strong>when number of server and load balancers are dynamically changing.</strong></li>
+</ol>
+
+<h2 id="existing-systems">Existing systems:</h2>
+
+<p>Reply on simple hash computation, but hash-based load balancers can mitigate PCC violations but may suffer from <strong>load imbalances up to 30%</strong>.</p>
+
+<p>Details are discussed at “Background and motivation” below.</p>
+
+<h2 id="solutions">Solutions:</h2>
+
+<p>Introduce a load balancer that supports:</p>
+
+<ol>
+  <li><strong><em>dynamicity</em></strong>, the number of <strong>LBs and servers</strong> can increase or decrease depending on the actual load.</li>
+  <li><strong><em>per-connection-consistency</em> (PCC)</strong>, packets belonging to the <strong>same connection</strong> are forwarded to the <strong>same server;</strong></li>
+  <li><strong><em>uniform load distribution</em></strong>, by supporting advanced load balancing mechanisms that efficiently utilize the servers;</li>
+  <li><strong><em>efficient packet processing</em></strong>, the LB should have <strong>minimal impact</strong> on communication latency;</li>
+  <li><strong><em>resilience</em></strong>, it should be hard for a client to “clog” the LB and the servers with spurious traffic</li>
+</ol>
+
+<h2 id="deployments">Deployments:</h2>
+
+<ol>
+  <li>
+    <p>In Stateless and stateful manner,</p>
+  </li>
+  <li>
+    <p>Both a software and a Tofino-based hardware switch.</p>
+  </li>
+</ol>
+
+<h2 id="result">Result:</h2>
+
+<p>Has negligible packet processing overheads, and can support load balancing mechanisms that reduce the flow completion time by a factor of 2 − 3x.</p>
+
+<h2 id="contriubtion-summary">Contriubtion summary:</h2>
+
+<ol>
+  <li>quantify limitations of existing stateless and stateful
+LBs through large-scale simulations. We show that the quality of the load distribution of existing LBs is 40 times worse than that of an ideal LB. We also show stateless LBs (such as Beamer and Faild) can reduce such imbalances at the price of increasing PCC violations.</li>
+  <li>Present a stateless and a stateful design of CHEETAH, which strike different trade-offs in terms of resilience and performance</li>
+  <li>Implement our stateless and stateful CHEETAH LBs in FastClick. Also implement both versions of CHEETAH with a weighted round-robin LB on a Tofino-based switch.</li>
+</ol>
+
+<h1 id="background-and-motivation">Background and motivation</h1>
+
+<h2 id="multi-tier-load-balancing-architecutres">Multi-tier load balancing architecutres.</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211022195900494.png" alt="image-20211022195900494" /></p>
+
+<p>VIP =&gt; each service =&gt; a set of servers providing that service.</p>
+
+<p>DIP =&gt; each server.’s IP</p>
+
+<p>LB =&gt; a server receving incomming connections for a <strong>service</strong> and select <strong>a server to provide the service.</strong></p>
+
+<p>​			LB partitions the space of connections identifiers ( TCP 5 tuples) across all the servers (DIPS) associate with that VIP.</p>
+
+<p>​			5 tuples:  a source IP address/port number, destination IP address/port number and the protocol in use.</p>
+
+<h2 id="limits-of-stateless-load-balancers">Limits of Stateless Load Balancers</h2>
+
+<h3 id="traditional-stateless-lbs-cannot-guarantee-pcc">Traditional stateless LBs cannot guarantee PCC</h3>
+
+<p>If the number of servers changes, the indirection table must be updated, which may cause some <em>existing</em> connections to be rerouted to the new (and wrong) server that is now associated with an entry in the table, <em>i.e.</em>, a PCC violation</p>
+
+<h3 id="advanced-stateless-lbs-cannot-always-guarantee-pcc">Advanced stateless LBs cannot always guarantee PCC.</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211022205246266.png" alt="image-20211022205246266" /></p>
+
+<p>Experiment step: Performed <strong><em>DIP updates</em></strong> using different frequency distributions.</p>
+
+<p>We define the <strong>number of broken connections</strong> as the number of connections that have been mapped to <em>at least two</em> different servers during their starting and ending times.</p>
+
+<p>Fig. 2a shows that Beamer and Faild (plotted using the same line) still break almost <strong>1%</strong> of the connections at the highest DIP update frequency,</p>
+
+<h3 id="hash-based-lbs-cannot-uniformly-spread-the-load">Hash-based LBs cannot uniformly spread the load.</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211022210912041.png" alt="image-20211022210912041" /></p>
+
+<p><strong><em>imbalance</em></strong> of a server:  the <strong>ratio between the number of connections active on that server and the average number of active connections across all servers.</strong></p>
+
+<p><strong><em>system imbalance</em></strong>: the maximum imbalance of any server</p>
+
+<p>Experiment step: Vary only the <strong>number of connections that are active</strong> at the same time in the cluster between 20K and 200K</p>
+
+<p>These results show that a more uniform distribution of loads can be achieved by storing the mapping between connections and servers.(Round-Robin, Power-Of-Two, and Least-Loaded require storing the connection-to-server mapping)</p>
+
+<h3 id="beamer-can-reduce-imbalance-at-the-cost-of-a-greater-number-of-pcc-violations">Beamer can reduce imbalance at the cost of a greater number of PCC violations.</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211022212758521.png" alt="image-20211022212758521" /></p>
+
+<p>Monitor server’s load imbalances, once the server reaches a threshold, the server is removed from indirection table. And it will be re-added to the table when number of active connectinons drops below the average.</p>
+
+<p>Note that, if an entry in the indirection table changes its server mapping twice, Beamer will break those existing connections that were relying on the initial state of the indirection table.</p>
+
+<p>We note that guaranteeing an imbalance of at most 10% would cause 3% of all connections to break.</p>
+
+<h2 id="limits-of-stateful-load-balancers">Limits of Stateful Load Balancers</h2>
+
+<p><strong>ConnTable:</strong> Store the connection-to-server mapping.</p>
+
+<h3 id="todays-stateful-lbs-cannot-guarantee-pcc">Today’s stateful LBs cannot guarantee PCC</h3>
+
+<p>if the number of servers also changes, then some existing connections will be routed to an LB without state, hence it will hash the connection to the wrong server, thus breaking PCC.</p>
+
+<h3 id="todays-stateful-lbs-rely-on-complex-and-slow-data-structures">Today’s stateful LBs rely on complex and slow data structures.</h3>
+
+<p>Cuckoo-hash tables to keep per-connection mappings, but the insertion is slow, impacting the throughput.</p>
+
+<h2 id="service-resilience-and-load-balancers">Service Resilience and Load Balancers</h2>
+
+<h3 id="lbs-shield-servers-from-targeted-bandwidth-depletion-attacks">LBs shield servers from targeted bandwidth depletion attacks</h3>
+
+<p>Spreading connections across all servers guarantees that the system absorb sudden bursts due to DDoS attacks with minimal impact on a service’s operation.</p>
+
+<h3 id="stateful-lbs-support-per-connection-view-at-lower-resilience">Stateful LBs support per-connection view at lower resilience</h3>
+
+<p>Incoming spurious connections add to the connection table rapidly exhaust the limited LB memory and rapidly degrading performance</p>
+
+<h1 id="the-cheetah-load-balancer">The CHEETAH Load Balancer</h1>
+
+<p>Encoding information about the connection into a <em>cookie</em> that is added to all the packets of a connection</p>
+
+<p>Guarantee:</p>
+
+<ol>
+  <li>Future packets belonging to the same connection are forwarded to the same server.</li>
+  <li>Speed up the forwarding process in a stateful LB, which in turn increases the resilience of the LB.</li>
+</ol>
+
+<p>Limitations of the naive approach.</p>
+
+<ol>
+  <li>Some clients can wait to establish many connections to the same server and then suddenly increase their load. This is highly undesired as it leads to cascade-effect imbalances and service disruptions</li>
+</ol>
+
+<h2 id="stateless-cheetah">Stateless CHEETAH:</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211024182232774.png" alt="image-20211024182232774" /></p>
+
+<p>Guarantees PCC:</p>
+
+<ol>
+  <li>move the server’s information to header.</li>
+  <li>use VIPToServers Table only for 1st packet of the connection. The rest is using AllServers Table.</li>
+</ol>
+
+<p>And preserves the same resilience:</p>
+
+<p>​	hash the server identifers. Resilient to attack.</p>
+
+<p>Supports arbitrary load balancing mechanisms:</p>
+
+<p>​	Since the binding of the connection to the server is stored in the packet header, it can support many LB mechanisms that go well beyond uniform hashing.</p>
+
+<p>Lower bounds on the size of the cookie</p>
+
+<ol>
+  <li>In CHEETAH, the size of the cookie has to be at least log2 <em>k</em> bits, where <em>k</em> is the maximum number of servers stored in the AllServers table.</li>
+</ol>
+
+<h2 id="stateful-cheetah">Stateful CHEETAH:</h2>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211024191710265.png" alt="image-20211024191710265" /></p>
+
+<ol>
+  <li>A stateful LB can keep track of the <strong>behaviour of each individual connection</strong> and support complex network functions, such as <strong>rate limiters, NATs, detection of heavy hitters, and rerouting to dedicated scrubbing devices</strong></li>
+  <li>We store a set of <em>m</em> ConnTable tables that keep per-connection statistics and DIP mappings.</li>
+  <li>We also use an equal number of ConnStack stacks of indices, each storing the unused entries in its corresponding ConnTable.</li>
+</ol>
+
+<h2 id="hybrid-datacenter-architecture">hybrid datacenter architecture:</h2>
+
+<p>Propose a 2-tier DC architecture where the first tier consists of stateless CHEETAH LBs and the second tier consists of stateful CHEETAH LB.</p>
+
+<ol>
+  <li>The stateless LB uses the first bytes of the cookie to encode the identifier of a stateful load balancer, thus guaranteeing a connection always reaches the same LB regardless of the LB pool size.</li>
+  <li>The stateful load balancer uses the last bytes of the cookie to encode per-connection information as described above</li>
+</ol>
+
+<h1 id="implementation">Implementation</h1>
+
+<p>Stores information about the connection mappings into the connections themselves. When a CHEETAH LB receives the first packet of a connection, it encodes the selected server’s identifier into a <em>cookie</em> that is permanently added to all the packet headers exchanged within this connection.</p>
+
+<p><em>Decouples</em> the load balancing logic from PCC support.</p>
+
+<p>Cookies that can be processed fast and can only be interpreted by the LB</p>
+
+<p>Stateless and statefl version. encode the connection-to-servers mappings into the packet headers.</p>
+
+<p><strong>Overall Implementation</strong>:</p>
+
+<ol>
+  <li>Built on top of FastClick</li>
+  <li>Implement stateless and stateful CHEETAH LB on Tofino-based switch using P4.</li>
+  <li><strong>Embed the cookie into part of the bits of the TCP timestamp options</strong></li>
+</ol>
+
+<p>FastClick Implementation:</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211025143229228.png" alt="image-20211025143229228" /></p>
+
+<p>TCP options: 1-byte identifier, 1-byte length, content value.  Could be in any order.</p>
+
+<p><strong>New Problem</strong>: How to extract the timestamp option <em>TS**ecr</em> from a packet ??</p>
+
+<p><strong>Solutions</strong>: For different patterns, use different rules.</p>
+
+<p>For other packets (Non-Syn/Ack):</p>
+
+<p>​	99.95% of the packets have the following pattern: NOP (1B) + NOP (1B) + TimeStamp (10B) possibly followed by other fields.</p>
+
+<p>Etc…</p>
+
+<p>Finally, we note that we can completely avoid the more complex parsing operations for SYNs and SYN/ACKs <strong>if servers use TCP SYN cookies</strong>.</p>
+
+<p><strong>Load balancing mechanisms.</strong></p>
+
+<p>We implemented several load balancing mechanisms that will be evaluated using multiple workloads. Including:</p>
+
+<ol>
+  <li>
+    <p>Power-of-2 choices and</p>
+  </li>
+  <li>
+    <p>A weighted round robin (WRR).</p>
+
+    <p>Weight of each server changes according to their relative CPU loads. Eg. if a server is underutilized (it’s load is less than average server load. we should increase the weights. )</p>
+  </li>
+</ol>
+
+<p><strong>P4-Tofino prototype</strong></p>
+
+<p>Rely on registers, which provide per-packet transactional memories, to store a counter that implements the weighted-round-robin LB.</p>
+
+<h1 id="evaluation">Evaluation:</h1>
+
+<h2 id="measurement-from-three-perspectives">Measurement from three perspectives:</h2>
+
+<ol>
+  <li>Cost of packet processing,</li>
+  <li>Load imbalances</li>
+  <li>PCC support</li>
+</ol>
+
+<h2 id="experiments-steps">Experiments steps:</h2>
+
+<ol>
+  <li>LB is running on a dual-socket, 18 cores machine, which is connected to a NoviFlow Switch.</li>
+  <li>4 machines generate load to LB.</li>
+  <li>4 machines run up to <strong>64</strong> nginx web servers to handle the requests. 
+<strong>( isolated using Linux network namespaces. Each NGINX server has a dedicated virtual NIC using SRIOV, allowing packets to be switched in hardware and directly received on the correct CPU core)</strong></li>
+</ol>
+
+<h2 id="experiment-result-and-analysis">Experiment result and analysis</h2>
+
+<h3 id="1-packet-processing-analysis">1. Packet processing Analysis</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211025165107627.png" alt="image-20211025165107627" /></p>
+
+<p><strong>Observe</strong>:</p>
+
+<ol>
+  <li>Compare packet processing time between stateless CHEETAH and stateful CHEETAH. Also compare with Beamer.</li>
+  <li>The main result from this experiment is that stateless CHEETAH consumes almost the same number of CPU cycles per packet as the most optimized, hardware assisted hash-based mechanism and significantly fewer cycles than stateful approaches.</li>
+  <li>Stateful CHEETAH outperforms cuckoo-hash based LBs.</li>
+</ol>
+
+<p><strong>Analysis:</strong></p>
+
+<p>The operation of obfuscating the cookie only adds less than a 4-cycle hit.</p>
+
+<p>We note that our stateless CHEETAH implementation uses <strong>server-side TCP timestamp correction</strong> (see Sect. 4), which only imposes a <strong>0.2% performance hit over the server processing time</strong>. If we were to use <strong>LB-side timestamp correction,</strong> we observe that the stateless CHEETAH modifies the timestamp MSB on the LB in just <strong>30 cycles per packet performance hit.</strong></p>
+
+<h3 id="2-load-imblanace-analysis">2. Load Imblanace Analysis</h3>
+
+<p>Expect operator to choose a <strong>uniform round-robin LB mechanism</strong> to distribute the load.eg Cheetah-RR</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211026105954738.png" alt="image-20211026105954738" /></p>
+
+<p>We measure the 99th percentile flow completion time (FCT) tail latency for the increasing average server load</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211026110327174.png" alt="image-20211026110327174" /></p>
+
+<p>We measure the variance of the servers’ load over the experiment for an average server load of 60% and 16, 32, and 64 servers</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211026112145665.png" alt="image-20211026112145665" /></p>
+
+<p><strong>Observe</strong>:</p>
+
+<p>CHEETAH reduces the 99th percentile FCT by a factor of 2 − 3x compared to the best performing hash-based mechanism, <em>i.e.</em>, Hash RSS.</p>
+
+<p>Variance of RR is considerably smaller than hash-based methods.</p>
+
+<p>CHEETAH improves FCT even with non-uniform work- loads.</p>
+
+<p><strong>Analysis:</strong></p>
+
+<p>The variance of RR is considerably smaller than hash-based methods. This is because the Load balancer iteratively spreads the incoming requests over the servers instead randomly spreading them. In this specific scenario, CHEETAH allows operators to leverage RR, which would otherwise be impossible with today’s load balancers</p>
+
+<h3 id="3-pcc-analysis">3. PCC Analysis</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20211026120232344.png" alt="image-20211026120232344" /></p>
+
+<p>We compare CHEETAH against Hash RSS, consistent hashing, and Beamer.</p>
+
+<p><strong>Observe:</strong></p>
+
+<p>Compared to Beamer, Cheetah not only achieves better load balancing with AWRR (Sect. 5.2), but it also does not break any connection.</p>
+
+<h1 id="conclusions">Conclusions</h1>
+
+<ol>
+  <li>
+    <p>We introduced a novel building block for load balancers that guarantees PCC and supports any realizable LB mechanisms.</p>
+  </li>
+  <li>
+    <p>We implemented CHEETAH on both software switches and programmable ASIC Tofino switches</p>
+  </li>
+</ol>
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/4/" data-toggle="tooltip" data-placement="top" title="Load balancing and proxying">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/6/" data-toggle="tooltip" data-placement="top" title="Programmable Calendar Queues for High-speed Packet Scheduling">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/160/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/160/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>MST algorithm - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/160/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">MST algorithm</h1>
+                    
+                    <span class="meta">Posted on October 1, 2023</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+19 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h1 id="introduction">Introduction</h1>
+
+<p>This paper identifies parameters that determine the behavior of fundamental global network problems.</p>
+
+<p>If a <strong>distributed network algorithm</strong>’s running time for a network with n vertices can be <strong>optimized to O(n)</strong>, it’s considered a success</p>
+
+<ul>
+  <li>Its performance will grow linearly and in direct proportion to the size of the input data set (n).</li>
+  <li>One example: In the leader selection problem, its from O(nlogn) -&gt; O(n)</li>
+</ul>
+
+<p>This paper says: The more sensitive parameter to consider is the network’s diameter, termed “Diam”, and it is demonstrated by providing a distributed minimum-weight spanning tree algorithm.</p>
+
+<ul>
+  <li>it uses graph decomposition and edge-elimination-by-pipelining.</li>
+</ul>
+
+<p>Universal Optimality:</p>
+
+<ul>
+  <li><strong>if an algorithm is universally optimal, it pinpoints the exact parameters contributing to the problem’s complexity.</strong></li>
+</ul>
+
+<p>Question:</p>
+
+<ul>
+  <li>Can we identify inherent <strong>graph parameters</strong> for various network problems and then <strong>develop universally optimal algorithms</strong> based on these parameters?</li>
+</ul>
+
+<p>The paper track the MST problem (<strong>Minimum-Weight Spanning Tree</strong>),</p>
+
+<ul>
+  <li>Past algorithm: O(nlogn) -&gt; O(n)</li>
+  <li>While the question is where the O(n) is univerasally optimal.</li>
+  <li>Further, the paper present MST algorithm with O(Diam + n^ε· log^n) time complexity.</li>
+</ul>
+
+<h1 id="problem-model">Problem Model</h1>
+
+<h2 id="goal">Goal:</h2>
+
+<p>The objective is to build a <strong>spanning tree</strong> across all the nodes in <em>V</em> that has the minimal total edge weight.</p>
+
+<ul>
+  <li>A <strong>spanning tree</strong> of a graph is a tree that spans (reaches out to) all the vertices of the graph and contains all the vertices with the minimum required number of edges.</li>
+  <li>the goal is to construct a tree that connects all the nodes in the set <em>V</em> such that the sum of the weights of the edges in this tree is as small as possible.</li>
+</ul>
+
+<h2 id="assume">Assume:</h2>
+
+<ul>
+  <li>Every node has s <strong>unique</strong> identifier, each edge has a <strong>distinct</strong> weight (can also be identifed by identifer)</li>
+  <li>Diam(F) is the diameter of the subgraph F, which is the <strong>maximum unweighted distance</strong> (number of hops) between any two nodes in F.</li>
+  <li>Ignore communication costs (# msgs the algorithm uses), and it’s samll cost</li>
+  <li>synchronous computation: run in rounds, each round take one time unit. All msg delivered in next cycle.
+    <ul>
+      <li>Even though the paper assumes synchronous computation, they note that they can adopt asynchronous mechanisms due to their decision to ignore communication costs.</li>
+    </ul>
+  </li>
+  <li>Constraints:
+    <ul>
+      <li>message are size of O(logn), and one node can send one msg per edge in each round. In other words, suggests that the size of the message <strong>grows</strong> logarithmically with the number of nodes.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="solution-context">Solution-Context:</h2>
+
+<p>Distributed growth approach:</p>
+
+<ul>
+  <li>This algorithm does not utilize a central controller, or “center of activity,” but rather allows a large number of processes to proceed simultaneously and independently in the network.</li>
+  <li>Each node will form a fragement by merging the neibouhoods, the paper claims that it needs to prevent some fragments from growing too large while other are still very small.</li>
+</ul>
+
+<p>Coordinated elimination approach:</p>
+
+<ul>
+  <li>Use a centralized coordiantor to send/receive msgs is communication intensive, thus it needs delegating the work of the center node to other nodes along the paths leading to the center.</li>
+  <li>It focus on eliminate edges that are not part of MST, using red rule.</li>
+</ul>
+
+<p>New Pipelining techniques</p>
+
+<ul>
+  <li>This is to prevent communication congestion, It has three satges and eliminate short cycles, reduce number of edges.</li>
+  <li>This paper use <strong>only two satges</strong>, simplify the process, the main change is the way they handle cycle elimiation, nodes froward descriptions of candidate edges to their parents on a spanning tree build using BFS.</li>
+</ul>
+
+<h2 id="the-algorithm">The algorithm:</h2>
+
+<p>Two stages to build  MST:</p>
+
+<ul>
+  <li>
+    <p>Controlled-GHS:</p>
+
+    <ul>
+      <li>it’s an adapted version of the original GHS algorithm, original GHS: <strong>Objective</strong>: Nodes in a network form ‘fragments’ that increase in size iteratively until all nodes belong to a single, large fragment representing the MST.</li>
+      <li>Detais:
+        <ul>
+          <li>Each node is its own fragment</li>
+          <li>Each fragment has a tree, where one node is the root, and all others can track back to the root.</li>
+          <li>steps of : Fragments try to find their minimum-weight outgoing edge,
+            <ul>
+              <li>Each node in the fragment reports the minum weight outgoing edge ot the above nodes, while above gather all information below and then select the light-weight weight and then reports up, all the way until root, Then root knows the minim-weight outging edge in the fragement.</li>
+              <li>Root then send the information to the fragement following the path of the minimum-weight outgoing edges.</li>
+              <li>If another fragment also chosen the same edge, both fragements merge into large fragment.</li>
+              <li>Finally, all nodes form a single fragement</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Edge elimination</p>
+
+    <ul>
+      <li>After obtaining the large fragment from the Controlled-GHS phase, the edge elimination step is crucial to prune away those unnecessary edges, thus building a tree.</li>
+      <li>steps:
+        <ul>
+          <li>All nodes forward details of edges into central nodes.</li>
+          <li>Some edge descriptions are elimintaed.</li>
+          <li>central node does the final edge elimination to give the MST.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>summary:</p>
+
+    <p>The combined approach first uses a controlled version of the GHS algorithm to create larger and larger fragments while maintaining a tree structure within each fragment. Once there’s a small number of large fragments, the algorithm moves to the edge elimination phase, where unnecessary edges are removed, leaving behind the Minimum Spanning Tree for the entire network.</p>
+  </li>
+</ul>
+
+<p>Dominating set:</p>
+
+<ul>
+  <li>a subset of vertices such that every vertex not in the subset is adjacent to at least one vertex of the subset.</li>
+  <li>The problem here is to find a “small” dominating set on a given tree.</li>
+</ul>
+
+<p>Solutions:</p>
+
+<ul>
+  <li>Every vertex not in M has neighbor in M</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Size of M</td>
+          <td>M</td>
+          <td>is less than half the total vertices in the tree T.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<p>L^~(v) is a function to assign a level to each node in the tree. leaf is 0, node above leaf is 1 etc</p>
+
+<h2 id="algorithm-small-dom-set">Algorithm Small-Dom-Set</h2>
+
+<p>finds a small dominating set on a tree <em>T</em>:</p>
+
+<ul>
+  <li>Mark the nodes: Assign level numbers to each node in the tree using level function.</li>
+  <li>Among the nodes that are not mard with a level, select MIS.</li>
+  <li>Dominating set M = Q and L^~(v)</li>
+</ul>
+
+<h1 id="controlled-ghs-procedure">Controlled-GHS procedure.</h1>
+
+<p>a modified version of the GHS algorithm， it aims to:</p>
+
+<ul>
+  <li>Limit the number of fragments upon termination to <em>N</em>.</li>
+  <li>Ensure that throughout its run, the diameter of every fragment <em>F</em> is bounded by <em>d</em>.</li>
+</ul>
+
+<p>Run in phases, each phase has two stag:</p>
+
+<ul>
+  <li>
+    <p>stage 1: selection of minimum weigth outgoing edges:</p>
+
+    <p>For each fragment, this stage identifies the smallest-weight edge that connects it to a different fragment. This step prepares the fragments for a potential merge</p>
+  </li>
+  <li>
+    <p>stage 2: fragment merging:</p>
+
+    <ul>
+      <li>It identifies a dominating set for each tree in the fragment forest, and then, they combined to get MF_f</li>
+      <li>fragments outside MF_f pick a neighboring fragment within MF_F to merge with. It ensure the formation of star structures, preventing long chains.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Summary:</p>
+
+<p>The Controlled-GHS algorithm builds upon the GHS by adding control to the growth of the fragments. It runs in phases, where each phase is composed of selecting edges for potential merges and then efficiently merging fragments while maintaining control over their size and shape. The algorithm ensures that fragments don’t grow too large or too stretched out, making it suitable for network applications where balance and efficiency are crucial.</p>
+
+<h1 id="edge-elimination">Edge elimination</h1>
+
+<p><strong>Objective</strong>: Given a fragment graph that represents possible portions of the Minimum Spanning Tree (MST), the algorithm aims to prune away extra interfragment edges and retain only those necessary for the MST.</p>
+
+<ul>
+  <li>A fragment graph:
+    <ul>
+      <li>vertical: a fragments forest</li>
+      <li>edge: connections</li>
+    </ul>
+  </li>
+  <li>After pruning, there is only N-1 edges to connect N fragments.</li>
+</ul>
+
+<p>Pipeline algorithm:</p>
+
+<ul>
+  <li>
+    <p>It is to prune the unnecessary edges between fragements.
+The algorithm aims to propagate the lightest edges in the graph upwards in the BFS tree while ensuring cycles are not introduced.</p>
+  </li>
+  <li>
+    <p>steps:</p>
+
+    <ul>
+      <li>BFS Tree construction:
+        <ul>
+          <li>This tree will serve as the structure for the algorithm, helping to propagate edge information.</li>
+          <li>each node is the orignal node</li>
+        </ul>
+      </li>
+      <li>Each node track two sets:
+        <ul>
+          <li>Q: all known interfagment edges</li>
+          <li>U: edges inforation which already sent to the parents.</li>
+        </ul>
+      </li>
+      <li>Initiating edge propagations:
+        <ul>
+          <li></li>
+        </ul>
+      </li>
+      <li>Edge sending machanism:
+        <ul>
+          <li>leaf nodes begin the process by sending information to their parents at the very start.</li>
+          <li>Non-leaf nodes (intermediate nodes) will start sending edges only after they have received messages from all their children. This ensures that the node has full knowledge of its sub-tree’s edges before forwarding them upward.</li>
+          <li>if a node can’t find any edge to send (because all are either already sent or would form cycles), it concludes its participation in this edge propagation process and informs its parent that it’s done.</li>
+        </ul>
+      </li>
+      <li>
+        <p>The root r(B), after receiving edge information from its children (directly or indirectly), determines the <em>N</em>−1 edges that should be part of the MST of the fragment graph <em>F</em>.</p>
+      </li>
+      <li>After deciding the edges of the MST, the root broadcasts this information over the BFS tree <em>B</em>. Every node in the graph G eventually learns which interfragment edges are part of the MST.</li>
+    </ul>
+  </li>
+  <li>
+    <p>In summary, This algorithm efficiently finds the MST by taking advantage of the BFS tree structure. Each node acts as a filtering agent, forwarding only the lightest edges, ensuring that by the time information reaches the root, it mostly contains the desired MST edges. The approach is distributed since each node in the BFS tree independently carries out its role, making it scalable for large networks.</p>
+  </li>
+</ul>
+
+<h1 id="problems-i-asked">Problems I asked</h1>
+
+<p>You’ve touched upon a central aspect of the algorithm’s design, and understanding the distinction is crucial. The goal of the GHS algorithm and its modified version, Controlled-GHS, is to construct a Minimum Spanning Tree (MST) in a distributed setting. The two major components of the process are:</p>
+
+<ol>
+  <li>
+    <p><strong>Fragment Construction (using Controlled-GHS)</strong> : Here, the network self-organizes into fragments using a decentralized process. Each fragment is a part of the MST. This phase ensures that as the algorithm progresses, these fragments grow in size, and the number of fragments reduces.</p>
+  </li>
+  <li>
+    <p><strong>Edge Elimination (using the BFS structure)</strong> : After having a collection of fragments, we now need to determine which edges between these fragments are part of the MST. The BFS tree structure is a communication mechanism that aids in this decision-making.</p>
+  </li>
+</ol>
+
+<p>To address your question directly:</p>
+
+<ul>
+  <li>
+    <p>The Controlled-GHS phase is about <strong>organizing the network</strong> into growing fragments of the MST in a decentralized manner. Without this phase, you would not have well-defined fragments, and determining the MST edges in a distributed system would be more challenging.</p>
+  </li>
+  <li>
+    <p>The BFS structure in the pipeline algorithm is about <strong>communication and decision-making</strong> . It’s a mechanism to allow nodes to share and propagate information about potential interfragment edges that could be part of the MST.</p>
+  </li>
+</ul>
+
+<p>The reason for not using just the BFS for the entire process is that a BFS tree by itself doesn’t guarantee a minimum spanning tree for the graph. The GHS algorithm ensures that we’re building the MST by focusing on merging fragments based on the lightest edges. The BFS structure is then a means to facilitate the communication needed to finalize the MST by selecting the necessary interfragment edges.</p>
+
+<p>In summary, while both phases involve trees, their purposes are different: one is for constructing parts of the MST in a decentralized manner, and the other is for efficient communication and decision-making about MST edge inclusion.</p>
+
+<h2 id="please-summarize-the-results-of-the-paper--what-are-the-main-important-new-results-achieved-in-this-paper--what-problem-was-solved--what-is-novel-about-the-solution">Please summarize the results of the paper.  (What are the main important new results achieved in this paper?  What problem was solved?  What is novel about the solution?)</h2>
+
+<p>The paper introduce a distributed algorithm for finding a <strong>minimum-weight spanning tree</strong> (a subset of the edges that connects all the vertices together without any cycles and with the minimum possible total edge weight). This algorithm’s time complexity is not linear in <em>n</em> but is linear in Diam. The specific time complexity is <em>O</em>(Diam + <em>n^ϵ</em>⋅<em>l<strong>o</strong>g</em>∗<em>n</em>) with ϵ≈0.6131.</p>
+
+<ul>
+  <li>The pappaer firstly define the universally optimal: if an algorithm is universally optimal, it pinpoints the exact parameters contributing to the problem’s complexity.</li>
+  <li>The paper then investigate a question: Can we identify inherent <strong>graph parameters</strong> for various network problems and then <strong>develop universally optimal algorithms</strong> based on these parameters?</li>
+  <li>Traditioanlly,  If an <strong>distributed network algorithm</strong>’s running time for a network with n vertices can be <strong>optimized to O(n)</strong>, it’s considered a success. The paper then illustrate that the more sensitive parameter to consider is the network’s diameter, termed “Diam”, rather than number of nodes n. Thus, the time complexity can be <em>O</em>(Diam + <em>n^ϵ</em>⋅<em>l<strong>o</strong>g</em>∗<em>n</em>) , and it is faster than O(n)</li>
+</ul>
+
+<p>The paper mainly track the MST problem (<strong>Minimum-Weight Spanning Tree</strong>), and try to find the solution with univerasally optimal, which is faster than traditional solution which run in O(n), where n is number of verticals.</p>
+
+<ul>
+  <li>The objective is to build a <strong>spanning tree</strong> across all the nodes in <em>V</em> that has the minimal total edge weight.
+    <ul>
+      <li>A <strong>spanning tree</strong> of a graph is a tree that spans (reaches out to) all the vertices of the graph and contains all the vertices with the minimum required number of edges.</li>
+      <li>The goal is to construct a tree that connects all the nodes in the set <em>V</em> such that the sum of the weights of the edges in this tree is as small as possible.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>The mainly novity of the paper combines two distinct approaches to the distributed constrcution of an MST, namely, Controlled-GHS and Edge Elimination.</p>
+
+<ul>
+  <li>The Controlled-GHS algorithm builds upon the GHS by adding control to the growth of the fragments. It runs in phases, where each phase is composed of selecting edges for potential merges and then efficiently merging fragments while maintaining control over their size and shape. The algorithm ensures that fragments don’t grow too large or too stretched out, making it suitable for network applications where balance and efficiency are crucial.</li>
+  <li>Once there’s a small number of large fragments, the algorithm moves to the edge elimination phase, where unnecessary edges are removed, leaving behind the Minimum Spanning Tree for the entire network.</li>
+</ul>
+
+<p>Further, the paper provides the full lemma and proof, and all the way to the time complexity computations.</p>
+
+<h2 id="please-justify-your-overall-recommendation">Please justify your overall recommendation.</h2>
+
+<p>The paper is very good at illustrating why needs combine the two algorithms. For me, it’s important to understand why it needs a controlled GHS, since all the nodes will be formed as a BFS anyway.</p>
+
+<p>While here is the answer:</p>
+
+<p>The goal of the GHS algorithm and its modified version, Controlled-GHS, is to construct a Minimum Spanning Tree (MST) in a distributed setting. The two major components of the process are:</p>
+
+<ol>
+  <li>
+    <p><strong>Fragment Construction (using Controlled-GHS)</strong> : The network self-organizes into fragments using a decentralized process. Each fragment is a part of the MST. This phase ensures that as the algorithm progresses, these fragments grow in size, and the number of fragments reduces. The Controlled-GHS phase is about <strong>organizing the network</strong> into growing fragments of the MST in a decentralized manner. Without this phase, it would not have well-defined fragments, and determining the MST edges in a distributed system would be more challenging.</p>
+  </li>
+  <li>
+    <p><strong>Edge Elimination (using the BFS structure)</strong> : After having a collection of fragments, we now need to determine which edges between these fragments are part of the MST. The BFS tree structure is a communication mechanism that aids in this decision-making. The BFS structure in the pipeline algorithm is about <strong>communication and decision-making</strong>. It’s a mechanism to allow nodes to share and propagate information about potential interfragment edges that could be part of the MST.</p>
+  </li>
+</ol>
+
+<p>The reason for not using just the BFS for the entire process is that a BFS tree by itself doesn’t guarantee a minimum spanning tree for the graph. The GHS algorithm ensures that we’re building the MST by focusing on merging fragments based on the lightest edges. The BFS structure is then a means to facilitate the communication needed to finalize the MST by selecting the necessary interfragment edges.</p>
+
+<p>In summary, while both phases involve trees, their purposes are different: one is for constructing parts of the MST in a decentralized manner, and the other is for efficient communication and decision-making about MST edge inclusion.</p>
+
+<h2 id="what-are-the-main-strengths-of-this-paper--what-does-it-do-very-well--what-are-the-best-aspects-of-the-paper--what-are-the-main-reasons-to-accept-the-paper-to-your-conference">What are the main strengths of this paper?  (What does it do very well?  What are the best aspects of the paper?  What are the main reasons to accept the paper to your conference?)</h2>
+
+<p>The algorithm has well and clear assmption, thus provided well scenario where the alrogithm can be adpoted.</p>
+
+<ul>
+  <li>Every node has s <strong>unique</strong> identifier, each edge has a <strong>distinct</strong> weight (can also be identifed by identifer)</li>
+  <li>Diam(F) is the diameter of the subgraph F, which is the <strong>maximum unweighted distance</strong> (number of hops) between any two nodes in F.</li>
+  <li>Ignore communication costs (# msgs the algorithm uses), and it’s samll cost</li>
+  <li>synchronous computation: run in rounds, each round take one time unit. All msg delivered in next cycle.
+    <ul>
+      <li>Even though the paper assumes synchronous computation, they note that they can adopt asynchronous mechanisms due to their decision to ignore communication costs.</li>
+    </ul>
+  </li>
+  <li>Constraints:
+    <ul>
+      <li>message are size of O(logn), and one node can send one msg per edge in each round. In other words, suggests that the size of the message <strong>grows</strong> logarithmically with the number of nodes.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Further, the paper clearly and deeply introduce the context, problem, solution, analysis, lemma, and proof.</p>
+
+<ul>
+  <li>
+    <p>Controlled-GHS algorithm is a modified version of the GHS algorithm, it aims to:</p>
+
+    <ul>
+      <li>Limit the number of fragments upon termination to <em>N</em>.</li>
+      <li>Ensure that throughout its run, the diameter of every fragment <em>F</em> is bounded by <em>d</em>.</li>
+    </ul>
+
+    <p>it Run in phases, each phase has two stag:</p>
+
+    <ul>
+      <li>
+        <p>stage 1: selection of minimum weigth outgoing edges:</p>
+
+        <p>For each fragment, this stage identifies the smallest-weight edge that connects it to a different fragment. This step prepares the fragments for a potential merge</p>
+      </li>
+      <li>
+        <p>stage 2: fragment merging:</p>
+
+        <ul>
+          <li>It identifies a dominating set for each tree in the fragment forest, and then, they combined to get MF_f</li>
+          <li>fragments outside MF_f pick a neighboring fragment within MF_F to merge with. It ensure the formation of star structures, preventing long chains.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Edge elimination: Given a fragment graph that represents possible portions of the Minimum Spanning Tree (MST), the algorithm aims to prune away extra interfragment edges and retain only those necessary for the MST. And After pruning, there is only N-1 edges to connect N fragments.</p>
+
+    <p>It uses Pipeline algorithm to achieve this:</p>
+
+    <ul>
+      <li>
+        <p>It is to prune the unnecessary edges between fragements.
+The algorithm aims to propagate the lightest edges in the graph upwards in the BFS tree while ensuring cycles are not introduced.</p>
+      </li>
+      <li>
+        <p>steps:</p>
+
+        <ul>
+          <li>BFS Tree construction:
+            <ul>
+              <li>This tree will serve as the structure for the algorithm, helping to propagate edge information.</li>
+              <li>each node is the orignal node</li>
+            </ul>
+          </li>
+          <li>Each node track two sets:
+            <ul>
+              <li>Q: all known interfagment edges</li>
+              <li>U: edges inforation which already sent to the parents.</li>
+            </ul>
+          </li>
+          <li>Edge sending machanism:
+            <ul>
+              <li>leaf nodes begin the process by sending information to their parents at the very start.</li>
+              <li>Non-leaf nodes (intermediate nodes) will start sending edges only after they have received messages from all their children. This ensures that the node has full knowledge of its sub-tree’s edges before forwarding them upward.</li>
+              <li>if a node can’t find any edge to send (because all are either already sent or would form cycles), it concludes its participation in this edge propagation process and informs its parent that it’s done.</li>
+            </ul>
+          </li>
+          <li>
+            <p>The root r(B), after receiving edge information from its children (directly or indirectly), determines the <em>N</em>−1 edges that should be part of the MST of the fragment graph <em>F</em>.</p>
+          </li>
+          <li>After deciding the edges of the MST, the root broadcasts this information over the BFS tree <em>B</em>. Every node in the graph G eventually learns which interfragment edges are part of the MST.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>The paper is solid in problem definatin, solution illustration and proofs.</p>
+
+<h2 id="what-are-the-main-weaknesses-of-the-paper--please-give-the-authors-advice-for-how-to-improve-their-paper--what-are-the-least-good-aspects-of-the-paper--what-are-the-main-reasons-to-reject-the-paper">What are the main weaknesses of the paper?  Please give the authors advice for how to improve their paper.  (What are the least good aspects of the paper?  What are the main reasons to reject the paper?)</h2>
+
+<p>The paper didn’t provide a good application example to illustrate how much improvement in terms of latency or throughput of the algorithm.  Providing a detailed use case or conduct on real datasets will help reader to understand their improvements much more deeply.</p>
+
+<h2 id="what-can-you-learn-from-this-paper-about-how-to-write-a-good-research-paper">What can you learn from this paper about how to write a good research paper?</h2>
+
+<p>Firstly, it’s important to define good problems and also illustrate what existing work is missing in solving some problems.</p>
+
+<p>Secondly, even existing work claims it’s a success to have O(n) in solving the distributed networking problems. It sill needs to think deeper to find a new direction to solve the problem</p>
+
+<p>Thirdly, if we need to combine algorithms, it’s important to illustrate why missing one will not work and why both are necessary</p>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/159/" data-toggle="tooltip" data-placement="top" title="Atomic Cross-Chain Swaps">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/161/" data-toggle="tooltip" data-placement="top" title="Multidimensional agreement in Byzantine systems">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

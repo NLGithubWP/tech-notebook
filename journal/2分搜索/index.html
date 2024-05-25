@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/2%E5%88%86%E6%90%9C%E7%B4%A2/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/2%E5%88%86%E6%90%9C%E7%B4%A2/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>2分搜索 - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/2%E5%88%86%E6%90%9C%E7%B4%A2/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li class="active"><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">2分搜索</h1>
+                    
+                    <span class="meta">Posted on August 10, 2021</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+21 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/coding/" data-toggle="tooltip" title="Other posts filed in coding category" rel="tag">coding</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h1 id="1-search-for-range">1. <a href="https://leetcode-cn.com/problems/binary-search/">search for range</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">search</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+  <span class="c">// must == mid,  otherwise it's not log(n)</span>
+	<span class="k">for</span> <span class="n">left</span><span class="o">+</span><span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="m">2</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+			<span class="k">return</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span> <span class="p">{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">left</span>
+	<span class="p">}</span>
+    <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">right</span>
+	<span class="p">}</span>
+	
+	<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="2-search-insert-position">2. <a href="https://leetcode-cn.com/problems/search-insert-position/">Search Insert Position</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">searchInsert</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">left</span> <span class="o">:=</span>  <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+	<span class="k">for</span> <span class="n">left</span>  <span class="o">+</span> <span class="m">1</span><span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">{</span>
+			<span class="n">left</span><span class="o">=</span><span class="n">mid</span> 
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">right</span><span class="o">=</span><span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">left</span>
+	<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">right</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="k">return</span> <span class="n">right</span><span class="o">+</span><span class="m">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="3-search-a-2d-matrix">3. <a href="https://leetcode-cn.com/problems/search-a-2d-matrix/">Search a 2D Matrix</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">searchMatrix</span><span class="p">(</span><span class="n">matrix</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="n">m</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+	<span class="n">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="m">0</span><span class="p">])</span><span class="o">-</span><span class="m">1</span>
+	<span class="n">target_row</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+	
+	<span class="k">for</span> <span class="n">i</span><span class="o">:=</span><span class="m">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">m</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">{</span>
+		<span class="k">if</span> <span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">n</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">{</span>
+			<span class="n">target_row</span> <span class="o">=</span> <span class="n">i</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">target_row</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span><span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+	
+  <span class="c">// do a binary search at target row</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="n">n</span>
+	
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">matrix</span><span class="p">[</span><span class="n">target_row</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+			<span class="k">return</span> <span class="no">true</span>
+		<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">matrix</span><span class="p">[</span><span class="n">target_row</span><span class="p">][</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	 <span class="k">if</span> <span class="n">matrix</span><span class="p">[</span><span class="n">target_row</span><span class="p">][</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span> <span class="o">||</span> <span class="n">matrix</span><span class="p">[</span><span class="n">target_row</span><span class="p">][</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+	 	<span class="k">return</span> <span class="no">true</span>
+	 <span class="p">}</span>
+	 <span class="k">return</span> <span class="no">false</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h1 id="4-find-first-and-last-position-of-element-in-sorted-array">4. <a href="https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/">Find First and Last Position of Element in Sorted Array</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">searchRange</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+
+	<span class="n">l</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+	<span class="n">r</span> <span class="o">:=</span> <span class="o">-</span><span class="m">1</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">==</span> <span class="m">0</span><span class="p">{</span>
+		<span class="k">return</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// twice binary search, left bound</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">}</span>
+	<span class="p">}</span>
+	<span class="c">// use, else if else, otherwise ,l is re-writen</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="n">l</span> <span class="o">=</span> <span class="n">left</span>
+	<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="n">l</span> <span class="o">=</span> <span class="n">right</span>
+	<span class="p">}</span>
+
+	<span class="c">// twice binary search, right bound</span>
+	<span class="n">left</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">left</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">right</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="5-first-bad-version">5.<a href="https://leetcode-cn.com/problems/first-bad-version/"> First Bad Version</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">firstBadVersion</span><span class="p">(</span><span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">1</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="n">n</span>
+  
+  <span class="c">// if using righ++ or left ++, it will timeout </span>
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">isBadVersion</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">isBadVersion</span><span class="p">(</span><span class="n">left</span><span class="p">){</span>
+		<span class="k">return</span> <span class="n">left</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">right</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="6-find-minimum-in-rotated-sorted-array">6. <a href="https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/">Find Minimum in Rotated Sorted Array</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findMin</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">left</span> <span class="o">:=</span>  <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>  <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]{</span>
+		<span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="7-find-minimum-in-rotated-sorted-array-ii带重复的旋转数组如果mid和最右值相等绝对有一边的值全都一样">7. <a href="https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array-ii/">Find Minimum in Rotated Sorted Array II</a>（带重复的旋转数组，如果mid和最右值相等，绝对有一边的值全都一样）</h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findMin</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+  <span class="c">// binary search</span>
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="c">// if equal, go through left and right      </span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="k">if</span> <span class="n">findMinHelper</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">left</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">){</span>
+				<span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]{</span>
+		<span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">// if [3 1 3 3] or [3 3 1 3]</span>
+<span class="c">// go through left and right, until find min value, </span>
+<span class="c">// if return true, means all value are the same, nums is like [ 1 1 1] etc</span>
+<span class="c">// if return false, still need to use binary search</span>
+<span class="k">func</span> <span class="n">findMinHelper</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">mid</span> <span class="kt">int</span><span class="p">,</span> <span class="n">left</span> <span class="o">*</span><span class="kt">int</span><span class="p">,</span> <span class="n">right</span> <span class="o">*</span><span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span><span class="p">{</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">mid</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">{</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]{</span>
+			<span class="o">*</span><span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+			<span class="k">return</span> <span class="no">false</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="n">j</span> <span class="o">:=</span> <span class="n">mid</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span><span class="m">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span><span class="p">{</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+			<span class="o">*</span><span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+			<span class="k">return</span> <span class="no">false</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="8-search-in-rotated-sorted-array">8. <a href="https://leetcode-cn.com/problems/search-in-rotated-sorted-array/">Search in Rotated Sorted Array</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">search</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+			<span class="k">return</span> <span class="n">mid</span>
+		<span class="c">// if not equal, 分4段，根据mid和左右边界，来定界target的位置</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]{</span>
+				<span class="k">if</span> <span class="n">target</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">{</span>
+					<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+					<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span>
+			<span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="n">target</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&lt;=</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+					<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+					<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">left</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">right</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="9--search-in-rotated-sorted-array-ii带重复的旋转数组如果mid和最右值相等绝对有一边的值全都一样">9. <a href="https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/"> Search in Rotated Sorted Array II</a>带重复的旋转数组，如果mid和最右值相等，绝对有一边的值全都一样）</h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">search</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+			<span class="k">return</span> <span class="no">true</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+				<span class="k">if</span> <span class="n">target</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="p">[</span><span class="m">0</span><span class="p">]{</span>
+					<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+					<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span>
+			<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+				<span class="k">if</span> <span class="n">target</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&lt;=</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+					<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+					<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+				<span class="p">}</span>
+<span class="c">//如果等于，开始左右遍历</span>
+			<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+				<span class="k">if</span> <span class="n">helper</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">left</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">,</span> <span class="n">mid</span><span class="p">){</span>
+					<span class="k">return</span> <span class="no">false</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span> <span class="o">||</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="no">true</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="no">false</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">// 找到第一个不相等的</span>
+<span class="k">func</span> <span class="n">helper</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">left</span> <span class="o">*</span><span class="kt">int</span><span class="p">,</span> <span class="n">right</span> <span class="o">*</span><span class="kt">int</span><span class="p">,</span> <span class="n">mid</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span><span class="p">{</span>
+	<span class="k">for</span> <span class="n">i</span><span class="o">:=</span><span class="n">mid</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">{</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="m">1</span><span class="p">]{</span>
+			<span class="o">*</span><span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+			<span class="k">return</span> <span class="no">false</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="n">j</span><span class="o">:=</span><span class="n">mid</span><span class="p">;</span> <span class="n">j</span><span class="o">&gt;</span><span class="m">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span><span class="p">{</span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+			<span class="o">*</span><span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+			<span class="k">return</span> <span class="no">false</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="no">true</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="10-find-peak-element">10. <a href="https://leetcode-cn.com/problems/find-peak-element/">Find Peak Element</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findPeakElement</span><span class="p">(</span><span class="n">nums</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">==</span><span class="m">1</span><span class="p">{</span>
+		<span class="k">return</span> <span class="m">0</span>
+	<span class="p">}</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+    <span class="c">// 2 分搜索， </span>
+		<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="o">-</span><span class="m">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="o">+</span><span class="m">1</span><span class="p">]{</span>
+			<span class="k">return</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="o">-</span><span class="m">1</span><span class="p">]{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]{</span>
+		<span class="k">return</span> <span class="n">left</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">right</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="11--find-k-closest-elements">11. <a href="https://leetcode-cn.com/problems/find-k-closest-elements/"> Find K Closest Elements</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">findClosestElements</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">k</span> <span class="kt">int</span><span class="p">,</span> <span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+	<span class="c">// binary search find most close value to x</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="m">1</span>
+	<span class="k">var</span> <span class="n">pos</span> <span class="kt">int</span>
+	<span class="k">for</span> <span class="n">left</span> <span class="o">+</span> <span class="m">1</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">{</span>
+			<span class="n">pos</span> <span class="o">=</span> <span class="n">mid</span>
+			<span class="k">break</span>
+		<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="c">// two pointer, find most recent value</span>
+	<span class="n">lp</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">rp</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="k">if</span> <span class="n">pos</span><span class="o">==</span><span class="m">0</span><span class="p">{</span>
+		<span class="n">lp</span> <span class="o">=</span> <span class="n">left</span>
+		<span class="n">rp</span> <span class="o">=</span> <span class="n">right</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="n">lp</span> <span class="o">=</span> <span class="n">pos</span>
+		<span class="n">rp</span> <span class="o">=</span> <span class="n">pos</span><span class="o">+</span><span class="m">1</span>
+	<span class="p">}</span>
+	<span class="k">var</span> <span class="n">res</span> <span class="p">[]</span><span class="kt">int</span>
+
+	<span class="c">// append most recent value to res</span>
+	<span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">!=</span><span class="n">k</span><span class="p">{</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">closer</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rp</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+	<span class="p">}</span>
+	<span class="c">// do a sort</span>
+	<span class="n">sort</span><span class="o">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">closer</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span><span class="kt">int</span><span class="p">,</span> <span class="n">j</span> <span class="o">*</span><span class="kt">int</span><span class="p">,</span> <span class="n">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="c">// if either i or j reach bound, only use another one</span>
+	<span class="k">if</span> <span class="o">*</span><span class="n">i</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">j</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">{</span>
+		<span class="n">res</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="o">*</span><span class="n">j</span><span class="p">]</span>
+		<span class="o">*</span><span class="n">j</span><span class="o">++</span>
+		<span class="k">return</span> <span class="n">res</span>
+	<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="o">*</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">j</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="m">1</span><span class="p">{</span>
+		<span class="n">res</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="o">*</span><span class="n">i</span><span class="p">]</span>
+		<span class="o">*</span><span class="n">i</span><span class="o">--</span>
+		<span class="k">return</span> <span class="n">res</span>
+	<span class="p">}</span>
+	<span class="c">// if not, append the most recent value	</span>
+	<span class="n">a</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="o">*</span><span class="n">i</span><span class="p">]</span>
+	<span class="n">b</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="o">*</span><span class="n">j</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">x</span><span class="p">){</span>
+		<span class="o">*</span><span class="n">i</span><span class="o">--</span>
+		<span class="k">return</span> <span class="n">a</span>
+	<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">x</span><span class="p">){</span>
+		<span class="o">*</span><span class="n">j</span><span class="o">++</span>
+		<span class="k">return</span> <span class="n">b</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">if</span> <span class="o">*</span><span class="n">i</span><span class="o">&lt;*</span><span class="n">j</span><span class="p">{</span>
+			<span class="o">*</span><span class="n">i</span><span class="o">--</span>
+			<span class="k">return</span> <span class="n">a</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="o">*</span><span class="n">j</span><span class="o">++</span>
+			<span class="k">return</span> <span class="n">b</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="kt">int</span><span class="p">)</span><span class="kt">int</span><span class="p">{</span>
+	<span class="k">if</span> <span class="n">a</span><span class="o">&lt;</span><span class="m">0</span><span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="n">a</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">a</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="12-closest-binary-search-tree-value">12. <a href="https://leetcode-cn.com/problems/closest-binary-search-tree-value/">Closest Binary Search Tree Value</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">closestValue</span><span class="p">(</span><span class="n">root</span> <span class="o">*</span><span class="n">TreeNode</span><span class="p">,</span> <span class="n">target</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="n">res</span> <span class="kt">int</span>
+	<span class="n">dist</span> <span class="o">:=</span> <span class="n">math</span><span class="o">.</span><span class="n">MaxFloat64</span>
+	<span class="k">for</span> <span class="n">root</span><span class="o">!=</span><span class="no">nil</span><span class="p">{</span>
+		<span class="c">// check distance of each node</span>
+		<span class="n">tmp</span> <span class="o">:=</span> <span class="n">abs</span><span class="p">(</span><span class="kt">float64</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Val</span><span class="p">)</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">{</span>
+			<span class="n">dist</span> <span class="o">=</span> <span class="n">tmp</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">Val</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">target</span> <span class="o">&gt;=</span> <span class="kt">float64</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">Val</span><span class="p">){</span>
+			<span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">Right</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">Left</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">res</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="kt">float64</span><span class="p">)</span><span class="kt">float64</span><span class="p">{</span>
+	<span class="k">if</span> <span class="n">a</span><span class="o">&gt;</span><span class="m">0</span><span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="p">}</span><span class="k">else</span><span class="p">{</span><span class="k">return</span> <span class="o">-</span><span class="n">a</span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="13-在大数组中查找">13. 在大数组中查找</h1>
+
+<p>给一个按照升序排序的非负整数数组。这个数组很大以至于你只能通过固定的接口 ArrayReader.get(k) 来访问第k个数(或者C++里是ArrayReader-&gt;get(k))，并且你也没有办法得知这个数组有多大。</p>
+
+<p>找到给出的整数target第一次出现的位置。你的算法需要在O(logk)的时间复杂度内完成，k为target第一次出现的位置的下标。</p>
+
+<p>如果找不到target，返回-1。</p>
+
+<p>样例
+样例 1:</p>
+
+<p>输入: [1, 3, 6, 9, 21, …], target = 3
+输出: 1
+样例 2:</p>
+
+<p>输入: [1, 3, 6, 9, 21, …], target = 4
+输出: -1
+挑战
+O(logn)的时间复杂度，n是target第一次出现的下标。</p>
+
+<p>如果你访问了一个不可访问的下标（比如越界），ArrayReader 会返回<code class="language-plaintext highlighter-rouge">2147483647</code>。</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="n">ArrayReader</span> <span class="k">struct</span> <span class="p">{}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">this</span> <span class="o">*</span><span class="n">ArrayReader</span><span class="p">)</span> <span class="n">get</span><span class="p">(</span><span class="n">index</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span><span class="k">return</span> <span class="m">1</span><span class="p">}</span>
+
+<span class="k">func</span> <span class="n">search</span><span class="p">(</span><span class="n">reader</span> <span class="n">ArrayReader</span><span class="p">,</span> <span class="n">target</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="c">// You may assume all integers in the array are less than 10000</span>
+	<span class="c">// 第一次二分搜索找边界</span>
+	<span class="n">left</span> <span class="o">:=</span> <span class="m">0</span>
+	<span class="n">right</span> <span class="o">:=</span> <span class="m">10000</span>
+	<span class="k">for</span> <span class="n">left</span><span class="o">+</span><span class="m">1</span><span class="o">&lt;</span><span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">2147483647</span><span class="p">{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="n">right</span><span class="o">=</span><span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">right</span><span class="p">)</span><span class="o">&lt;</span><span class="m">2147483647</span><span class="p">{</span>
+		<span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
+	<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">left</span><span class="p">)</span><span class="o">&lt;</span><span class="m">2147483647</span><span class="p">{</span>
+		<span class="n">right</span> <span class="o">=</span> <span class="n">left</span>
+	<span class="p">}</span>
+	<span class="n">left</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="c">// 第二次二分搜索找值</span>
+	<span class="k">for</span> <span class="n">left</span><span class="o">+</span><span class="m">1</span><span class="o">&lt;</span><span class="n">right</span><span class="p">{</span>
+		<span class="n">mid</span> <span class="o">:=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="m">2</span>
+		<span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span><span class="o">&gt;</span><span class="n">target</span><span class="p">{</span>
+			<span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span><span class="o">&lt;</span><span class="n">target</span> <span class="p">{</span>
+			<span class="n">left</span> <span class="o">=</span> <span class="n">mid</span>
+		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+			<span class="k">return</span> <span class="n">mid</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">right</span><span class="p">)</span><span class="o">==</span><span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">right</span>
+	<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">left</span><span class="p">)</span><span class="o">==</span><span class="n">target</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">left</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="o">-</span><span class="m">1</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="14-powx-n">14. <a href="https://leetcode-cn.com/problems/powx-n/">Pow(x, n)</a></h1>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">func</span> <span class="n">myPow</span><span class="p">(</span><span class="n">x</span> <span class="kt">float64</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">float64</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="m">0</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">helper</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="m">1</span><span class="o">/</span><span class="n">helper</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">n</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">helper</span><span class="p">(</span><span class="n">x</span> <span class="kt">float64</span><span class="p">,</span> <span class="n">n</span> <span class="kt">int</span><span class="p">)</span><span class="kt">float64</span><span class="p">{</span>
+	<span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="m">0</span><span class="p">{</span><span class="k">return</span> <span class="m">1</span><span class="p">}</span>
+	<span class="n">y</span> <span class="o">:=</span>  <span class="n">helper</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="o">/</span><span class="m">2</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="m">2</span> <span class="o">==</span> <span class="m">0</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span>
+	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="k">return</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="o">*</span><span class="n">x</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/securityprotocol/" data-toggle="tooltip" data-placement="top" title="Securityprotocol">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97bfs_dfs/" data-toggle="tooltip" data-placement="top" title="栈和队列bfs_dfs">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

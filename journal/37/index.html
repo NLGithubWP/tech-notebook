@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/37/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/37/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>ZooKeeper Wait-free coordination for Internet-scale systems - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/37/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">ZooKeeper Wait-free coordination for Internet-scale systems</h1>
+                    
+                    <span class="meta">Posted on May 2, 2022</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+9 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <h1 id="key-features">Key Features</h1>
+
+<ol>
+  <li>
+    <p>Maintain <strong>wait-free data objects</strong> organized hierarchically as in the file system.</p>
+
+    <p>Zookeeper is wait-free because it processes one client’s requests without needing to wait for other clients to take action. This is partially a consequence of the API: despite being designed to support client/client coordination and synchronization, no ZooKeeper API call is defined in a way that would require one client to wait for another.</p>
+
+    <p>In contrast, a system that supported a lock acquire operation that waited for the current lock holder to release the lock would not be wait-free.</p>
+  </li>
+  <li>
+    <p><strong>FIFO client order</strong>: all requests from <strong>a given client</strong> are executed in the order that they were sent by the client.</p>
+
+    <p>So each client can submit requests asynchronously and a client is able to have multiple outstanding operations at a time.</p>
+
+    <p><strong>leader tracking for each client (really session) what number it should next expect. The leader has to keep state per session anyway, each client specifies an order for its operations (reads AND writes), and it increases monotonously. When followers receive a read request while the data in the position of order_id is empty, the follower will wait until there is data before replying to the client. In other words, the follower may block a read until the server has received (from the leader) all of the client’s preceding writes</strong></p>
+
+    <ul>
+      <li>each read executes at a particular point in the write order</li>
+      <li>a client’s successive reads execute at non-decreasing points in the order</li>
+      <li>a client’s read executes after all previous writes by that client</li>
+      <li>a server <strong>may block a client’s read to wait for previous write, or sync()</strong></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Linearizable writes</strong>: all requests that update the state of ZooKeeper are serializable and respect precedence</p>
+
+    <p>The linearizability is ensured with two condition</p>
+
+    <ul>
+      <li>All writing operations of all clients will be sent to the leader</li>
+      <li>use ZAB protocol to replicate the internal status/data. ( clients send writes to the leader, the leader chooses an order, numbered by “zxid”, the leader then sends to replicas, which all execute in zxid order)</li>
+      <li>The linearizability is async-linearizability, where each client can send multiple requests at the same time.</li>
+    </ul>
+  </li>
+  <li>
+    <p>ZooKeeper can handle 10k~100K of transactions per second.</p>
+
+    <ul>
+      <li>Fast read: It allows the client to read from a follower and read may return a stale value. The application which doesn’t require precedence order can use it.  This allows the service to scale linearly as servers are added to the system.</li>
+      <li>Non-fast read: client call <code class="language-plaintext highlighter-rouge">sync</code> before send read operation. <code class="language-plaintext highlighter-rouge">FIFO + linearizability =&gt; read latest value</code></li>
+      <li>Fuzzy snapshots also help to improve the throughput.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Zookeeper uses a watch mechanism to enable clients to cache data without managing the client cache directly.</p>
+
+    <p>With this mechanism, a client can watch for an update to a given data object, and receive a notification upon an update</p>
+  </li>
+  <li>
+    <p>Zookeeper uses fuzzy snapshots</p>
+
+    <p>A precise snapshot would correspond to a specific point in the log: the snapshot would include every write before that point, and no writes after that point, creation of a precise snapshot requires a way to prevent any writes from happening while the snapshot is being created and written to disk. Blocking writes for the duration of snapshot creation would decrease performance a lot.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The point of ZooKeeper's fuzzy snapshots is that ZooKeeper creates the
+snapshot from its in-memory database while allowing writes to the
+database. This means that a snapshot does not correspond to a
+particular point in the log -- a snapshot includes a more or less
+random subset of the writes that were concurrent with snapshot
+creation. After reboot, ZooKeeper constructs a consistent snapshot by
+replaying all log entries from the point at which the snapshot
+started. Because updates in Zookeeper are idempotent and delivered in
+the same order, the application-state will be correct after reboot and
+replay---some messages may be applied twice (once to the state before
+recovery and once after recovery) but that is ok, because they are
+idempotent. The replay fixes the fuzzy snapshot to be a consistent
+snapshot of the application state.
+   
+The Zookeeper leader turns the operations in the client API into
+idempotent transactions. For example, if a client issues a conditional
+setData and the version number in the request matches, the Zookeeper
+leader creates a setDataTXN that contains the new data, the new
+version number, and updated time stamps. This transaction (TXN) is
+idempotent: Zookeeper can execute it twice and it will result in the
+same state.
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><a href="http://nil.csail.mit.edu/6.824/2020/notes/l-zookeeper.txt">Reference1</a></p>
+
+<p><a href="http://nil.csail.mit.edu/6.824/2020/papers/zookeeper-faq.txt">Reference2</a></p>
+
+<p><a href="https://pdos.csail.mit.edu/6.824/papers/zookeeper-faq.txt">Reference3</a></p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>Many current services are used designed for a specific need. For example, chubby is a locking service with strong synchronization guarantees. ( R/W go-to leader. ) It is important to design a service for each of the different coordination needs.</p>
+
+<ol>
+  <li>Zookeeper tries to expose users with high abstract APIs, and users can use them to implement their own primitives.</li>
+</ol>
+
+<p>Besides, chubby only allows reading from the leader and has low throughput, while zookeeper relax consistency guarantees to allow read from a follower.</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<ol>
+  <li>propose a wait-free coordination service with relaxed consistency guarantees for use in distributed systems.</li>
+  <li>provides some use cases about how to use zk to implement lock etc.</li>
+  <li>evaluation.</li>
+</ol>
+
+<h1 id="service-overview">Service overview</h1>
+
+<h2 id="data-model">Data Model</h2>
+
+<p>znode is an in-memory data node, and they are organized in a hierarchical namespace referred to as the data tree. There are 2 kinds of nodes</p>
+
+<ol>
+  <li>Regular: persistent znode</li>
+  <li>Ephemeral: temporal node, it is deleted automatically when the client connection terminates.</li>
+</ol>
+
+<h2 id="how-to-use-zk-to-guarantee-strong-consistency">How to use Zk to guarantee strong consistency.</h2>
+
+<p>In the case where we use zk for leader selection.</p>
+
+<ol>
+  <li>
+    <p>The new leader makes the configuration change by deleting ready, updating the various configuration nodes, and creating ready</p>
+
+    <p>While there is still a problem, the client can see the ready node, and begin to read it while the new leader is updating it.</p>
+  </li>
+  <li>
+    <p>The above problem is solved by ordering a guarantee for the notifications.</p>
+
+    <p>if a client is watching for a change, the client will see the notification event before it sees the new state of the system after the change is made</p>
+  </li>
+</ol>
+
+<p>But when two clients can communicate with each other, there is still a problem when client A update cfg at zk, tell client B, and B read from the replica. B may not read them as replication latency.</p>
+
+<ol>
+  <li>
+    <p>the solution is B can issue a write-request (sync API).</p>
+
+    <p>FIFO + linear =&gt; B see the A’s update.</p>
+  </li>
+</ol>
+
+<h1 id="use-cases">Use cases</h1>
+
+<h2 id="config-management">Config Management</h2>
+
+<p>Starting processes obtain their configuration by reading zc with the watch flag set to true. zc store the latest cfgs.</p>
+
+<h2 id="rendezvous">Rendezvous</h2>
+
+<p>master and multiple workers register their own information (address. status) to an ephemeral node in ZK.</p>
+
+<h2 id="group-membership">Group Membership</h2>
+
+<p>Using ephemeral nodes to dynamic update group memberships and use watch mechanism to inform master of the updates.</p>
+
+<h2 id="locks">Locks</h2>
+
+<h3 id="simple-lock">simple lock</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505153345262.png" alt="image-20220505153345262" /></p>
+
+<p>Each client trying to acquire the lock will enter the queue, and be assigned an order number.</p>
+
+<p>Only the client standing at the top of the queue can get the lock.</p>
+
+<h3 id="readwrite-lock">read/write lock</h3>
+
+<p>Read lock need to make sure all write lock is dispear.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505153606837.png" alt="image-20220505153606837" /></p>
+
+<h2 id="double-barrier">Double Barrier</h2>
+
+<p>processes firstly create their <em>ready</em> znodes, and enter the barrier together when the number of znodes exceeds the threshold; they delete their znodes when finishing their work, and exit altogether when all <em>ready</em> znodes are deleted</p>
+
+<h1 id="implementation">Implementation</h1>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505154203054.png" alt="image-20220505154203054" /></p>
+
+<p>Important notes.</p>
+
+<h2 id="request-processor">Request processor</h2>
+
+<p>ZK transforms each write into a transaction.</p>
+
+<ol>
+  <li>it calculates the state after applying the write,</li>
+  <li>generate a transaction that captures the new state. ( the tx has new data, new version number, and updated time.)</li>
+</ol>
+
+<h2 id="atomic-broadcast">Atomic broadcast</h2>
+
+<ol>
+  <li>Zab guarantees that changes broadcast by a leader are delivered in the order they were sent and all changes from previous leaders are delivered to an established leader before it broadcasts its own changes. In brief, the leader would never lose data and keep them in order.</li>
+  <li>WAL: we force writes to be on the disk media before they are applied to the in-memory database</li>
+  <li>write transaciton is idempotent.</li>
+</ol>
+
+<h2 id="replicated-database">Replicated database</h2>
+
+<ol>
+  <li>The replicated database is an in-memory database containing the entire data tree. And the system records the snapshot periodically.</li>
+  <li>ZooKeeper uses periodic snapshots and only requires the redelivery of messages since the start of the snapshot.</li>
+</ol>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>50 servers,</p>
+
+<h2 id="throughput">Throughput</h2>
+
+<ol>
+  <li>
+    <p>35 servers to simulate 250 simultaneous clients.</p>
+  </li>
+  <li>
+    <p>Each client has at least 100 requests outstanding.</p>
+  </li>
+  <li>
+    <p>Each request consists of reading or writing 1K of data.</p>
+  </li>
+</ol>
+
+<p>ZooKeeper uses request throttling to keep servers from being overwhelmed</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505155252484.png" alt="image-20220505155252484" /></p>
+
+<ol>
+  <li>Read throughput is higher than write throughput because reads do not use atomic broadcast</li>
+  <li>The other reason for the longer processing of write requests is that servers must ensure that transactions are logged to a non-volatile store before sending acknowledgments back to the leader.</li>
+</ol>
+
+<h3 id="failure">Failure</h3>
+
+<p>run ZK in 5 machiens. kept the written percentage at a constant 30%.</p>
+
+<p>Periodically we killed some of the server processes. (follower or leader in ZK cluster.)</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505160241068.png" alt="image-20220505160241068" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505160318388.png" alt="image-20220505160318388" /></p>
+
+<h2 id="latency">Latency</h2>
+
+<p>Each worker/sender creates 50k nodes, We calculate the throughput by dividing the number of creating requests completed by the total time it took for all the workers to complete.</p>
+
+<p>The throughput of the single ZooKeeper worker benchmark indicates that the average request latency is 1.2ms for three servers and 1:4ms for 9 servers.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505160846481.png" alt="image-20220505160846481" /></p>
+
+<h2 id="performance-of-barriers">Performance of barriers</h2>
+
+<p>50, 100, and 200 clients entering a number b of barriers in succession, b in. [200; 400; 800; 1600]</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220505161150862.png" alt="image-20220505161150862" /></p>
+
+<p>our benchmark code uses is much lower compared to the raw throughput ZooKeeper can achieve  This is due to clients waiting on other clients.</p>
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/36/" data-toggle="tooltip" data-placement="top" title="ServeDB Secure, Verifiable, and Efficient Range Queries on Outsourced Database">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/38/" data-toggle="tooltip" data-placement="top" title="NAS-BENCH-SUITE NAS EVALUATION IS (NOW) SURPRISINGLY EASY">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/21/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/21/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>The design of a practical system for fault-tolerant virtual machines - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/21/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">The design of a practical system for fault-tolerant virtual machines</h1>
+                    
+                    <span class="meta">Posted on January 28, 2022</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+9 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <p>The design of a practical system for fault-tolerant virtual machines</p>
+
+<h1 id="something-get-from-the-paper">Something get from the paper</h1>
+
+<p>Fault-tolerate = primary/backup + state-machine sync method (init state, same ops, same order.)</p>
+
+<p>Receiving ack before returning to client can guarantee state-consistency betwen primary and backups.</p>
+
+<p>Shared storage to make sure only one VM is primary</p>
+
+<p>Slow down the primary is backup is too slow.</p>
+
+<p>Using easy-to-control temp buffer to handle race conditin of disk operation and memory accessing of VM.(virtual memory, some data in memory is stored on disk. )</p>
+
+<h1 id="introduction">Introduction</h1>
+
+<h2 id="current-problems">Current Problems</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Primary/backup approach</code></p>
+
+<p>Requires keep the state of backup identical to the state of primary all the time.</p>
+
+<p>But shipping changes to all state of primary,CPU, memory and I/O devices, are very large and time-consuming since it requires much bandwidth.</p>
+
+<p><code class="language-plaintext highlighter-rouge">State-machine Approach</code></p>
+
+<p>Model the server as deterministic state machine which are kept in sync by starting from <strong>same init state, and execute same request in same order.</strong></p>
+
+<p>But mose servers or services don’t have deterministic operations, extra coordination must be used to keep the extra information.</p>
+
+<p>Implementing coordination to ensure deterministic execution of physical servers is difficult, as processor frequenceies increase. VM is excellent platform for <code class="language-plaintext highlighter-rouge">state-machine approach</code>, where the hypervisor play the role of coordinator.</p>
+
+<h2 id="solution">Solution</h2>
+
+<p>The paper implemented fault-tolerant system using primary/backup approach on VM.</p>
+
+<ol>
+  <li>The System has small time lag.</li>
+  <li>The System use <code class="language-plaintext highlighter-rouge">deterministic replay technology</code> to record the execution of primary and replay at backup server, such that the bandwidth usage is not high.</li>
+  <li>The System automatically restores redundancy after failure by starting a new backup VM on new server.</li>
+  <li>mainly deal with fail-stop failures.</li>
+</ol>
+
+<h1 id="basic-ft-design">Basic FT design</h1>
+
+<h2 id="basic-ideas">Basic ideas</h2>
+
+<p>Only primary VM is accessable for client.</p>
+
+<p>Primary sync the request to backup via network connection known as <code class="language-plaintext highlighter-rouge">logging channel</code>, and Backup VM return ack to primary VM explicitly.</p>
+
+<p>Output of backup VM is dropped by hypervisor and only primary VM return res to client.</p>
+
+<p>Using <code class="language-plaintext highlighter-rouge">heartbeating between server</code> and <code class="language-plaintext highlighter-rouge">monitoring of traffic on logging channel</code> to detect VM failure.</p>
+
+<h2 id="determinsitic-replay-implementation">Determinsitic Replay Implementation</h2>
+
+<p>Input needs to be replicated</p>
+
+<ul>
+  <li>determinstic events: Network packets, disk reads, input from devices</li>
+  <li>No-eterminstic events: virtual interrupts, reading clock cycle counter.</li>
+</ul>
+
+<p>Challenge</p>
+
+<ul>
+  <li>How to capture all deter/No-deter events correctly?</li>
+  <li>How to apply those inputs to backup VM?</li>
+  <li>Replication process doesn’t degrade performance</li>
+</ul>
+
+<p>Solution - Use <code class="language-plaintext highlighter-rouge">VMware determinsitic replay</code></p>
+
+<ul>
+  <li>It records events of VM in stream of log entries written to a log file.</li>
+  <li>Other VMs can read the file and replay.</li>
+  <li>It’s efficient in recording and delivering by using various techniques like hardware performance counters. So the system can record and delivered events nearly realtime.</li>
+  <li>The system use <code class="language-plaintext highlighter-rouge">VMware deterministic replay</code> but it send log entries via logging channel instead of writting log entires to disk. So the backup VM can replay in real time.</li>
+</ul>
+
+<h2 id="ft-protocol">FT Protocol</h2>
+
+<p>Goal/Challenge</p>
+
+<ul>
+  <li>
+    <p>if the backup VM takes over after primary VM failure, the backup VM will continue <strong>executing in a way that is entirely consistent with all outputs that the primary VM has sent to client.</strong></p>
+
+    <p>(this requires no data is lost during VM switching if primary fails.)</p>
+  </li>
+</ul>
+
+<p>Current problem</p>
+
+<ul>
+  <li>Failure happens after primary VM write successfully and return to client and before this write operation is sent to backup VMs, backup VM can takes over and replay the execution. If client issues a read to backup, then client read an inconsistenct data.</li>
+</ul>
+
+<p>Solution</p>
+
+<ul>
+  <li>
+    <p>The primary VM may <strong>not send an output to client</strong> until <strong>backup VM has received and ack the log entry</strong> associated with the operation producing the output. With this even primary VM fails after replying to client, backup VMs can still handle read request.</p>
+
+    <p><img src="imgs/image-20220203214015895.png" alt="image-20220203214015895" style="zoom:33%;" /></p>
+  </li>
+</ul>
+
+<p>Backup cannot determine if a primary crashed.</p>
+
+<h2 id="detecting-and-responding-to-failure">Detecting and Responding to Failure</h2>
+
+<p><strong>Failure detection</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">VMware FT</code> use UDP heartbeating between servers to detect when a server may have crashed. eg., <code class="language-plaintext highlighter-rouge">VMware FT</code>  monitor traffic sent from primary to backup and the ack sent from backup to primary.</p>
+
+<p><strong>Action</strong></p>
+
+<p>Once a backup VM is switched to primary VM, <code class="language-plaintext highlighter-rouge">VMware FT</code> automatically advertises the MAC address of the new primary VM on the network, so the network swithes know what server the new primary VM is located.</p>
+
+<p><strong>Problems</strong></p>
+
+<p>If the network has partition, brain-split happens.</p>
+
+<p><strong>Solution</strong></p>
+
+<p>To make sure only one primary exist in the system, the system introduce shared storage to provide the atomic operation.</p>
+
+<h1 id="practical-implementation-of-ft">Practical Implementation of FT</h1>
+
+<p>To enhance usable, robust and automatic of system, some new components are needed to add.</p>
+
+<h2 id="starting-and-restarting-ft-vms">Starting and Restarting FT VMs</h2>
+
+<p><strong>Problem</strong></p>
+
+<ol>
+  <li>How to start a new backup VM or re-start failured VM as a backup in the same state as a primary VM?</li>
+  <li>How to choose a server for such VM?</li>
+</ol>
+
+<p><strong>Solution</strong></p>
+
+<ol>
+  <li>Adopt the VMotion functionality of VMware vSphere, such that the origin VM is <strong>copped</strong> to a new server instead of migrating to new server.(migrating requires destory original VM)</li>
+  <li>All VMs can run on any server in the cluster with a shared storage. there is <code class="language-plaintext highlighter-rouge">clustering service</code> doing <code class="language-plaintext highlighter-rouge">resource mangement</code> and when a failure happens, backup VM become primary VM and then ask clustering service for a new backup VM, the clustering service determine best server based on resource usage and other constraints.</li>
+</ol>
+
+<h2 id="managing-the-logging-channel">Managing the logging channel</h2>
+
+<p>Hypervisors maintain a large buffer for logging entries for the primary and backup VMs. So the <code class="language-plaintext highlighter-rouge">VMware FT</code> can monitor the logging channel.</p>
+
+<p><img src="imgs/image-20220204114508590.png" alt="image-20220204114508590" style="zoom:50%;" /></p>
+
+<p><strong>Problem</strong></p>
+
+<p>When primary VM encounters a full log buffer when it needs to write a log entry, it must stop execution until log entries can be flushed out. (pause) This pause could increase clients latency. So how to minimize the possibility that the primary log buffer fills up.</p>
+
+<p><strong>Solution</strong></p>
+
+<p>Backup to slow =&gt; Primary log buffer fills up. Luckly, VMware deterministic replay guarantee the executing speed is the roughly the same.</p>
+
+<p><strong>Problem</strong></p>
+
+<p>Backup VM slow is inevitable when the server hosting backup VM is heavily loaded with other VM. If primary fails at this time and backup VM switch to primary VM, then backup VM must replaying all log entries. Which introduce more latency (<code class="language-plaintext highlighter-rouge">lag time</code>). How to reduce this?</p>
+
+<p><strong>Solution</strong></p>
+
+<p>Additional mechanism to <strong>slow down the primary VM to prevent the backup VM from getting too far behind.</strong> eg,. when backup VM has significant execution lag (&gt; 1 second), <code class="language-plaintext highlighter-rouge">VMware FT</code> starts slowing down the primary by informing the scheduler to give it smaller CPU.</p>
+
+<h2 id="operation-on-ft-vms">Operation on FT VMs</h2>
+
+<p>Various control operations applied to primary VM also should be applied to backup VMs.eg,.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Explicitly Powered off</code> on primary also applied to backups.</li>
+  <li><code class="language-plaintext highlighter-rouge">Explicitly resource change</code> on primary also applied to backups</li>
+</ul>
+
+<p>Various operations should only applied on primary VM.</p>
+
+<p>All above requirements are achieved using necessary control entry.</p>
+
+<h2 id="implementation-issues-for-disk-io">Implementation issues for Disk I/O</h2>
+
+<p>Disk operation are non-blocking, and can execute in parallel. Implementation of disk IO uses <code class="language-plaintext highlighter-rouge">DMA</code> directly to/from memory of virtual machines.</p>
+
+<p><strong>Problem</strong></p>
+
+<ul>
+  <li>Parallelims introduce race condition.</li>
+  <li>Disk operation can also race with memory access by application in VM since <strong>disk operation directly access the memory of a VM via DMA.</strong></li>
+</ul>
+
+<p><strong>Solution</strong></p>
+
+<p>The system detect race IO and make them sequential.</p>
+
+<p>The system also provide page protection on pages that are targets of disk operations. eg,. when race happens, then <strong>VM can paused until disk operation completes.</strong></p>
+
+<p>As for the implementation, use <strong>fully controlled</strong> temporary buffer to store the modified data. (we could provide consistency of this buffer easily compared with directly change MMU protection on pages.)</p>
+
+<ul>
+  <li>when disk read operation happens, read the temporary buffer.</li>
+  <li>when disk write operation happens, copy data to tmp buffer, update the data in buffer.</li>
+</ul>
+
+<h2 id="implementation-issues-for-network-io">Implementation issues for Network IO</h2>
+
+<p>Two approaches to improve VM network performance while running FT.</p>
+
+<ol>
+  <li>Reduce VM interrupts by only posting the interrupt for a group of packets.</li>
+  <li>Reduce transmit delay (time between sending log message to backup and getting an ack) by remove thread context switch.</li>
+</ol>
+
+<h1 id="design-alternatives">Design Alternatives</h1>
+
+<h2 id="shared-vs-non-shard-disk">Shared vs Non-shard Disk</h2>
+
+<p><strong>shared disk</strong></p>
+
+<p>Only primary VM does actual writes to disk, and write must be delayed after get ack from backups.</p>
+
+<p><strong>No-shared disk</strong></p>
+
+<p>Challenges includes</p>
+
+<ul>
+  <li>sync the disk infor</li>
+  <li>handle split-brain problem</li>
+</ul>
+
+<p><img src="imgs/image-20220204170006130.png" alt="image-20220204170006130" style="zoom:40%;" /></p>
+
+<h2 id="executing-disk-reads-on-backup-vm">Executing Disk reads on backup VM</h2>
+
+<p>In reading operation, Primary VM read from disk and send read result to backups.</p>
+
+<p>Alternate design is to send read ops to backups, and backups can read from disk themselves.</p>
+
+<p>challenges</p>
+
+<ul>
+  <li>backup read disk failes =&gt; retry</li>
+  <li>Primary read disk fails =&gt; backup should knows it and revert the data to original</li>
+  <li>reading disk introduce latency at backup VMs.</li>
+</ul>
+
+<p>Experiments shows executing disk reads on backup can cause some slightly reduced throughput (1-4%) for real applications.</p>
+
+<h1 id="preformanace-evaluation">Preformanace Evaluation</h1>
+
+<h2 id="applications">Applications</h2>
+
+<p>SPECJbb: java application which is CPU-intensive and little IO</p>
+
+<p>Kernel Compile: CPU and MMU intensive. (Race of memory access)</p>
+
+<p>Oracle Swingbench: OLTP workload with substantial disk and network IO</p>
+
+<p>MSSQL DVD Store: many clients.</p>
+
+<h2 id="basic-performance-result">Basic performance result</h2>
+
+<p>3rd column is average bandwidth of daata sent on logging channel when app are running.</p>
+
+<p><img src="imgs/image-20220204170922453.png" alt="image-20220204170922453" style="zoom:50%;" /></p>
+
+<p>Overhead of FT is small with less than 10%</p>
+
+<h2 id="network-benchmarks">Network Benchmarks</h2>
+
+<p>Primary and backup connected by 1GB/10GB channels.</p>
+
+<p><img src="imgs/image-20220204171732998.png" alt="image-20220204171732998" style="zoom:50%;" /></p>
+
+<p>When FT is disabled, Vm can achieve 940Mbit/s</p>
+
+<p>When FT is enabled for receive workloads, the logging bandwidth is large since all incomming packets must be sent on logging channels.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Adding FT to system only introduce less 10% overhead.</p>
+
+<p>logging bandwidth required to keep the primary and backup in sync is small, less then 20Mbit/s. The primary and backup can separated by long distances.</p>
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/19/" data-toggle="tooltip" data-placement="top" title="Neural Architecture Search A Survey">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/22/" data-toggle="tooltip" data-placement="top" title="Chain Replication for Supporting High Throughput and Availability">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>

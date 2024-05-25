@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/31/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/31/" />
+
+
+  <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+<link rel="icon" href="/tech-notebook/favicon.ico?" type="image/x-icon">
+
+    <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
+
+    <title>Retiarii A Deep Learning Exploratory-Training Framework - NoteBook</title>
+
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/31/">
+
+<!-- CSS -->
+	
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tech-notebook/css/main.css">
+    <link rel="stylesheet" href="/tech-notebook/css/galleries.css">
+     <link rel="stylesheet" href="/tech-notebook/css/super-search.css">
+    <link rel="stylesheet" href="/tech-notebook/css/magnificpopup.css">
+    <link rel="stylesheet" href="/tech-notebook/css/pygments.css">
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" style="margin-right:1em; z-index: 1;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+            <a href="/tech-notebook/" title="HOME"><img src="/tech-notebook/img/logos/logo6.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="margin-right:1em; text-shadow: -.025em -.025em 0 rgba(0, 133, 161, 0.75), .025em -.025em 0 rgba(0, 133, 161, 0.75), -.025em .025em 0 rgba(0, 133, 161, 0.75), .025em .025em 0 rgba(0, 133, 161, 0.75);">
+               
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/gallery/">GALLERY</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/journal/">JOURNAL</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/about/">ABOUT</a></li>
+            
+          
+        
+          
+            
+            
+              <li><a href="https://nlgithubwp.github.io/tech-notebook/resume/">CV</a></li>
+            
+          
+        
+                            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <meta name="viewport" content="width=device-width">
+
+<link href="/tech-notebook/css/tags-wrap.css" rel="stylesheet" />
+  
+    </head>
+    <body>
+  
+
+
+
+<article>
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/tech-notebook/img/postcover/post02.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="post-heading">
+                    <h1 style="color: #acd578;">Retiarii A Deep Learning Exploratory-Training Framework</h1>
+                    
+                    <span class="meta">Posted on April 18, 2022</span>
+
+<span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
+
+
+<i class="fa fa-clock-o"></i>&nbsp;
+7 minute read
+
+
+
+ 
+
+
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
+                    
+   </span>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+
+    <div class="container">
+        <div class="row">
+            
+
+             <p>Retiarii: A Deep Learning Exploratory-Training Framework</p>
+
+<h1 id="current-problems">Current Problems</h1>
+
+<p>There are three ways to create a new model candidate.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419161111915.png" alt="image-20220419161111915" /></p>
+
+<p>The exploratory-training process is not supported well in current software.</p>
+
+<ol>
+  <li>
+    <p><strong>Search space</strong>:  In the current system, like PyTorch/tf, we have to code up all variations of models in one jumbo model, and there is a control flow to pick one during model construction. <strong>The control flow in this Jumbo model</strong> makes it hard to optimize memory usage, operator fusion, etc.</p>
+
+    <p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419165437608.png" alt="image-20220419165437608" /></p>
+  </li>
+  <li>
+    <p><strong>Search Strategy</strong>: Exploration strategy is responsible for</p>
+
+    <ul>
+      <li>deciding which models to instantiate and train. in which priority, and when to terminate. eg, Random Search, Grid Search, Heuristic-based search, Bayesian-based. and reinforcement learning.</li>
+      <li>Manage execution of training, eg. stop training the bad-performance model, and add more resources to model with good performance. Share weights of overlapped layers.</li>
+    </ul>
+
+    <p>The implementation of a Search Strategy often tightly couples an exploration strategy with a specific model space, which includes 2 problems:</p>
+
+    <ul>
+      <li><strong>poor reusable</strong>: it’s hard to reuse a search strategy designed for one search space by another search space.</li>
+      <li><strong>hard to scale</strong>: It’s hard to cross-model training or distributed training with Multiple GPU.</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="contribution">Contribution</h1>
+
+<p>The paper’s system clearly decouples model space from exploration strategy and enables system optimizations to speed up the exploration process.</p>
+
+<ol>
+  <li>
+    <p>New programming interface ( Mutator abstraction ) to</p>
+
+    <ul>
+      <li>specify DNN model space for exploration.</li>
+      <li>specify exploration strategy to decide
+        <ul>
+          <li>order to instantiate and train the model.</li>
+          <li>prioritize model training.</li>
+          <li>when to terminate training.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>The Retiarii use Mutator abstraction for the above specification ( Search space and Strategy ).</p>
+
+    <ul>
+      <li>The Search Space = <code class="language-plaintext highlighter-rouge">A set of base models and mutators.</code></li>
+      <li>The Search Strategy = which base model and a mutator to use +  <code class="language-plaintext highlighter-rouge">when</code> to apply mutators to the base model.</li>
+    </ul>
+
+    <p>Each mutator is fine-grained, and captures a logical unit of modification. Reusable and compostable</p>
+  </li>
+  <li>
+    <p>Offers just-in-time engine to instantiate model, manage the training of the instantiated model, gather information of exploration strategy to consume, execute the decision.</p>
+  </li>
+  <li>
+    <p>Offers <code class="language-plaintext highlighter-rouge">cross-model optimizations</code> to improve the overall exploratory training process by using correlation information.</p>
+  </li>
+</ol>
+
+<h2 id="evaluation-result">Evaluation result</h2>
+
+<ol>
+  <li>reduce the exploration time of popular NAS algorithm by 2.57X</li>
+  <li>Improve scalability of NAS using weight sharing with a speed-up of 8.58 X</li>
+</ol>
+
+<h1 id="mutator-as-the-core-abstraction">Mutator as the Core Abstraction</h1>
+
+<ol>
+  <li>
+    <p>Rather than encoding modification in the complex jumbo model, the system import the existing model from Tf/Pytorch as a base model and apply a mutator to generate a new model.</p>
+
+    <p>There are three Mutator in the system</p>
+
+    <ul>
+      <li>Input Mutator: mutate inputs of matched operators</li>
+      <li>Operator mutator: replace matched operator with other operators</li>
+      <li>Insert mutator: Insert new operators or sub-graphs</li>
+    </ul>
+
+    <p>The search space includes all base models and new models.</p>
+  </li>
+  <li>
+    <p>The system can record the relation between models generated by different mutators based on the same base model. eg, for two instantiations of the same base model, the nodes not modified by mutator are considered identical.</p>
+
+    <p>The relation can be used to optimize the multi-model training.</p>
+  </li>
+  <li>
+    <p>The mutator can be applied to any subgraph of the model. And create a new model instance.</p>
+
+    <p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419175540302.png" alt="image-20220419175540302" /></p>
+  </li>
+</ol>
+
+<h1 id="retiarii-just-in-time-engine">Retiarii Just-In-Time Engine</h1>
+
+<p>The engine will instantiate the model on the Floy and manage the training of the model dynamically.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Inputs</code>: based models, mutators, policy describing exploration strategy.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Execution</code>: Pick one base model and a mutator to generate a new model using strategy.</p>
+
+<p>Strategy can be</p>
+
+<ul>
+  <li>context-free strategy: random choice</li>
+  <li>history-based strategy. etc</li>
+  <li>customization choice.</li>
+</ul>
+
+<p>The engine records the mutation history, thus it knows which nodes are not modified and stay identical. So the engine can perform corse-model optimization like</p>
+
+<ul>
+  <li>common sub-expression elimination,</li>
+  <li>cross model operator batching</li>
+  <li>NAS optimization</li>
+</ul>
+
+<p>The optimized Data flow graph is then converted to a standard model format for the existing DL framework to perform single-model optimization before training.</p>
+
+<p>The strategy also responsible for</p>
+
+<ul>
+  <li>Launch training on the new model,</li>
+  <li>monitor the training and collect results,</li>
+  <li>adjust training resource allocation</li>
+  <li>Terminate training of less promising models.</li>
+</ul>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419182139203.png" alt="image-20220419182139203" /></p>
+
+<h1 id="cross-model-optimization">Cross-Model Optimization</h1>
+
+<h2 id="optimization-opportunities">Optimization Opportunities</h2>
+
+<h3 id="common-sub-expression-elimination">Common sub-expression elimination</h3>
+
+<p>Compute the identical operations only once.</p>
+
+<p>It can be applied to non-trainable operations such as data loading and preprocessing. since it’s determinstic operation. while in training, weight is changing.</p>
+
+<p><strong>Evaluation</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419213808406.png" alt="image-20220419213808406" /></p>
+
+<h3 id="operator-batching">Operator Batching</h3>
+
+<p>Common operators with different inputs and weights can potentially be batched together and computed in a single operator kernel.</p>
+
+<ol>
+  <li>Two graphs that share multiple layers with the <strong>same weights</strong> can be merged. As shown below.</li>
+  <li>Two operations with different weights can also be batched with special kernels like <strong>grouped convolution, and batch_matmul</strong>. That can parallel compute on slices of an input tensor.</li>
+</ol>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419230838890.png" alt="image-20220419230838890" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419184057269.png" alt="image-20220419184057269" /></p>
+
+<p>group convolution:</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419232624659.png" alt="image-20220419232624659" /></p>
+
+<h3 id="weight-sharing">Weight sharing</h3>
+
+<p>Instead of training the graph’s weight from scratch, shared weights are inherited from other graphs to continue the training in this graph. And only the different nodes will have different weights.</p>
+
+<ol>
+  <li>It can let user developers to annotate operator weights they want to share.</li>
+  <li>it will identify the weight-sharing-enabled operators in common subgraphs.</li>
+</ol>
+
+<p>The system incure a new type of parallelism when constructing executable graphs.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419225513233.png" alt="image-20220419225513233" /></p>
+
+<p>The System builds a super-graph automatically, And we don’t need to store the check-point on disk and then reload.</p>
+
+<p><strong>Evaluation</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419225626822.png" alt="image-20220419225626822" /></p>
+
+<h2 id="executable-graph-construction">Executable Graph Construction</h2>
+
+<p>To exploit the above optimization, the system needs to construct graphs from raw models.</p>
+
+<p>The construction involves:</p>
+
+<ul>
+  <li>Model merging,</li>
+  <li>device placement of operators.</li>
+  <li>Training parallelism</li>
+</ul>
+
+<h3 id="device-placement">Device placement</h3>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419190028675.png" alt="image-20220419190028675" /></p>
+
+<p>For DFGs sharing the same dataset and preprocessing, these common operators can be merged by common sub-expression elimination.</p>
+
+<p>The system will test each model for a few iterations and then sort them based on iteration time.  The system will then pack as many as models possible.</p>
+
+<p><strong>Evaluation</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419214307634.png" alt="image-20220419214307634" /></p>
+
+<h3 id="mixed-parallelism-for-weight-sharing">Mixed parallelism for weight sharing.</h3>
+
+<p>The system uses both data parallelism and model parallelism to train the network.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419191852896.png" alt="image-20220419191852896" /></p>
+
+<p><strong>Evaluation</strong></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419222635225.png" alt="image-20220419222635225" /></p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<h2 id="main-founding">Main founding</h2>
+
+<ol>
+  <li>
+    <p>The separation of model space and exploration strategy makes it easy for Retiarii to try different combinations.  Retiarii currently supports 27 popular Neural Architecture Search (NAS) solutions. Most of them can be implemented by the three mutator classes provided by Retiarii.</p>
+  </li>
+  <li>
+    <p>A number of micro-benchmarks show how Retiarii’s cross model optimizations greatly improve training efficiency.</p>
+  </li>
+  <li>
+    <p>Retiarii improves the model exploration speed of three NAS solutions by up to 2.58°ø, compared with traditional approaches.</p>
+  </li>
+  <li>
+    <p>Retiarii improves the scalability of weight sharing-based NAS solutions and brings up to 8.58°ø speed-up using the proposed mixed parallelism, compared with data parallelism.</p>
+  </li>
+</ol>
+
+<h2 id="micro-benchmarks">Micro benchmarks</h2>
+
+<h3 id="shard-data-loading-and-preprocessing">Shard data loading and preprocessing</h3>
+
+<p>We compare Retiarii with a baseline that runs each model independently without common sub-expression elimination.</p>
+
+<h3 id="operator-batching-1">Operator batching</h3>
+
+<p>Insert an adapter layer to a pre-trained Mobile Net, and multiple mobile Net shares the same weights, only the adaptor is different.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419184057269.png" alt="image-20220419184057269" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419214446724.png" alt="image-20220419214446724" /></p>
+
+<p>Overall, Retiarii’s operator batching improves the aggregate throughput by 3.08°ø when batching 192 models, compared with the baseline that can only train at most 12 models together. Retiarii can batch more models than the baseline because it only has one copy of (fixed) weights from MobileNet. Only the memory for adapters is increased when batching more models</p>
+
+<h3 id="weight-sharing-1">Weight sharing</h3>
+
+<p>Compare three cases</p>
+
+<ol>
+  <li>weight is saved and loaded through files</li>
+  <li>weight is saved and loaded through the object in memory</li>
+  <li>the system’s super graph with cross-modal optimization.</li>
+</ol>
+
+<h2 id="speeding-up-nas">Speeding up NAS</h2>
+
+<p>Using MnasNet, NASNet, AmoebaNet.</p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419225009849.png" alt="image-20220419225009849" /></p>
+
+<p><img src="https://github.com/NLGithubWP/tech-notebook/raw/master/img/a_img_store/image-20220419222323121.png" alt="image-20220419222323121" /></p>
+
+<ol>
+  <li>Retiarii is substantially faster than the two baselines due to the cross-model optimizations</li>
+</ol>
+
+<h2 id="scale-weight-shared-training">Scale weight shared training</h2>
+
+
+
+                <br>
+          <br>
+    <br>
+
+
+<!--               <div class="post-author text-center">                       
+	        <img src="/tech-notebook/img/" alt="'s photo" itemprop="image" class="post-avatar img-circle img-responsive"/>    
+	    <h4>By <span itemprop="name" class="fn"><a href="/tech-notebook/about/" title="About " itemprop="url"></a></span></h4>
+	    <div style="font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; display:inline-block;font-size:.75em;"></div>
+</div> -->
+    <hr class="small">
+ <div class="post-share text-center">
+    <p class="light small">
+        <h6>END OF POST</h6>
+    </p>
+    <ul class="social-mini">
+
+    </ul>
+</div>
+                        
+
+                        
+                <br>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/tech-notebook/journal/30/" data-toggle="tooltip" data-placement="top" title="Paxos Made Moderately Complex">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/tech-notebook/journal/32/" data-toggle="tooltip" data-placement="top" title="DARTS DIFFERENTIABLE ARCHITECTURE SEARCH">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+        </div>
+    </div>
+</article>
+
+<br>
+
+<hr class="medium">
+
+            <div class="tags-wrap">
+   <div class="tags">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Tags Cloud</h3>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="tag-list">
+    
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<div class="categories">
+
+  <div class="section-heading group" style="color: #fff; text-align: center; margin-top: 10px;">
+
+    <h3>Categories Cloud</h3>
+
+  </div>
+
+ 
+
+
+
+
+
+
+
+
+
+ <div class="category-list">
+   
+<a href="/tech-notebook/journal/category//">  </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/a-paper-note/"> A paper note </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/cmu-database/"> CMU database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/coding/"> coding </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/devices/"> devices </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/distributed-database/"> distributed database </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/machine-learning-basic/"> machine learning basic </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/operation-system/"> operation system </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/practise/"> practise </a> &nbsp;&nbsp;
+
+<a href="/tech-notebook/journal/category/programming-language/"> programming language </a> &nbsp;&nbsp;
+
+  </div>
+
+</div>
+
+<hr class="medium">
+
+<br>
+<br>
+
+       </div>
+
+
+<!-- jQuery -->    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/tech-notebook/js/main.min.js "></script>
+<!-- include image popups -->
+<script src="/tech-notebook/js/jquery.magnific-popup.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function($) {
+        $('a.popup').magnificPopup({
+         type: 'image',
+	  gallery:{
+         enabled:true,
+         navigateByImgClick: true,
+         preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+       },
+image: {
+      titleSrc: function(item) {
+              return item.el.attr('title') + '&nbsp;' + item.el.attr('data-caption');
+            }
+        }
+          // other options
+      });
+});
+    </script>
+
+<script src="/tech-notebook/js/retina.min.js"></script>
+<!-- include Masonry -->
+<script src="/tech-notebook/js/isotope.pkgd.min.js"></script> 
+<!-- include mousewheel plugins -->
+<script src="/tech-notebook/js/jquery.mousewheel.min.js"></script>
+<!-- include carousel plugins -->
+<script src="/tech-notebook/js/jquery.tinycarousel.min.js"></script>
+<!-- include svg line drawing plugin -->
+<script src="/tech-notebook/js/jquery.lazylinepainter.min.js"></script>
+<!-- include custom script -->
+<script src="/tech-notebook/js/scripts.js"></script>
+<!-- Modernizr -->
+ <script src="/tech-notebook/js/modernizr.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+    <a href="javascript:void(0)" title="SEARCH" onclick="superSearch.toggle()" class="super-search-btn">
+<span class="fa fa-search" style="font-size:1em; position:fixed; right: .75em; top: 1em; z-index: 2;"></span>
+</a>
+<div class="super-search" id="js-super-search">
+<a href="javascript:void(0)" onclick="superSearch.toggle()" class="super-search__close-btn"">
+<span class="fa fa-close" style="font-size:48px;"></span>
+</a>
+<input type="text" placeholder="Type here to search" class="super-search__input" id="js-super-search__input">
+<ul class="super-search__results" id="js-super-search__results"></ul>
+</div>
+
+
+
+ <script src="/tech-notebook/js/super-search.js"></script>
+
+<script>
+superSearch({
+    searchFile: '/tech-notebook/feed.xml',
+    searchSelector: '#js-super-search', // CSS Selector for search container element.
+    inputSelector: '#js-super-search__input', // CSS selector for <input>
+    resultsSelector: '#js-super-search__results' // CSS selector for results container
+});
+</script>
+
+    
+        <div class="row"  style="background-color: #530720; padding-bottom: 40px; margin-top: 50px; margin-bottom: 80px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+      <center><h4><p>It's the niceties that make the difference fate gives us the hand, and we play the cards.</h4></center>
+
+
+<!--<form style="padding:3px;text-align:center;font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;" action="https://tinyletter.com/photorgasms" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/yourproject', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true"><input type="text" placeholder="Enter your email address"  style="width:200px;height:30px;border:0;background-color:#5A0F28;color:#dddddd;outline:0;padding-left:12px;" name="email" id="tlemail" />&nbsp; &nbsp; <input type="submit" value="Get notified!" style="background-color:#470118;color:#dddddd;height:30px;border:0;" /></form>-->
+            </div>
+        </div>
+     
+<style type="text/css">
+        .tlemail::-webkit-input-placeholder {
+   color: rgba(255,255,255,.45);
+}
+       .tlemail:-moz-placeholder { /* Firefox 18- */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(255,255,255,.45);  
+}
+
+      .tlemail:-ms-input-placeholder {  
+   color: rgba(255,255,255,.45);  
+}
+    </style>
+
+
+    <!-- Footer -->
+<footer>
+<div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                <ul class="list-inline text-center">
+
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://facebook.com/" data-toggle="tooltip" title="Facebook">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://twitter.com/" data-toggle="tooltip" title="Twiiter">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://instagram.com/" data-toggle="tooltip" title="Instagram">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="https://flickr.com/photos/" data-toggle="tooltip" title="Flickr">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-flickr fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+<!--                    -->
+<!--                    <li>-->
+<!--                        <a href="http://.deviantart.com">-->
+<!--                            <span class="fa-stack fa-lg" data-toggle="tooltip" title="Deviantart">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-deviantart fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    -->
+                    
+                    <li>
+                        <a href="https://github.com/NLGithubWP/tech-notebook" data-toggle="tooltip" title="Github">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+<!--            <li>-->
+<!--    <a href="mailto:" data-toggle="tooltip" target="_blank" title="Email">-->
+<!--                       <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>-->
+<!--</span>-->
+<!--          </a> </li>-->
+
+<!--         <li>-->
+<!--                        <a href="/tech-notebook/feed.xml" data-toggle="tooltip" title="Feed">-->
+<!--                            <span class="fa-stack fa-lg">-->
+<!--                                <i class="fa fa-circle fa-stack-2x"></i>-->
+<!--                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+<!--                            </span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+<center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+   <script>
+//** jQuery Scroll to Top Control script- (c) 
+//** v1.1 (April 7th, 10')
+//** 1) Adds ability to scroll to an absolute position (from top of page) or specific element on the page instead.
+//** 2) Fixes scroll animation not working in Opera. 
+var scrolltotop={
+//startline: Integer. Number of pixels from top of doc scrollbar is scrolled before showing control
+//scrollto: Keyword (Integer, or "Scroll_to_Element_ID"). How far to scroll document up when control is clicked on (0=top).
+setting: {startline:100, scrollto: 0, scrollduration:1000, fadeduration:[500, 100]},
+controlHTML: '<img src="https://cloud.githubusercontent.com/assets/14811095/13691821/88412468-e744-11e5-8bb5-94340afd92e7.png" style="filter:alpha(opacity=100); -moz-opacity:1;"/>', //HTML for control, which is auto wrapped in DIV w/ ID="topcontrol"
+controlattrs: {offsetx:35, offsety:60}, //offset of control relative to right/ bottom of window corner
+anchorkeyword: '#top', //Enter href value of HTML anchors on the page that should also act as "Scroll Up" links
+state: {isvisible:false, shouldvisible:false},
+scrollup:function(){
+if (!this.cssfixedsupport) //if control is positioned using JavaScript
+this.$control.css({opacity:0}) //hide control immediately after clicking it
+var dest=isNaN(this.setting.scrollto)? this.setting.scrollto : parseInt(this.setting.scrollto)
+if (typeof dest=="string" && jQuery('#'+dest).length==1) //check element set by string exists
+dest=jQuery('#'+dest).offset().top
+else
+dest=0
+this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+},
+keepfixed:function(){
+var $window=jQuery(window)
+var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx
+var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety
+this.$control.css({left:controlx+'px', top:controly+'px'})
+
+},
+
+togglecontrol:function(){
+var scrolltop=jQuery(window).scrollTop()
+if (!this.cssfixedsupport)
+this.keepfixed()
+this.state.shouldvisible=(scrolltop>=this.setting.startline)? true : false
+if (this.state.shouldvisible && !this.state.isvisible){
+this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0])
+this.state.isvisible=true
+}
+else if (this.state.shouldvisible==false && this.state.isvisible){
+this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1])
+this.state.isvisible=false
+}
+
+},
+init:function(){
+jQuery(document).ready(function($){
+var mainobj=scrolltotop
+var iebrws=document.all
+
+mainobj.cssfixedsupport=!iebrws || iebrws && document.compatMode=="CSS1Compat" && window.XMLHttpRequest //not IE or IE7+ browsers in standards mode
+mainobj.$body=(window.opera)? (document.compatMode=="CSS1Compat"? $('html') : $('body')) : $('html,body')
+mainobj.$control=$('<div id="topcontrol">'+mainobj.controlHTML+'</div>')
+.css({position:mainobj.cssfixedsupport? 'fixed' : 'absolute', bottom:mainobj.controlattrs.offsety, right:mainobj.controlattrs.offsetx, opacity:0, cursor:'pointer'})
+.attr({title:'Scroll To Top'})
+.click(function(){mainobj.scrollup(); return false})
+.appendTo('body')
+
+if (document.all && !window.XMLHttpRequest && mainobj.$control.text()!='') //loose check for IE6 and below, plus whether control contains any text
+mainobj.$control.css({width:mainobj.$control.width()}) //IE6- seems to require an explicit width on a DIV containing text
+mainobj.togglecontrol()
+
+$('a[href="' + mainobj.anchorkeyword +'"]').click(function(){
+mainobj.scrollup()
+
+return false
+})
+
+$(window).bind('scroll resize', function(e){
+
+mainobj.togglecontrol()
+
+})
+
+})
+
+}
+
+}
+
+scrolltotop.init()
+</script>  
+
+</body>
+
+</html>
