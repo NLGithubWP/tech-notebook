@@ -1,8 +1,5 @@
 import os
 import re
-import requests
-from bs4 import BeautifulSoup
-
 
 def fix_md_format(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -16,10 +13,6 @@ def fix_md_format(file_path):
         categories_line = next((line for line in content if line.startswith('categories:')), None)
 
         if title_line and header_image_line and categories_line:
-            title_index = content.index(title_line)
-            header_image_index = content.index(header_image_line)
-            categories_index = content.index(categories_line)
-
             new_front_matter = [
                 '---\n',
                 title_line,
@@ -29,64 +22,55 @@ def fix_md_format(file_path):
                 '---\n'
             ]
 
-            content = new_front_matter + content[max(title_index, header_image_index, categories_index) + 1:]
+            # Add the remaining content after the found lines
+            remaining_content = content[max(content.index(title_line), content.index(header_image_line), content.index(categories_line)) + 1:]
+            content = new_front_matter + remaining_content
 
     with open(file_path, 'w', encoding='utf-8') as file:
         file.writelines(content)
-
-
-def get_paper_info(title):
-    search_url = f'https://scholar.google.com/scholar?q={title}'
-    response = requests.get(search_url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    result = soup.find('div', class_='gs_ri')
-    if result:
-        title = result.find('h3').text
-        publication_info = result.find('div', class_='gs_a').text
-        return title, publication_info
-    return title, None
-
 
 def update_readme(md_files, readme_path):
     new_entries = []
 
     for file_path in md_files:
         file_name = os.path.basename(file_path)
-        date_part = re.search(r'\d{4}-\d{2}-\d{2}', file_name).group(0)
+        date_match = re.search(r'\d{4}-\d{2}-\d{2}', file_name)
 
-        with open(file_path, 'r', encoding='utf-8') as file:
-            content = file.readlines()
+        if date_match:
+            date_part = date_match.group(0)
 
-        title_line = next((line for line in content if line.startswith('title:')), None)
-        if title_line:
-            title = title_line.split('title: ')[1].strip()
-            fixed_title, publication_info = get_paper_info(title)
-            new_entry = f'* [{date_part} {fixed_title}]({file_path})'
-            if publication_info:
-                new_entry += f' - {publication_info}'
-            new_entries.append(new_entry)
+            with open(file_path, 'r', encoding='utf-8') as file:
+                content = file.readlines()
 
-    with open(readme_path, 'r', encoding='utf-8') as file:
-        readme_content = file.readlines()
+            title_line = next((line for line in content if line.startswith('title:')), None)
+            if title_line:
+                title = title_line.split('title: ')[1].strip()
+                new_entry = f'* [{date_part} {title}](https://github.com/NLGithubWP/tech-notebook/blob/master/_posts/paper-notebook/{file_name})\n'
+                new_entries.append(new_entry)
+
+    if os.path.exists(readme_path):
+        with open(readme_path, 'r', encoding='utf-8') as file:
+            readme_content = file.readlines()
+    else:
+        readme_content = []
 
     new_readme_content = readme_content + new_entries
 
     with open(readme_path, 'w', encoding='utf-8') as file:
         file.writelines(new_readme_content)
 
-
 def main():
     directory = './_posts/paper-notebook/'  # Set this to the directory containing the .md files
     md_files = [os.path.join(directory, f) for f in os.listdir(directory) if f.endswith('.md')]
-    readme_path = os.path.join(directory, 'README.md')
+    readme_path = './README.md'  # Updated path for README.md
 
     for md_file in md_files:
         print(f'Processing file: {md_file}')
         fix_md_format(md_file)
 
+    print('Updating README.md...')
     update_readme(md_files, readme_path)
     print('README.md updated successfully.')
-
 
 if __name__ == "__main__":
     main()
