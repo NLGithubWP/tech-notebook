@@ -1,15 +1,16 @@
-
 import os
 import re
 import requests
 from bs4 import BeautifulSoup
+
 
 def fix_md_format(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.readlines()
 
     # Check if the front matter is missing
-    if content[0].strip() != '---' or content[-1].strip() != '---':
+    content_str = ''.join(content)
+    if not (content_str.startswith('---') and 'layout: post' in content_str and content_str.count('---') >= 2):
         title_line = next((line for line in content if line.startswith('title:')), None)
         if title_line:
             title_index = content.index(title_line)
@@ -19,6 +20,7 @@ def fix_md_format(file_path):
 
     with open(file_path, 'w', encoding='utf-8') as file:
         file.writelines(content)
+
 
 def get_paper_info(title):
     search_url = f'https://scholar.google.com/scholar?q={title}'
@@ -30,6 +32,7 @@ def get_paper_info(title):
         publication_info = result.find('div', class_='gs_a').text
         return title, publication_info
     return title, None
+
 
 def update_readme(md_files, readme_path):
     new_entries = []
@@ -58,6 +61,7 @@ def update_readme(md_files, readme_path):
     with open(readme_path, 'w', encoding='utf-8') as file:
         file.writelines(new_readme_content)
 
+
 def main():
     directory = './_posts/paper-notebook/'  # Set this to the directory containing the .md files
     md_files = [os.path.join(directory, f) for f in os.listdir(directory) if f.endswith('.md')]
@@ -67,6 +71,7 @@ def main():
         fix_md_format(md_file)
 
     update_readme(md_files, readme_path)
+
 
 if __name__ == "__main__":
     main()
