@@ -5,8 +5,8 @@
     <description>It's the niceties that make the difference fate gives us the hand, and we play the cards.</description>
     <link>https://nlgithubwp.github.io/tech-notebook/</link>
     <atom:link href="https://nlgithubwp.github.io/tech-notebook/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
-    <lastBuildDate>Sat, 25 May 2024 09:21:51 +0000</lastBuildDate>
+    <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
+    <lastBuildDate>Sat, 25 May 2024 09:35:41 +0000</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
     
       <item>
@@ -14,7 +14,7 @@
         <description>&lt;p&gt;This is the latest SOTA&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</guid>
         
@@ -60,7 +60,7 @@
   &lt;/li&gt;
 &lt;/ol&gt;
 </description>
-        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</guid>
         
@@ -80,7 +80,7 @@
 &lt;/ol&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</guid>
         
@@ -119,7 +119,7 @@
 &lt;/ul&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</guid>
         
@@ -131,7 +131,7 @@
         <description>&lt;p&gt;It focus on developing efficient query evaluation techniques that increase the robustness of query plans.&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</guid>
         
@@ -157,28 +157,9 @@
 
 &lt;p&gt;join orders selected by Balsa contribute more towards improved performance, making join order selection a critical contribution of&lt;/p&gt;
 </description>
-        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title></title>
-        <description>&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
-
-&lt;p&gt;BAO’s challenges&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;BAO use 42 pre-defined hint-sets. Manually engineering feature hint-sets can be quite challenging.&lt;/li&gt;
-  &lt;li&gt;IN disaggregated settings, it lack a reliable cost models.&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-01-08-178/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-01-08-178/</guid>
         
         
       </item>
@@ -336,6 +317,563 @@
         <pubDate>Tue, 14 May 2024 00:00:00 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/213/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/213/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>PostgreSQL 14 Internals</title>
+        <description>&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
+
+&lt;p&gt;Buffer states retrieval UDF on page 171 could be used as states for RL.&lt;/p&gt;
+
+&lt;p&gt;pg_statio_all_tables on page 177 could show how many pages are read for a table into the buffer cache.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANALYZE big;&lt;/code&gt; updates the statistics of the table for the query planner. It is an essential step for PostgreSQL to make informed decisions about query execution plans.&lt;/p&gt;
+
+&lt;p&gt;Page 184 has an SQL to check what fraction of each relation is cached, and whether this data is hot (a page is considered hot here if its usage count is bigger than one.&lt;/p&gt;
+
+&lt;p&gt;enable &lt;strong&gt;debug_print_parse&lt;/strong&gt; parameter in PostgreSQL, we can view the full parse tree in the server log.&lt;/p&gt;
+
+&lt;p&gt;If you want to explore full plan trees, dump them into the server log by enabling the &lt;strong&gt;debug_print_plan&lt;/strong&gt; parameter. But in practice, it is usually enough to view the text representation of the plan displayed by the &lt;strong&gt;EXPLAIN&lt;/strong&gt; command.&lt;/p&gt;
+
+&lt;p&gt;Visibility of the table as on page 308 may be used.&lt;/p&gt;
+
+&lt;p&gt;SQL in 315 can update the default cardinalities.&lt;/p&gt;
+
+&lt;p&gt;The correlation field on page 323 introduces some methods to get column correlation related to the disk.&lt;/p&gt;
+
+&lt;p&gt;SQL on page 326 can show all statistics of the column for an expression.&lt;/p&gt;
+
+&lt;p&gt;Statistics dependence can be created (page 329), and is useful.&lt;/p&gt;
+
+&lt;p&gt;The query on page 349 will tell how to able or disable the query. force_parallel_mode&lt;/p&gt;
+
+&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
+
+&lt;h2 id=&quot;data-organization&quot;&gt;Data organization&lt;/h2&gt;
+
+&lt;p&gt;single Postgresql instance can serve several databases at a time. They are called database clusters.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Logical Storage&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A catalog** in PostgreSQL is a set of system tables that store metadata about all database objects in a cluster, such as tables, indexes, functions, and schemas. This metadata includes details like object names, data types, and access permissions.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Catalog tables are all begin with pg_&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Schema&lt;/strong&gt; is a namespace with many objectives. predefined schemas:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;public (for user objectives), pg_catalog (system catalog tables), information_schema (view for system catalog), pg_toast, og_temp&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Relations&lt;/strong&gt;: all tables, indexes, and views are called relations.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;all data associated with a relation is stored in several forks, a fork is basically a single file of 1GB (can be configured), and the file is also named a &lt;strong&gt;segment&lt;/strong&gt;. The sequence number of the segment is added to the end of its filename.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Physical Storage&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;PGDATA&lt;/strong&gt; is a directory that contains all the files related to the database cluster, at the beginning, it contains&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;template0 database: is used for restoring data or creating a database with a different encoding.&lt;/li&gt;
+  &lt;li&gt;template1 database: is a template for all other databases that a user can create (by copying template1) in the cluster.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Tablespaces&lt;/strong&gt; is a physical data layout, it is a dir in the file system, database stores the data in several &lt;strong&gt;tablespaces&lt;/strong&gt;. During the database initialization, two tablespaces are created:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;pg_default:  default tablespace unless another tablespace is selected for this purpose.&lt;/li&gt;
+  &lt;li&gt;pg_global: system catalog objects common to the whole cluster.&lt;/li&gt;
+  &lt;li&gt;postgres database uses tablespace &lt;strong&gt;xyzzy&lt;/strong&gt; as the default one&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Pages&lt;/strong&gt;. To facilitate I/O, all files are logically split into pages (or blocks), which represent the minimum amount of data that can be read or written. Consequently, many internal PostgreSQL algorithms are tuned for page processing.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TOAST&lt;/strong&gt;: Each row must fit a single page: there is no way to continue a row on the next page. To store long rows, PostgreSQL uses a special mechanism called TOAST (The Oversized Attributes Storage Technique).
+Long attribute values are separated into smaller chunks, which will be stored in the TOAST table. The chunk size is decided such that one page of the TOAST table can contain four rows.&lt;/p&gt;
+
+&lt;p&gt;Each TOAST table has three columns, chunk_id, chunk_seq, and length. columns&lt;/p&gt;
+
+&lt;p&gt;For index, the toast mechanism can offer only compression.&lt;/p&gt;
+
+&lt;p&gt;PostgreSQL supports a few strategies:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;plain means that ToAST is not used (this strategy is applied to data types that are known to be“short,” such as the integer type).&lt;/li&gt;
+  &lt;li&gt;extended allows both compressing attributes and storing them in a separate TOAST table.&lt;/li&gt;
+  &lt;li&gt;external implies that long attributes are stored in the ToAST table in an uncom- pressed state.&lt;/li&gt;
+  &lt;li&gt;main requires long attributes to be compressed first; they will be moved to the TOAST table only if compression does not help.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Due to TOAST, each table will have at least three files (or “forks”): &lt;strong&gt;the main data file, the TOAST data file, and the TOAST index file.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;process&quot;&gt;Process&lt;/h1&gt;
+
+&lt;p&gt;A PostgreSQL server instance consists of &lt;strong&gt;several interacting processes.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;postmaster&lt;/code&gt;: spawns all other processes and supervises them (restart the failed one if there is one).&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;startup&lt;/code&gt; restores the system after a failure.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;auto vacuum&lt;/code&gt; removes stale data from &lt;strong&gt;tables and indexes.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;checkpointer&lt;/code&gt; executes checkpoints.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;writer&lt;/code&gt; flushes dirty pages to the disk.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stats collector&lt;/code&gt; collects usage statistics for the instance.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wal writer&lt;/code&gt; writes WAL entries to disk.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wal sender&lt;/code&gt; sends WAL entries to a replica.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wal receiver&lt;/code&gt; gets WAL entries on a replica&lt;/p&gt;
+
+&lt;p&gt;Drawbacks:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;static shared memory allocation does not allow resizing structures like buffer cache on the fly;&lt;/li&gt;
+  &lt;li&gt;parallel algorithms are hard to implement and less efficient than they could be;  (due to inefficient sharing state via IPC.)&lt;/li&gt;
+  &lt;li&gt;sessions are tightly bound to processes.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To enable &lt;strong&gt;process interaction&lt;/strong&gt;, the postmaster allocates shared memory, which is available to all the processes.&lt;/p&gt;
+
+&lt;p&gt;PostgreSQL uses a large portion of the shared memory for caching frequently accessed data.&lt;/p&gt;
+
+&lt;p&gt;One client connection will trigger spawning a new process, it is until the session continues or lost. This is inefficient and may cause problems when too many clients try to connect.&lt;/p&gt;
+
+&lt;p&gt;One solution is using the connection pool (PgBouncer or Odyssey), but this limits the maximum connection number.&lt;/p&gt;
+
+&lt;p&gt;Since the process uses MVCC in building various isolation levels, it will generate many old versions of data, which can be deleted by using a vacuum.&lt;/p&gt;
+
+&lt;h1 id=&quot;memory&quot;&gt;Memory&lt;/h1&gt;
+
+&lt;p&gt;Lots of shared memory is used to store the buffered cache.&lt;/p&gt;
+
+&lt;p&gt;In the buffer search and eviction, it uses a clock sweep algorithm, which goes around the buffer cache and reduces the usage count for each cached page by one as it passes.&lt;/p&gt;
+
+&lt;p&gt;The first unpinned buffer with the zero counts found by the clock hand will be cleared.&lt;/p&gt;
+
+&lt;p&gt;Thus, the usage count is incremented each time the buffer is accessed (that is, pinned), and reduced when the buffer manager is searching for pages to evict.
+As a result, the least recently used pages are evicted first, while those that have been accessed more often will remain in the cache longer.&lt;/p&gt;
+
+&lt;p&gt;Each process has its cache, which stores the &lt;strong&gt;Temporary Table.&lt;/strong&gt; e.g., CREATE TEMPORARY TABLE tmp AS SELECT 1;&lt;/p&gt;
+
+&lt;h1 id=&quot;query-execution&quot;&gt;Query Execution&lt;/h1&gt;
+
+&lt;p&gt;parsed, transformed, planned, executed.&lt;/p&gt;
+
+&lt;h2 id=&quot;parser-text--parse-tree&quot;&gt;Parser: Text =&amp;gt; Parse Tree&lt;/h2&gt;
+
+&lt;p&gt;It uses a &lt;strong&gt;lexer&lt;/strong&gt; (previously used in compilers, interpreters, and many types of text processing systems ) to split the query text into a set of lexemes (such as keywords, string literals, and numeric literals).&lt;/p&gt;
+
+&lt;p&gt;It then uses a &lt;strong&gt;parser&lt;/strong&gt; to validate this set against the SQL language grammar, and then build a &lt;strong&gt;Parse Tree&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Then it performs semantic analysis to determine whether whether the database contains any tables or other objects that this query refers to by name, and whether the user has permission to access these objects by checking the catalog.&lt;/p&gt;
+
+&lt;h2 id=&quot;transformation-parse-tree--rewriten-parse-tree&quot;&gt;Transformation: Parse Tree =&amp;gt; Rewriten Parse Tree&lt;/h2&gt;
+
+&lt;p&gt;This rewrites the query:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;replace the view in the parse tree with the subtree, security reason.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Transformation is based on the query rewrite rule system. https://www.postgresql.org/docs/14/rules.html&lt;/p&gt;
+
+&lt;h2 id=&quot;planningoptimizer-rewriten-parse-tree--plan-tree&quot;&gt;Planning/Optimizer: Rewriten Parse Tree =&amp;gt; Plan Tree&lt;/h2&gt;
+
+&lt;p&gt;Several join tables =&amp;gt; grow the plans, the optimal and non-optimal plans can differ by orders of magnitude.&lt;/p&gt;
+
+&lt;p&gt;Optimizer uses a &lt;strong&gt;dynamic programming algorithm combined with some heuristics&lt;/strong&gt; to reduce the search space.&lt;/p&gt;
+
+&lt;p&gt;A genetic algorithm** is used to optimize the query if &lt;strong&gt;geqo_threshold&lt;/strong&gt; is set, which defines the number of elements at one level to optimize. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;optimizer/gecko/&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Cost-based optimizer estimates the resources required for execution. (&lt;strong&gt;I/O operation CPU cycles&lt;/strong&gt;)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Startup Cost: Prepare for the node execution.
+    &lt;ul&gt;
+      &lt;li&gt;The cost associated with setting up the necessary data structures, loading initial data into memory, and any other preparatory tasks required before actual data processing starts. For example, if a query involves a sequential scan of a table, the startup cost would include the &lt;strong&gt;time and resources&lt;/strong&gt; needed to locate the table on disk.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;total cost: comprises all the expenses incurred by fetching the result.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If using the cursor, it reads data row by row, if not, it reads the whole result at once.  Different methods differ in plan generation.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;w cursor, it minimizes the total cost.&lt;/li&gt;
+  &lt;li&gt;w/o a cursor, it minimizes the cost of cursor_tuple_fraction.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The cardinality estimation calculations rely on the &lt;strong&gt;collected statistics&lt;/strong&gt;,  such as table sizes and data distribution in table columns.&lt;/p&gt;
+
+&lt;h3 id=&quot;cardinality-estimation&quot;&gt;Cardinality Estimation&lt;/h3&gt;
+
+&lt;p&gt;Steps:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Estimate the number of input rows of each node. =&amp;gt; 1&lt;/li&gt;
+  &lt;li&gt;Estimate the &lt;strong&gt;selectivity&lt;/strong&gt; of the node == the &lt;strong&gt;fraction of input rows&lt;/strong&gt; that will remain at the output. =&amp;gt; 2&lt;/li&gt;
+  &lt;li&gt;CE of a node = multiplying the &lt;strong&gt;=&amp;gt;1 by the =&amp;gt; 2&lt;/strong&gt; applied at that node.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Methods to compute CE:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;CE of filter condition: each column is considered independently. Thus the below functions may have errors.
+sel_{x and y} = sel_x*sel_y,&lt;/p&gt;
+
+    &lt;p&gt;sel_{x or y} = 1- (1-sel_x)(1-sel_y)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CE of join: Cartesian product. If the first dataset has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; rows and the second dataset has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; rows, then their Cartesian product results in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N x M&lt;/code&gt; rows. (maximum possible number of rows that could result from a join)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cost-model&quot;&gt;Cost Model:&lt;/h3&gt;
+
+&lt;p&gt;disk I/o and CPU resources&lt;/p&gt;
+
+&lt;p&gt;cost =sF(CE)&lt;/p&gt;
+
+&lt;p&gt;some operation has no prerequisites, so their execution starts immediately. while other has. e.g., sort needs to wait to collect all other data. The startup cost of such nodes is usually higher than zero.&lt;/p&gt;
+
+&lt;h1 id=&quot;execution&quot;&gt;Execution&lt;/h1&gt;
+
+&lt;p&gt;executor opens a portal in backend memory, which keeps the state of the query currently being executed.&lt;/p&gt;
+
+&lt;p&gt;The execution process starts from the root,&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;nested loop join does not need to wait until all rows are received to start producing output. It processes and passes on rows as soon as they meet the join condition.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As for the join operation, it uses a &lt;strong&gt;work_mem&lt;/strong&gt; to decide the maximum amount of memory that each database operation, such as sorting or hash joins, can use before spilling to disk.&lt;/p&gt;
+
+&lt;p&gt;PostgresoL has &lt;strong&gt;no global cache for queries&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;statistics-in-database&quot;&gt;Statistics in database&lt;/h1&gt;
+
+&lt;p&gt;During analysis, For analysis purposes, 300× 100 default_statistics_target random rows are sampled. The sample size required to build statistics of a particular accuracy has a low dependency on the volume of analyzed data, so the size of the table is not taken into account.&lt;/p&gt;
+
+&lt;p&gt;It uses &lt;strong&gt;default_statistics_target&lt;/strong&gt; to decide how many to use to decide the statistics for each column.&lt;/p&gt;
+
+&lt;h3 id=&quot;basic-statistics&quot;&gt;Basic Statistics&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Number of tuples in a relation (&lt;strong&gt;rel-tuples&lt;/strong&gt;)&lt;/li&gt;
+  &lt;li&gt;Relation size, in pages (&lt;strong&gt;replaces&lt;/strong&gt;)&lt;/li&gt;
+  &lt;li&gt;Number of pages tagged in the visibility map (&lt;strong&gt;relallvisible&lt;/strong&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;null-values&quot;&gt;Null values&lt;/h3&gt;
+
+&lt;h3 id=&quot;distinct-values&quot;&gt;Distinct values&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;There is a &lt;strong&gt;n_distinct&lt;/strong&gt; variable for each column&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;most-common-values&quot;&gt;Most common values&lt;/h3&gt;
+
+&lt;p&gt;each column has two features&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;most_common_vals&lt;/code&gt;&lt;/strong&gt;:&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;most_common_freqs&lt;/code&gt;&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;histogram&quot;&gt;Histogram&lt;/h3&gt;
+
+&lt;p&gt;If distinct values are too many to be stored in an array, PostgresoL employs a histogram.&lt;/p&gt;
+
+&lt;p&gt;The histogram is divided into multiple small ranges, each with the same number of values.&lt;/p&gt;
+
+&lt;p&gt;The histogram is used for operations like estimating the selectivity of &lt;strong&gt;greater than and less than&lt;/strong&gt; conditions.&lt;/p&gt;
+
+&lt;h2 id=&quot;correlation&quot;&gt;Correlation&lt;/h2&gt;
+
+&lt;p&gt;correlation between the physical order of data and the logical order defined by comparison operations.&lt;/p&gt;
+
+&lt;p&gt;This is used for the cost estimation of index scans.&lt;/p&gt;
+
+&lt;h2 id=&quot;expression-statistics&quot;&gt;Expression Statistics&lt;/h2&gt;
+
+&lt;p&gt;For customer functions or transformations to a column in a SQL query, PostgreSQL’s query planner may struggle to accurately estimate the distribution of the data after the transformation. It uses default ones, 0.5%.&lt;/p&gt;
+
+&lt;p&gt;The 0.5% figure is a cautious estimate, assuming that any given transformed value (like extracting a month, converting strings, or applying mathematical operations) might only match a small fraction of total rows.&lt;/p&gt;
+
+&lt;p&gt;Therefore, we need to collect expression statistics ourselves.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create extended-expression statistics by using CREATE STATISTICS.&lt;/li&gt;
+  &lt;li&gt;Statistics index for expression indexes. Which can update automatically.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;multivariate-statistics&quot;&gt;multivariate statistics&lt;/h2&gt;
+
+&lt;p&gt;span several table columns.&lt;/p&gt;
+
+&lt;p&gt;There is a &lt;strong&gt;well-known problem of correlated predicates&lt;/strong&gt;, planner assumes predicates do not depend on each other, so the selectivity is estimated as the product of the selectivities of filter conditions combined by logical &lt;strong&gt;and&lt;/strong&gt;.
+As a result, the planner will &lt;strong&gt;underestimate&lt;/strong&gt; the row number.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;plain index scan wins for fetching a small number of tuples,&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;bitmaps can win for a somewhat larger number of tuples,&lt;/li&gt;
+  &lt;li&gt;season wins if you’re fetching a large percentage of the whole table.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Dependence can be created between columns.&lt;/p&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;The statistics gathered by PostgreSQL’s query optimizer impact various parts of a query, particularly in the following areas:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Where Conditions&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;Basic Statistics&lt;/strong&gt; such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rel-tuples&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;relpages&lt;/code&gt; help in estimating the overall size of the data and the amount of data to process, influencing whether a sequential scan or an index scan is more efficient.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Distinct Values (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n_distinct&lt;/code&gt;)&lt;/strong&gt; and &lt;strong&gt;Most Common Values (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;most_common_vals&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;most_common_freqs&lt;/code&gt;)&lt;/strong&gt; are crucial for estimating the selectivity of filters in the WHERE clause. These statistics determine how many rows are likely to match a given condition, especially when filtering on specific column values.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Histograms&lt;/strong&gt; are used to estimate the selectivity for range conditions (e.g., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;column &amp;gt; value&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;column &amp;lt; value&lt;/code&gt;). They help the optimizer understand the distribution of data within a column when exact matches are not feasible to calculate due to a high number of distinct values.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Join Conditions&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;Multivariate Statistics&lt;/strong&gt; play a significant role in join conditions by helping to estimate the selectivity and distribution of values that result from joining tables. These are particularly useful when columns from different tables are correlated, which might not be apparent through individual column statistics.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Expression Statistics&lt;/strong&gt; and &lt;strong&gt;Correlation&lt;/strong&gt; data influence the optimizer’s decision on which type of join (nested loop, hash join, or merge join) is most efficient based on the expected size of join outputs and the physical order of data.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Index Scans&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;The &lt;strong&gt;correlation between physical and logical order of data&lt;/strong&gt; greatly affects whether an index scan is beneficial. High correlation means that the data is physically stored in a way that aligns well with the index, making index scans faster and more predictable.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In essence, these statistics help PostgreSQL’s optimizer make informed decisions about every aspect of query execution—from choosing scan types to optimizing joins and applying filters—thereby enhancing performance by selecting the most efficient execution paths based on data distribution and query structure.&lt;/p&gt;
+
+&lt;h1 id=&quot;table-access-methods&quot;&gt;Table Access Methods&lt;/h1&gt;
+
+&lt;p&gt;Postgresql allows you to plug in various engines (pluggable storage engines).&lt;/p&gt;
+
+&lt;p&gt;Engine defines&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;tuple format and data structure&lt;/li&gt;
+  &lt;li&gt;table &lt;strong&gt;scan&lt;/strong&gt; implementation and cost estimation&lt;/li&gt;
+  &lt;li&gt;implementation of insert, delete, update, and lock operations&lt;/li&gt;
+  &lt;li&gt;visibility rules.&lt;/li&gt;
+  &lt;li&gt;vacuum and analysis procedures.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A default storage engine is a &lt;strong&gt;heap&lt;/strong&gt;, optional ones are zheac and &lt;strong&gt;zedstore&lt;/strong&gt; (columnar storage).&lt;/p&gt;
+
+&lt;h2 id=&quot;sequential-scans&quot;&gt;Sequential scans.&lt;/h2&gt;
+
+&lt;p&gt;The scan process will use an extra buffer ring, which not affect the main buffer cache.&lt;/p&gt;
+
+&lt;p&gt;multiple processes can share the same buffer ring, thus reading the same data.&lt;/p&gt;
+
+&lt;h3 id=&quot;cost-estimate&quot;&gt;cost estimate&lt;/h3&gt;
+
+&lt;p&gt;disk I/o and CPU resources.&lt;/p&gt;
+
+&lt;p&gt;there are many default values for each operation. And they are defined based on the hardware. They can be updated via the tablespace level.&lt;/p&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#define DEFAULT_SEQ_PAGE_COST  1.0
+#define DEFAULT_RANDOM_PAGE_COST  4.0
+#define DEFAULT_CPU_TUPLE_COST 0.01
+#define DEFAULT_CPU_INDEX_TUPLE_COST 0.005
+#define DEFAULT_CPU_OPERATOR_COST  0.0025
+#define DEFAULT_PARALLEL_TUPLE_COST 0.1
+#define DEFAULT_PARALLEL_SETUP_COST  1000.0
+&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;#define DEFAULT_EFFECTIVE_CACHE_SIZE  524288   &lt;/span&gt;&lt;span class=&quot;cm&quot;&gt;/* measured in pages */&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;i/o cost = cost of single page * number of page to read&lt;/p&gt;
+
+&lt;p&gt;The planner will not consider parallel execution at all if the estimated volume of heap data to be read does not exceed the 8MB &lt;strong&gt;min_parallel_table_scan_size&lt;/strong&gt; value.&lt;/p&gt;
+
+&lt;p&gt;Not all queries can be parallelized.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Query which modified or locked data UPDATE, DELETE, SELECT FOR UPDATE, and the like.&lt;/li&gt;
+  &lt;li&gt;Queries that can be paused. It applies to queries run within cursors, including FOR loops in PL/pgSQL&lt;/li&gt;
+  &lt;li&gt;Queries that call PARALLEL UNSAFE functions. By default, these are all user-defined functions and a few standard ones.&lt;/li&gt;
+  &lt;li&gt;Queries within functions if these functions are called from a parallelized query (to avoid recursive growth of the number of workers).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;index-access-methods&quot;&gt;Index Access Methods&lt;/h1&gt;
+
+&lt;p&gt;PostgreSQL supports six built-in index access methods: btree, hash, gist, gin sexiest, brin&lt;/p&gt;
+
+&lt;p&gt;Tuples in Postgresql are referred to by six-byte tuple IDs. TIDS&lt;/p&gt;
+
+&lt;p&gt;Data amount &lt;strong&gt;vs&lt;/strong&gt; scan methods:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Select a large amount of data =&amp;gt; sequential scan&lt;/li&gt;
+  &lt;li&gt;Select a small amount of data =&amp;gt; index scan&lt;/li&gt;
+  &lt;li&gt;Select the mid-level amount of data =&amp;gt; bitmap scan&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;index-scans&quot;&gt;Index scans&lt;/h1&gt;
+
+&lt;h2 id=&quot;index-only-scan&quot;&gt;index-only scan&lt;/h2&gt;
+
+&lt;p&gt;the cost = estimated costs of index access operations and heap page reads.&lt;/p&gt;
+
+&lt;p&gt;I/o estimation depends on both the &lt;strong&gt;index scan selectivity&lt;/strong&gt; and the &lt;strong&gt;correlation&lt;/strong&gt; between the &lt;strong&gt;physical order of tuples on disk a&lt;/strong&gt;nd the &lt;strong&gt;order in which the access method returns their IDs.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;bitmap-scan&quot;&gt;Bitmap scan&lt;/h2&gt;
+
+&lt;p&gt;A Bitmap Index Scan is used to efficiently determine “where to look” in the table, and a Bitmap Heap Scan is used to actually “look” at the data and retrieve it.&lt;/p&gt;
+
+&lt;p&gt;Bitmap index scan is less dependent on the correlation.&lt;/p&gt;
+
+&lt;h1 id=&quot;join-methods&quot;&gt;Join methods&lt;/h1&gt;
+
+&lt;p&gt;Postgresql provides several join methods:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a nested loop join&lt;/li&gt;
+  &lt;li&gt;a hash join&lt;/li&gt;
+  &lt;li&gt;a merge join&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;nested-loop-joins&quot;&gt;Nested Loop Joins&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;supports  (inner join + left outer join), not support right join and full join.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Traverse the outer set, for each record, it checks the inner set to see if there are matches, and it checks the inner set many times.&lt;/p&gt;
+
+&lt;p&gt;Therefore, the efficiency of nested loop joins depends on several factors:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The cardinality of the outer set of rows.&lt;/li&gt;
+  &lt;li&gt;Availability of an access method that can efficiently fetch the needed rows of the inner set.&lt;/li&gt;
+  &lt;li&gt;Recurrent access to the same rows of the inner set.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A SQL could execute it in this way:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Scan the inner set and save data into a materialized file, then reuse it many times.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;CE: Cartesian product is estimated at the product of cardinalities of the joined data sets&lt;/p&gt;
+
+&lt;p&gt;Cost:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;start cost: sum of the child node’s start cost&lt;/li&gt;
+  &lt;li&gt;cost of fetching all rows in the outer set,&lt;/li&gt;
+  &lt;li&gt;the cost of a single retrieval of all the rows of the inner set&lt;/li&gt;
+  &lt;li&gt;the cost of processing each row to be returned&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;if the inner set is repeatedly scanned with the same parameter values, it can cache those rows, (page 407). However, since the data is too large, it can edit the caching results.&lt;/p&gt;
+
+&lt;h2 id=&quot;hash-joins&quot;&gt;Hash Joins&lt;/h2&gt;
+
+&lt;p&gt;Supports any type of join.&lt;/p&gt;
+
+&lt;p&gt;Suitable if the table can be accommodated in RAM. If not, two passes will be applied.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The smaller set is usually used as the inner one, as it results in a smaller hash table.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In the first stage, it builds a hash table by pulling the whole inner set of rows from its child node.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;columns references in the join condition are hash key, value is all queried fields of the inner set.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In the second stage, it traverses the other table, computes the hash key, and searches.&lt;/p&gt;
+
+&lt;p&gt;Costs:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;build hash table: total cost of fetching inner set, calculate the hash function, insert rows into a hashtable.&lt;/li&gt;
+  &lt;li&gt;fetching the outer set of rows.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If the data is too large to fit into the memory, the inner set is divided into many files, one is in memory while others are inside the disk.
+For the outer set, it first calculates the hash for each row key, and can directly decide which batch that row belongs to, if belongs to the current batch (the batch in memory), it performs join, otherwise, it waits for the second pass.&lt;/p&gt;
+
+&lt;p&gt;if some temp file is too large, it cannot fit well into the memory, So if the hash table being built turns out too big, the number of batches is increased (doubled) on the fly. Each batch is virtually split into two new ones: about half of the rows (assuming that the distribution is uniform) are left in the hash table, while the other half is saved into a new temporary file&lt;/p&gt;
+
+&lt;p&gt;In the case of non-uniform distribution, increasing the number of batches may not help. For example, if the key column contains the same value in all its rows, it will be placed into the same batch since the hash function will return the same value over and over again. Unfortunately, the hash table will continue growing in this case, regardless of the imposed restrictions.&lt;/p&gt;
+
+&lt;p&gt;In theory, this issue could be addressed by a multi-pass join, which would perform partial scans of the batch, but it is not supported.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;This problem is not solved yet?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;merge-join&quot;&gt;Merge Join&lt;/h2&gt;
+
+&lt;p&gt;The merge join algorithm can be used with any types of joins&lt;/p&gt;
+
+&lt;p&gt;sort data by join key and return results which are also sorted similarly.&lt;/p&gt;
+
+&lt;p&gt;If there is &lt;strong&gt;order by&lt;/strong&gt;, merge sort is used mostly.&lt;/p&gt;
+
+&lt;p&gt;Merge join requires the input tables to be sorted on the join keys. If the tables are not already sorted, PostgreSQL will sort them before performing the merge join. This sorting operation is represented in the plan by the Sort node.
+It only uses one pass over both data sets and does not take any additional memory. It uses two pointers to current rows.&lt;/p&gt;
+
+&lt;p&gt;PostgreSQL can decide to use to various sorting methods:  quicksort, external merge, top_N heapsort&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If the data set to be sorted fits the 4MB work_mem chunk, the classic quicksort method is applied.&lt;/li&gt;
+  &lt;li&gt;If a data set needs to be sorted only &lt;strong&gt;partially&lt;/strong&gt; (as defined by the LIMIT clause), the heapsort method can be applied.&lt;/li&gt;
+  &lt;li&gt;If the scan shows that the data set is too big to be sorted in memory, the sorting node switches over to external merge sorting: all rows are written into several pre-sorted files, and rows inside each file are sorted, but across various files are not sorted. 
+Then it uses a merge sort algorithm to merge those files.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;comparison&quot;&gt;Comparison&lt;/h2&gt;
+
+&lt;h3 id=&quot;the-nested-loop-join&quot;&gt;The nested loop join&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;does not have any prerequisites and can start returning the first rows of the result set right away&lt;/li&gt;
+  &lt;li&gt;It is the only join method that does not have to fully scan the inner set (as long as index access is available for it).&lt;/li&gt;
+  &lt;li&gt;These properties make the nested loop algorithm (combined with indexes) an ideal choice for short &lt;strong&gt;OLTP&lt;/strong&gt; queries,which deal with rather small sets of rows.&lt;/li&gt;
+  &lt;li&gt;supports all join conditions&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;However&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Thus, the complexity of the nested loop algorithm often shows linear growth rather than quadratic one, even if with a high linear coefficient.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;a-hash-join&quot;&gt;A hash join&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;only one pass over two data sets. works best on large data sets.&lt;/li&gt;
+  &lt;li&gt;Combined with sequential table scans,this algorithm is typically used for &lt;strong&gt;OLAP&lt;/strong&gt; queries,which compute the result based on a large volume of data.&lt;/li&gt;
+  &lt;li&gt;However, if the response time is more important than throughput, a hash join is not the best choice: it will not start returning the resulting rows until the whole hash table is built&lt;/li&gt;
+  &lt;li&gt;response time in this context, we are referring to the time between sending a query and receiving the first row of the result set&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;merge-join-1&quot;&gt;Merge Join&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A merge join can perfectly handle both short OLTP queries and long OLAP ones.&lt;/li&gt;
+  &lt;li&gt;An added bonus of a merge join is the equivalence of the inner and outer sets. The efficiency of both nested loop and hash joins is highly dependent on whether the planner can assign inner and outer sets correctly.&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Wed, 17 Apr 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/212/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/212/</guid>
         
         
         <category>A paper note</category>
