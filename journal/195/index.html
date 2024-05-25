@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
-   <meta property="og:url" content="https://nlgithubwp.github.io/journal/2024-03-18-198/" />
-   <link rel="canonical" href="https://nlgithubwp.github.io/journal/2024-03-18-198/" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/195/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/195/" />
 
 
   <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
@@ -16,9 +16,9 @@
 
     <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
 
-    <title>NoteBook</title>
+    <title>A Learned Query Rewrite System using Monte Carlo Tree Search - NoteBook</title>
 
-    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/">
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/195/">
 
 <!-- CSS -->
 	
@@ -128,9 +128,9 @@
     <div class="container">
         <div class="row">
             <div class="post-heading">
-                    <h1 style="color: #acd578;"></h1>
+                    <h1 style="color: #acd578;">A Learned Query Rewrite System using Monte Carlo Tree Search</h1>
                     
-                    <span class="meta">Posted on May 25, 2024</span>
+                    <span class="meta">Posted on March 14, 2024</span>
 
 <span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
 
@@ -143,7 +143,8 @@
  
 
 
-      
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
                     
    </span>
 
@@ -158,42 +159,35 @@
         <div class="row">
             
 
-             <p>Propose a new task: Multi-Model dialogue response generation: given the dialogue context, the model should not only generate a pure text response but also have the capacity to generate a multimodal response (e.g., containing both image and text).</p>
+             <p>Query rewrite transforms a SQL query into an <strong>equivalent</strong> one but with <strong>higher</strong> <strong>performance</strong>.</p>
 
-<p>Challenges:</p>
+<p>Existing problems</p>
 
-<ol>
-  <li>the training is over-fitted to the training datasets, and cannot generalize to the new domain.</li>
-  <li>not easy to collect enough training data for a new domain.</li>
-</ol>
+<ul>
+  <li>How to represent the large search space or rewrite order.</li>
+  <li>how to define the order? The order of applying different rewrite rules significantly affects the query performance.</li>
+  <li>How to estimate the cost reduction of a rewrite? Rewriting rules functions differently for different queries.</li>
+</ul>
 
-<p>Ideas:</p>
+<p>This paper propose a query rewritten system, which accept (query + rewrite rules) =&gt; optimal rewrite order + query</p>
 
-<p>make parameters that rely on multimodal dialogues small and independent by <strong>disentangling</strong> textual response generation and image response generation, and thus we can learn the major part of the generation model from text-only dialogues and image_description+image, pairs that are much easier to be obtained.</p>
-
-<p><img src="../../img/a_img_store/image-20240318185701629.png" alt="image-20240318185701629" /></p>
-
-<p><strong>Problem formulation:</strong></p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>(dialogue context U, response R) =&gt; learned model P(R</td>
-      <td>U; \theta)</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>U and R may contains images.</p>
-
-<ol>
-  <li>Unified representations of both text and images =&gt; express image in form of sequence tokens.
-    <ol>
-      <li>Texts =&gt; BPE-encoded tokens</li>
-      <li>Images =&gt; each token is a discrete Auto-Encoder</li>
-    </ol>
+<ul>
+  <li>Model possible orders as a policy tree, root = input query. path = an rewritten order.</li>
+  <li>Note utility:
+    <ul>
+      <li>cost between latency of executing original and current node + access pattern.</li>
+    </ul>
   </li>
-</ol>
+  <li>Monte Carlo Tree Search to explore the policy tree to find the optimal node</li>
+  <li>Cost estimation
+    <ul>
+      <li>M_R[i,j]: cost reduction of applying rule j to operator i</li>
+      <li>Q_C[i,j]: operator i contains columsn j</li>
+      <li>M_R[i,j]: index, distinct value</li>
+    </ul>
+  </li>
+</ul>
+
 
 
                 <br>
@@ -223,12 +217,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/tech-notebook/journal/2024-03-14-197/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
+                        <a href="/tech-notebook/journal/194/" data-toggle="tooltip" data-placement="top" title="Looking Ahead Makes Query Plans Robust">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/tech-notebook/journal/2024-03-18-199/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
+                        <a href="/tech-notebook/journal/197/" data-toggle="tooltip" data-placement="top" title="PilotScope Steering Databases with Machine Learning Drivers">Next Post &rarr;</a>
                     </li>
                     
                 </ul>

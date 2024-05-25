@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
-   <meta property="og:url" content="https://nlgithubwp.github.io/journal/2024-03-13-190/" />
-   <link rel="canonical" href="https://nlgithubwp.github.io/journal/2024-03-13-190/" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/194/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/194/" />
 
 
   <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
@@ -16,9 +16,9 @@
 
     <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
 
-    <title>NoteBook</title>
+    <title>Looking Ahead Makes Query Plans Robust - NoteBook</title>
 
-    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/">
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/194/">
 
 <!-- CSS -->
 	
@@ -128,9 +128,9 @@
     <div class="container">
         <div class="row">
             <div class="post-heading">
-                    <h1 style="color: #acd578;"></h1>
+                    <h1 style="color: #acd578;">Looking Ahead Makes Query Plans Robust</h1>
                     
-                    <span class="meta">Posted on May 25, 2024</span>
+                    <span class="meta">Posted on March 14, 2024</span>
 
 <span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
 
@@ -143,7 +143,8 @@
  
 
 
-      
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
                     
    </span>
 
@@ -158,22 +159,8 @@
         <div class="row">
             
 
-             <p>QO-based approach may have key limitations related to generalization.</p>
+             <p>It focus on developing efficient query evaluation techniques that increase the robustness of query plans.</p>
 
-<p>Optimizations: Join order, Physical Operators (Index scan, Sequential scan, Hash join, Nested loop join, Merge join)</p>
-
-<p>Balsa, Bao as baselines, it shwos Balsa trained on the cannot generalize to unseen workloads.</p>
-
-<p>Solutions: combine Lookahead Information Passing (LIP), Adaptive Join Algorithm (AJA) to buidl a new adaptive query processing optimizatioin mechanisms.</p>
-
-<p>Lookahead Information Passing:</p>
-
-<ul>
-  <li>Execute the most selective join operation firstreduce the tuples passed to the subsequent join operations.</li>
-  <li>lookahead bloom filters to pre-filter the rows, makeing the query execution not sensitive to the join orders.</li>
-</ul>
-
-<p>join orders selected by Balsa contribute more towards improved performance, making join order selection a critical contribution of</p>
 
 
                 <br>
@@ -203,12 +190,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/tech-notebook/journal/215/" data-toggle="tooltip" data-placement="top" title="TABPFN A TRANSFORMER THAT SOLVES SMALL TABULAR CLASSIFICATION PROBLEMS IN A SECOND">&larr; Previous Post</a>
+                        <a href="/tech-notebook/journal/190/" data-toggle="tooltip" data-placement="top" title="Simple Adaptive Query Processing vs. Learned Query Optimizers">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/tech-notebook/journal/2024-03-14-194/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
+                        <a href="/tech-notebook/journal/195/" data-toggle="tooltip" data-placement="top" title="A Learned Query Rewrite System using Monte Carlo Tree Search">Next Post &rarr;</a>
                     </li>
                     
                 </ul>

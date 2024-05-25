@@ -5,164 +5,9 @@
     <description>It's the niceties that make the difference fate gives us the hand, and we play the cards.</description>
     <link>https://nlgithubwp.github.io/tech-notebook/</link>
     <atom:link href="https://nlgithubwp.github.io/tech-notebook/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
-    <lastBuildDate>Sat, 25 May 2024 09:35:41 +0000</lastBuildDate>
+    <pubDate>Sat, 25 May 2024 09:40:44 +0000</pubDate>
+    <lastBuildDate>Sat, 25 May 2024 09:40:44 +0000</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
-    
-      <item>
-        <title></title>
-        <description>&lt;p&gt;This is the latest SOTA&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title></title>
-        <description>&lt;p&gt;Propose a new task: Multi-Model dialogue response generation: given the dialogue context, the model should not only generate a pure text response but also have the capacity to generate a multimodal response (e.g., containing both image and text).&lt;/p&gt;
-
-&lt;p&gt;Challenges:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;the training is over-fitted to the training datasets, and cannot generalize to the new domain.&lt;/li&gt;
-  &lt;li&gt;not easy to collect enough training data for a new domain.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Ideas:&lt;/p&gt;
-
-&lt;p&gt;make parameters that rely on multimodal dialogues small and independent by &lt;strong&gt;disentangling&lt;/strong&gt; textual response generation and image response generation, and thus we can learn the major part of the generation model from text-only dialogues and image_description+image, pairs that are much easier to be obtained.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;../../img/a_img_store/image-20240318185701629.png&quot; alt=&quot;image-20240318185701629&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Problem formulation:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;(dialogue context U, response R) =&amp;gt; learned model P(R&lt;/td&gt;
-      &lt;td&gt;U; \theta)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;U and R may contains images.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Unified representations of both text and images =&amp;gt; express image in form of sequence tokens.
-    &lt;ol&gt;
-      &lt;li&gt;Texts =&amp;gt; BPE-encoded tokens&lt;/li&gt;
-      &lt;li&gt;Images =&amp;gt; each token is a discrete Auto-Encoder&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-</description>
-        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title></title>
-        <description>&lt;p&gt;This paper designs and implements PilotScop with a programming model to facilitate the integration of AI into DB.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;data collections: cardinality, plan cost, execution time,&lt;/li&gt;
-  &lt;li&gt;inject ML task into database&lt;/li&gt;
-  &lt;li&gt;ML environment to support the execution&lt;/li&gt;
-  &lt;li&gt;interaction between ML and database at runtime.&lt;/li&gt;
-  &lt;li&gt;AI and DB can developed independently.&lt;/li&gt;
-&lt;/ol&gt;
-
-</description>
-        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title></title>
-        <description>&lt;p&gt;Query rewrite transforms a SQL query into an &lt;strong&gt;equivalent&lt;/strong&gt; one but with &lt;strong&gt;higher&lt;/strong&gt; &lt;strong&gt;performance&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Existing problems&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;How to represent the large search space or rewrite order.&lt;/li&gt;
-  &lt;li&gt;how to define the order? The order of applying different rewrite rules significantly affects the query performance.&lt;/li&gt;
-  &lt;li&gt;How to estimate the cost reduction of a rewrite? Rewriting rules functions differently for different queries.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This paper propose a query rewritten system, which accept (query + rewrite rules) =&amp;gt; optimal rewrite order + query&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Model possible orders as a policy tree, root = input query. path = an rewritten order.&lt;/li&gt;
-  &lt;li&gt;Note utility:
-    &lt;ul&gt;
-      &lt;li&gt;cost between latency of executing original and current node + access pattern.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Monte Carlo Tree Search to explore the policy tree to find the optimal node&lt;/li&gt;
-  &lt;li&gt;Cost estimation
-    &lt;ul&gt;
-      &lt;li&gt;M_R[i,j]: cost reduction of applying rule j to operator i&lt;/li&gt;
-      &lt;li&gt;Q_C[i,j]: operator i contains columsn j&lt;/li&gt;
-      &lt;li&gt;M_R[i,j]: index, distinct value&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title></title>
-        <description>&lt;p&gt;It focus on developing efficient query evaluation techniques that increase the robustness of query plans.&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title></title>
-        <description>&lt;p&gt;QO-based approach may have key limitations related to generalization.&lt;/p&gt;
-
-&lt;p&gt;Optimizations: Join order, Physical Operators (Index scan, Sequential scan, Hash join, Nested loop join, Merge join)&lt;/p&gt;
-
-&lt;p&gt;Balsa, Bao as baselines, it shwos Balsa trained on the cannot generalize to unseen workloads.&lt;/p&gt;
-
-&lt;p&gt;Solutions: combine Lookahead Information Passing (LIP), Adaptive Join Algorithm (AJA) to buidl a new adaptive query processing optimizatioin mechanisms.&lt;/p&gt;
-
-&lt;p&gt;Lookahead Information Passing:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Execute the most selective join operation firstreduce the tuples passed to the subsequent join operations.&lt;/li&gt;
-  &lt;li&gt;lookahead bloom filters to pre-filter the rows, makeing the query execution not sensitive to the join orders.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;join orders selected by Balsa contribute more towards improved performance, making join order selection a critical contribution of&lt;/p&gt;
-</description>
-        <pubDate>Sat, 25 May 2024 09:35:41 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</guid>
-        
-        
-      </item>
     
       <item>
         <title>TABPFN A TRANSFORMER THAT SOLVES SMALL TABULAR CLASSIFICATION PROBLEMS IN A SECOND</title>
@@ -874,6 +719,386 @@ Then it uses a merge sort algorithm to merge those files.&lt;/li&gt;
         <pubDate>Wed, 17 Apr 2024 00:00:00 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/212/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/212/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>Efficient Memory Management for Large Language Model Serving with PagedAttention</title>
+        <description>&lt;p&gt;Throughput is important.&lt;/p&gt;
+
+&lt;p&gt;Batching requests can improve the throughput. The larger the batching size, the high throughput it is.&lt;/p&gt;
+
+&lt;p&gt;Use memory inefficiently lead to memory waste, and can thus store few requests, which leads low throughtput.&lt;/p&gt;
+
+&lt;p&gt;It’s challenging to manage memory efficiently. Existing system such as hugging face transformer. (20-40% used for store request)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Internal fragmentation&lt;/strong&gt;: over-allocated (e.g., 2048 tokens) due to unknown &lt;strong&gt;output&lt;/strong&gt; length.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Reservation&lt;/strong&gt;: not used at the current step, but will use in future. This is a kind of waste in current.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;External fragmentation&lt;/strong&gt;: different sequence length =&amp;gt; this is many the external fragmentation of the virtual memory not the physical memory.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Only 20%of  memory is effectively used for the current system.&lt;/p&gt;
+
+&lt;h2 id=&quot;contributions&quot;&gt;Contributions&lt;/h2&gt;
+
+&lt;p&gt;Request =&amp;gt; process, Block -&amp;gt; page, Tokens =&amp;gt; bytes.&lt;/p&gt;
+
+&lt;p&gt;This paper divides the KV cache into blocks, such that the KV cache can be store in the non-continuous memory.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;blocks are not necessarily stored in contiguous space, so KV is a more flexible way.&lt;/li&gt;
+  &lt;li&gt;external fragmentation is also avoided.&lt;/li&gt;
+  &lt;li&gt;memory sharing can happen at the granularity of the block&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then the paper proposes an attention algorithm based on such storage&lt;/p&gt;
+
+&lt;p&gt;Finally, the paper implements LLM based on such pageAttention.&lt;/p&gt;
+
+&lt;h3 id=&quot;methods&quot;&gt;Methods&lt;/h3&gt;
+
+&lt;p&gt;Logic &amp;amp; physical KV blocks&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Allocation is on-demand, every time it allocates a new block.&lt;/li&gt;
+  &lt;li&gt;memory sharing in block level, reduce memory usage&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Analysis:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;No internal fragmentation:  since it is on-demands, so only the last block has the internal fragmentation. Since each block has 16 or 32 tokens, thus internal fragmentation is small.&lt;/li&gt;
+  &lt;li&gt;No external fragmentation: blocks have same size, thus there any block can be used.&lt;/li&gt;
+  &lt;li&gt;Reduce memory usage, so we can store more requests.&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/211/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/211/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>Decision Transformer Reinforcement Learning via Sequence Modeling</title>
+        <description>&lt;p&gt;This paper mainly casts the problem of RL as conditional sequence modeling.&lt;/p&gt;
+
+&lt;p&gt;Where they input the expected reward and predict the best action here.&lt;/p&gt;
+
+&lt;p&gt;One problem is how to define the expected rewards.&lt;/p&gt;
+
+&lt;p&gt;The experiments show that it should be within in training dataset, but I feel there is a problem.&lt;/p&gt;
+
+&lt;p&gt;How to decide the expected rewards if we cannot predict future rewards?&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 10 Apr 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/210/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/210/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>Summarize of RL paper I have learned</title>
+        <description>&lt;h1 id=&quot;rl-basic-category&quot;&gt;RL basic category&lt;/h1&gt;
+
+&lt;p&gt;Model-Free&lt;/p&gt;
+
+&lt;p&gt;Model-Base&lt;/p&gt;
+
+&lt;p&gt;Offline RL&lt;/p&gt;
+
+&lt;p&gt;Online RL&lt;/p&gt;
+
+&lt;h1 id=&quot;model-base--offline&quot;&gt;Model-Base + Offline&lt;/h1&gt;
+
+&lt;h1 id=&quot;model-base--online&quot;&gt;Model-Base + Online&lt;/h1&gt;
+
+&lt;h1 id=&quot;model-free--offline&quot;&gt;Model-Free + Offline&lt;/h1&gt;
+
+&lt;h2 id=&quot;decision-transformer-reinforcement-learning-via-sequence-modeling-2021&quot;&gt;Decision Transformer: Reinforcement Learning via Sequence Modeling (2021)&lt;/h2&gt;
+
+&lt;p&gt;Large models require few samples to reach the same performance.&lt;/p&gt;
+
+&lt;p&gt;(Desired return, past states, actions) =&amp;gt; sequence model (Decision Transformer) =&amp;gt; actions with desired return.&lt;/p&gt;
+
+&lt;p&gt;This work is on offline RL.&lt;/p&gt;
+
+&lt;p&gt;This work is given a reward, and it try to predict an action to achieve the desired return&lt;/p&gt;
+
+&lt;h1 id=&quot;model-free--online&quot;&gt;Model-Free + Online&lt;/h1&gt;
+
+&lt;p&gt;Large transformer models have shown strong generalization capability on language understanding when fine-tuned with limited data.&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 02 Apr 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/209/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/209/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>CS234 reinforcement learning</title>
+        <description>&lt;h3 id=&quot;markov-assumption&quot;&gt;Markov Assumption&lt;/h3&gt;
+
+&lt;p&gt;future is independent of the past given the present&lt;/p&gt;
+
+&lt;p&gt;Markov Process/Chain&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;sequence of random states with Markov property&lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;no actions, rewards, only have transition model P(s_(t+1)&lt;/td&gt;
+          &lt;td&gt;s_t)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Markov Reward Process&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;markov chian + rewards&lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;no actions, transition model P(s_(t+1)&lt;/td&gt;
+          &lt;td&gt;s_t)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;reward function R(s_t).&lt;/li&gt;
+  &lt;li&gt;has defined &lt;strong&gt;return and value functions&lt;/strong&gt;, 
+Return = sum of reward from time step t to the horizon. 
+Value function = expected &lt;strong&gt;return&lt;/strong&gt; from state s.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Markov Decision Process (S, A, P, R, \gama)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Markov reward process + actions&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Definition:&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;table&gt;
+          &lt;tbody&gt;
+            &lt;tr&gt;
+              &lt;td&gt;Transition model P(s_(t+1)&lt;/td&gt;
+              &lt;td&gt;s_t, &lt;strong&gt;a_t&lt;/strong&gt;)&lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Reward function R(s_t, &lt;strong&gt;a_t&lt;/strong&gt;)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Policy:&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;what actions to take at each state&lt;/li&gt;
+      &lt;li&gt;can be deterministic or stochastic&lt;/li&gt;
+      &lt;li&gt;
+        &lt;table&gt;
+          &lt;tbody&gt;
+            &lt;tr&gt;
+              &lt;td&gt;like conditional distribution, pi(a&lt;/td&gt;
+              &lt;td&gt;s) = P(a&lt;/td&gt;
+              &lt;td&gt;s)&lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;MDP Policy Evaluation, Iterative Algorithm.&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;p&gt;V=0 for all states s.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;for k=1 to converge, and for each state, calculate.
+\(V_k^\pi(s) = r(s, \pi(s)) + r\sum p(s'|s, \pi(s)) V_{k-1}^\pi(s')\)
+This is &lt;strong&gt;Bellman’s backup&lt;/strong&gt; for a policy.&lt;/p&gt;
+
+        &lt;p&gt;and the optimal policy is 
+\(\pi^*(s)=argmaxV^\pi(s)\)&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Policy iteration is efficient in &lt;strong&gt;guessing&lt;/strong&gt; the optimal policy.&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;p&gt;define the &lt;strong&gt;Q function to measure&lt;/strong&gt; state-action value, and measure the improvement of a policy.
+\(Q^\pi(s, a) = R(s, a) + r\sum p(s'|s, a) V^\pi(s')\)&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;for all s and a, we compute the Q function, and then the new policy should be 
+\(\pi_{i+1}(s) = argmax_aQ^\pi_i(s, a)\)
+This is to find a such that the Q is max.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;&lt;strong&gt;Monotonic improvement&lt;/strong&gt; in policy, the new policy is always better. (there is proof at this &lt;a href=&quot;https://www.youtube.com/watch?v=E3f2Camj0Is&amp;amp;list=PLoROMvodv4rOSOPzutgyCTapiGlY2Nd8u&amp;amp;index=2&amp;amp;ab_channel=StanfordOnline&quot;&gt;Link&lt;/a&gt;)&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Value iteration is another way to compute it.&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;maintain the optimal value of starting in a state.&lt;/li&gt;
+      &lt;li&gt;Bellman Equation, and Bellman Backup operators.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;rl-algorithm-components&quot;&gt;RL Algorithm Components&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Model&lt;/strong&gt;: representation of how the world changes in response to agent’s action.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Transition model: predict next agent state, s_t + a_t =&amp;gt; s_(t+1)&lt;/li&gt;
+  &lt;li&gt;Reward model: predict immediate rewards, r(s_t, a_t)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Policy&lt;/strong&gt;: function mapping agent’s stats to action. S -&amp;gt; A,&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Determinsitc policy: pi(s) = a&lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;Stochastic policy: pi(a&lt;/td&gt;
+          &lt;td&gt;s) = Pr(a_t = a&lt;/td&gt;
+          &lt;td&gt;s_t = s)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Value Function&lt;/strong&gt;: &lt;strong&gt;future&lt;/strong&gt; rewards from being in a stats and action when following a policy&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;V(s_t) = E(r_t + r_(t+1) + r_(t+2)…&lt;/td&gt;
+          &lt;td&gt;s_t)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;quantify goodness/badness of states and actions.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;rl-agent&quot;&gt;&lt;strong&gt;RL agent:&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;Model-based/Model-free: the difference is whether they can model the environment。&lt;/p&gt;
+
+&lt;h3 id=&quot;model-free&quot;&gt;Model-Free&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Monte Carlo Policy Evaluation:&lt;/strong&gt; Policy evaluation when we don’t have dynamics and reward model.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;no bootstrapping&lt;/li&gt;
+  &lt;li&gt;does not assume state is Markov&lt;/li&gt;
+  &lt;li&gt;Can only be applied to episodic MPDs.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;###&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/208/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/208/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>An End-to-End Automatic Cloud Database Tuning System Using Deep Reinforcement Learning</title>
+        <description>&lt;p&gt;This paper proposes an end-to-end automatic CDB tuning system, which&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;uses the deep deterministic policy gradient method to find the optimal configurations in high-dimensional continuous space.&lt;/li&gt;
+  &lt;li&gt;adopts a &lt;strong&gt;try-and-error strategy&lt;/strong&gt; to learn knob settings with a limited number of samples to accomplish the initial training&lt;/li&gt;
+  &lt;li&gt;adopts the reward-feedback mechanism in RL instead of traditional regression, which enables end-to-end learning and accelerates the convergence speed&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;rl-for-tunning&quot;&gt;RL for tunning&lt;/h3&gt;
+
+&lt;p&gt;State: Got from the “show status”.&lt;/p&gt;
+
+&lt;p&gt;Reward: performance changed (latency/throughput)&lt;/p&gt;
+
+&lt;p&gt;Action: change tunable knobs&lt;/p&gt;
+
+&lt;p&gt;Policy: a DNN, db status =&amp;gt; DNN =&amp;gt; recommended knobs.&lt;/p&gt;
+
+&lt;p&gt;Training data:&lt;/p&gt;
+
+&lt;p&gt;(q, a, s, r), q is a set of query workloads, a is the knobs and values, s is the db status, and r is the performance when processing q.&lt;/p&gt;
+
+&lt;h3 id=&quot;insights&quot;&gt;Insights:&lt;/h3&gt;
+
+&lt;p&gt;value-based and policy-based,&lt;/p&gt;
+
+&lt;p&gt;Q-learning is effective in a relatively small state space. However, it is hard to solve the problem of a large state&lt;/p&gt;
+
+&lt;p&gt;DQN can model the states, but DQN is a discrete-oriented control algorithm, which means the actions of output are discrete&lt;/p&gt;
+
+&lt;p&gt;It uses Deep Deterministic Policy Gradient&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/207/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/207/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>Lero A Learning-to-Rank Query Optimizer</title>
+        <description>&lt;p&gt;###&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/205/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/205/</guid>
         
         
         <category>A paper note</category>
