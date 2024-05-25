@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link media="all" rel="stylesheet" type="text/css" href="https://nlgithubwp.github.io/css/pygments.css" />
-   <meta property="og:url" content="https://nlgithubwp.github.io/journal/2024-02-15-182/" />
-   <link rel="canonical" href="https://nlgithubwp.github.io/journal/2024-02-15-182/" />
+   <meta property="og:url" content="https://nlgithubwp.github.io/journal/213/" />
+   <link rel="canonical" href="https://nlgithubwp.github.io/journal/213/" />
 
 
   <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
@@ -16,9 +16,9 @@
 
     <meta name="description" content="It's the niceties that make the difference fate gives us the hand, and we play the cards.">
 
-    <title>NoteBook</title>
+    <title>ALECE An Attention-based Learned Cardinality Estimator for SPJ Queries on Dynamic Workloads (Extended) - NoteBook</title>
 
-    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/2024-02-15-182/">
+    <link rel="canonical" href="https://nlgithubwp.github.io/tech-notebook/journal/213/">
 
 <!-- CSS -->
 	
@@ -128,9 +128,9 @@
     <div class="container">
         <div class="row">
             <div class="post-heading">
-                    <h1 style="color: #acd578;"></h1>
+                    <h1 style="color: #acd578;">ALECE An Attention-based Learned Cardinality Estimator for SPJ Queries on Dynamic Workloads (Extended)</h1>
                     
-                    <span class="meta">Posted on May 25, 2024</span>
+                    <span class="meta">Posted on May 14, 2024</span>
 
 <span class="time-tag-categ" style="font-size:.7em;background-color: rgba(128, 128, 128, 0.45);">
 
@@ -143,7 +143,8 @@
  
 
 
-      
+  
+   &sim; Filed in <i class="fa fa-briefcase"></i>&nbsp;:&nbsp;<a href="/tech-notebook/journal/category/A paper note/" data-toggle="tooltip" title="Other posts filed in A paper note category" rel="tag">A paper note</a>    
                     
    </span>
 
@@ -158,76 +159,24 @@
         <div class="row">
             
 
-             <h1 id="insights">Insights</h1>
-
-<p>Retrain every N second to update the model</p>
-
-<p>The whole process follows RL, and the expliotation and exploration is balanced via <strong>plan search procedure</strong></p>
-
-<h1 id="introduction">Introduction</h1>
-
-<p>This paper proposes Neo, which can learn (based on RL) to make decisions about <strong>join order, operator, and index.</strong></p>
-
-<p>Challenges:</p>
-
-<ol>
-  <li>Use value network to automatically capture intuitive patterns.</li>
-  <li>Feature the query</li>
-  <li>overcame reinforcement learning’s <strong>infamous sample inefficiency</strong> by using a technique known as <strong>learning from demonstration.</strong>
-    <ol>
-      <li><strong>Sample inefficiency</strong> arises when an agent requires a large number of interactions (samples) with the environment to learn an effective policy, making the learning process slow and resource-intensive.</li>
-    </ol>
-  </li>
-</ol>
-
-<h1 id="system-overview">System Overview</h1>
-
-<p>Two phases:</p>
+             <p>Query-driven and data-driven methods</p>
 
 <ul>
-  <li>initial phase: expertise is collected from an expert optimizer
-    <ul>
-      <li>Collect (query, plan, time)</li>
-      <li>Train a Value Network (TCNN), which predicts the execution time of a partial or complete plan.
-        <ul>
-          <li>Feature: query level  (join graph) + plan level (join order) information.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>Running phase: queries are executed.
-    <ul>
-      <li>Given a query, it uses the value model to search for the best plan (with <strong>join order selection, join operators, and indexes</strong>.)</li>
-    </ul>
-  </li>
-  <li>Model Retraining:</li>
+  <li>query-driven: it basically train a model to predict CE.</li>
+  <li>data-driven: it basically learn a join distribution among columns and then sampling bsaed on that, and use the sampled data to estimate the basic staisitcs. Default optimizer will then use those statistics to estimate CE.</li>
 </ul>
 
-<p>Query optimization as a Markov decision process (MDP).</p>
+<p>Existing work:</p>
 
 <ul>
-  <li>State: partial query plan.</li>
-  <li>Action: a step in building a query plan in a bottom-up fashion.</li>
-  <li>Reward: latency.</li>
+  <li>Cannot combine both query-driven and data-driven methods.</li>
+  <li>Cannot handle dynamic workloads that mix queries and data manipulation statements including inserts, deletes and updates.</li>
 </ul>
 
-<h2 id="query-encoding">Query encoding.</h2>
+<p>ALECE is less sensitive to data changes</p>
 
-<p>Plan encoder + Query encoder.</p>
+<h1 id="techniques">Techniques</h1>
 
-<ul>
-  <li>Query encoder introduce the row vector, which map each row into a vector like a sentence. in NLP.</li>
-</ul>
-
-<p>TCNN to predict the latency of each execution plan.</p>
-
-<p>min-heap to help the searching process, from the partial plan all the way to the full query plan.</p>
-
-<h1 id="exps">Exps</h1>
-
-<p>both synthetic and realworld datasets</p>
-
-<p>JOB, TPC-H, Corp</p>
 
 
                 <br>
@@ -257,12 +206,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/tech-notebook/journal/2024-02-15-181/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
+                        <a href="/tech-notebook/journal/212/" data-toggle="tooltip" data-placement="top" title="PostgreSQL 14 Internals">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/tech-notebook/journal/2024-03-11-187/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
+                        <a href="/tech-notebook/journal/214/" data-toggle="tooltip" data-placement="top" title="TRANSFORMERS CAN DO BAYESIAN INFERENCE">Next Post &rarr;</a>
                     </li>
                     
                 </ul>

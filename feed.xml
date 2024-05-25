@@ -5,55 +5,16 @@
     <description>It's the niceties that make the difference fate gives us the hand, and we play the cards.</description>
     <link>https://nlgithubwp.github.io/tech-notebook/</link>
     <atom:link href="https://nlgithubwp.github.io/tech-notebook/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
-    <lastBuildDate>Sat, 25 May 2024 09:10:39 +0000</lastBuildDate>
+    <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
+    <lastBuildDate>Sat, 25 May 2024 09:15:12 +0000</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
-    
-      <item>
-        <title></title>
-        <description>
-</description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-05-20-215/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-05-20-215/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title></title>
-        <description>&lt;p&gt;Query-driven and data-driven methods&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;query-driven: it basically train a model to predict CE.&lt;/li&gt;
-  &lt;li&gt;data-driven: it basically learn a join distribution among columns and then sampling bsaed on that, and use the sampled data to estimate the basic staisitcs. Default optimizer will then use those statistics to estimate CE.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Existing work:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Cannot combine both query-driven and data-driven methods.&lt;/li&gt;
-  &lt;li&gt;Cannot handle dynamic workloads that mix queries and data manipulation statements including inserts, deletes and updates.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ALECE is less sensitive to data changes&lt;/p&gt;
-
-&lt;h1 id=&quot;techniques&quot;&gt;Techniques&lt;/h1&gt;
-
-</description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-05-14-213/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-05-14-213/</guid>
-        
-        
-      </item>
     
       <item>
         <title></title>
         <description>&lt;p&gt;This is the latest SOTA&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</guid>
         
@@ -99,7 +60,7 @@
   &lt;/li&gt;
 &lt;/ol&gt;
 </description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</guid>
         
@@ -119,7 +80,7 @@
 &lt;/ol&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</guid>
         
@@ -158,7 +119,7 @@
 &lt;/ul&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</guid>
         
@@ -170,7 +131,7 @@
         <description>&lt;p&gt;It focus on developing efficient query evaluation techniques that increase the robustness of query plans.&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</guid>
         
@@ -196,7 +157,7 @@
 
 &lt;p&gt;join orders selected by Balsa contribute more towards improved performance, making join order selection a critical contribution of&lt;/p&gt;
 </description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</guid>
         
@@ -205,77 +166,236 @@
     
       <item>
         <title></title>
-        <description>&lt;p&gt;Meta-leaner is trained on a &lt;strong&gt;distribution&lt;/strong&gt; of similar tasks, in the hopes of generalization to &lt;strong&gt;novel but related tasks&lt;/strong&gt; by learning a high-level strategy that captures the essence of the problem it is asked to solve.&lt;/p&gt;
+        <description>&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
 
-&lt;p&gt;Recent meta-learning approaches are extensively hand-designed, either using architectures specialized to a particular application, or hard-coding algorithmic components that constrain how the meta-learner solves the task.&lt;/p&gt;
+&lt;p&gt;BAO’s challenges&lt;/p&gt;
 
-&lt;p&gt;This paper propose a simple and generic meta-learner architectures.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;BAO use 42 pre-defined hint-sets. Manually engineering feature hint-sets can be quite challenging.&lt;/li&gt;
+  &lt;li&gt;IN disaggregated settings, it lack a reliable cost models.&lt;/li&gt;
+&lt;/ul&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-189/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-189/</guid>
+        <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-01-08-178/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-01-08-178/</guid>
         
         
       </item>
     
       <item>
         <title></title>
-        <description>&lt;h1 id=&quot;insights&quot;&gt;Insights&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
 
-&lt;p&gt;RL models system tasks as a sequential decision-making problem and provides a feedback for exploring the space&lt;/p&gt;
+&lt;p&gt;Parametric query optimization (PQO): queries that have identical SQL structure and only differ in the value of bound parameters&lt;/p&gt;
 
-&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
+&lt;h2 id=&quot;motivations&quot;&gt;Motivations&lt;/h2&gt;
 
-&lt;p&gt;meta-learning + bootstrapping =&amp;gt; quickly adapt to various workloads.&lt;/p&gt;
+&lt;p&gt;Traditionally, PQO is studied from the perspective of reducing query planning time by avoiding re-optimization, etc. But those approaches still rely on the traditional query optimizers, and are thus sub-optimal.&lt;/p&gt;
 
-&lt;p&gt;safe and robust RL exploration.&lt;/p&gt;
+&lt;p&gt;ML-based approaches have those drawbacks:&lt;/p&gt;
 
-&lt;h2 id=&quot;challenges-of-applying-rl-to-production&quot;&gt;Challenges of applying RL to production&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Inference times are higher than traditional methods.&lt;/li&gt;
+  &lt;li&gt;inconsistent performance across dataset sizes and distributions.&lt;/li&gt;
+  &lt;li&gt;unclear query performance improvements.&lt;/li&gt;
+  &lt;li&gt;lack robustness.&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;First, a learned RL policy is workload-specific and infrastructure-specific, 
-Nontrivial retraining is needed to adapt to new workloads and environment shifts in each problem domain, which is a critical problem in making RL practical in production&lt;/p&gt;
-
-&lt;p&gt;Without timely retraining, the online policy-serving performance of the RL agent fluctuates and leads to undesired degradation.&lt;/p&gt;
-
-&lt;p&gt;RL training is through trial and error, and&lt;/p&gt;
-
-&lt;h2 id=&quot;objective&quot;&gt;Objective&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;fast-adapting, effective, and robust RL-based solutions under the constraints s of production cloud systems&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;RL model trained in a robust manner.&lt;/p&gt;
-
-&lt;p&gt;RL policy can be adapted to new workloads without significant retraining.&lt;/p&gt;
-
-&lt;p&gt;The online RL model policy-serving performance can be kept stable.&lt;/p&gt;
-
-&lt;h2 id=&quot;techniques&quot;&gt;Techniques&lt;/h2&gt;
+&lt;h2 id=&quot;contributions&quot;&gt;Contributions&lt;/h2&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;Fast model adaptation: meta-learning to model RL agent as &lt;strong&gt;base-learner&lt;/strong&gt; + &lt;strong&gt;meta-learner&lt;/strong&gt; for learning to generalize to new app/env shifts.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;With the embedding, fewer retraining iterations are needed for new, previously unseen workloads.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Stable online RL policy-serving performance.&lt;/p&gt;
-
-    &lt;p&gt;continuous monitoring, retraining detection, and trigger mechanisms.&lt;/p&gt;
+  &lt;li&gt;Decoupled plan generation and learning-bsaed plan prediction architecture.
+    &lt;ul&gt;
+      &lt;li&gt;better candidate plan generation algorithms: Row count evolution: generate candidate plans by perturbing the optimizer’s cardinality estimates.&lt;/li&gt;
+    &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Safe exploration. RL bootstrapping module that combines offline and online training.&lt;/p&gt;
-
-    &lt;p&gt;Heuristics-based controller by comparing rewards, the agent continues to be trained online.&lt;/p&gt;
+  &lt;li&gt;It leverages actual query execution data to build a training dataset for best-plan prediction, avoiding the well-studied mismatch between cost models and execution latency.&lt;/li&gt;
+  &lt;li&gt;Robust neural network prediction techniques to reduce tail latency and reduce query regressions.
+    &lt;ul&gt;
+      &lt;li&gt;Use &lt;strong&gt;Spectral-normalized Neural Gaussian Processes&lt;/strong&gt; to accurately quantify how confident it is about a prediction.&lt;/li&gt;
+    &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;h1 id=&quot;solutions&quot;&gt;Solutions&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Problem&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Candidate generation + best plan prediction.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Assumption&lt;/strong&gt;
+It assumes a fixed system state, including &lt;strong&gt;database configuration, optimizer implementation, and data distribution&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the database is reconfigured infrequently, data distribution drifts slowly.&lt;/li&gt;
+  &lt;li&gt;when those things change, the model needs to re-train with new training data.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;System&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Planner: It proposes Row count evolutions, which is a computationally efficient algorithm that generates new plans by randomly perturbing the optimizer’s cardinality estimates.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Multiplicative perturbations: it is motivated by the standard metric of Q-error in cardinality estimation.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Models: each query template -&amp;gt; one ML model.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;encoding: it uses the parameter value as an input feature, each going through embeddings for strings integer features.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;training:&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;p&gt;It forces the optimizer to produce a &lt;strong&gt;candidate plan by providing all join/scan methods and the join order via hints&lt;/strong&gt;&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;It trains the model based on a multiple-label classification problem.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;Objective function: regression is unstable and hard to train. multi-class classification is not suitable since multiple queries may be near-optimal.&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:10:39 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-12-188/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-12-188/</guid>
+        <pubDate>Sat, 25 May 2024 09:15:12 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-01-02-175/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-01-02-175/</guid>
         
+        
+      </item>
+    
+      <item>
+        <title>TABPFN A TRANSFORMER THAT SOLVES SMALL TABULAR CLASSIFICATION PROBLEMS IN A SECOND</title>
+        <description>
+</description>
+        <pubDate>Mon, 20 May 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/215/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/215/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>TRANSFORMERS CAN DO BAYESIAN INFERENCE</title>
+        <description>&lt;h3 id=&quot;enhanced-summary&quot;&gt;Enhanced Summary&lt;/h3&gt;
+
+&lt;p&gt;This paper introduces Prior-Data Fitted Networks (PFNs), a novel approach leveraging Transformers to approximate Bayesian inference. PFNs aim to overcome challenges associated with deep learning for Bayesian methods, such as explicit prior specification and accurate uncertainty capture. By transforming posterior approximation into a supervised classification problem, PFNs can make probabilistic predictions with a single forward pass, efficiently mimicking Gaussian Processes (GPs) and enabling Bayesian inference for intractable problems with significant speedups.&lt;/p&gt;
+
+&lt;h3 id=&quot;gaussian-processes-and-bayesian-inference&quot;&gt;Gaussian Processes and Bayesian Inference&lt;/h3&gt;
+
+&lt;p&gt;Gaussian Processes (GPs) are a powerful tool in Bayesian inference, providing a non-parametric way to model distributions over functions. Bayesian inference involves updating prior beliefs based on observed data to make predictions. GPs facilitate this by defining prior over functions and using observed data to compute the posterior distribution, which can then be used for predictions.&lt;/p&gt;
+
+&lt;h3 id=&quot;relationship-between-gps-and-the-paper&quot;&gt;Relationship Between GPs and the Paper&lt;/h3&gt;
+
+&lt;p&gt;The paper demonstrates that PFNs can effectively approximate the posterior predictive distribution (PPD) of GPs. This is significant because GPs are known for their ability to provide well-calibrated uncertainty estimates and handle small datasets effectively. By approximating GPs, PFNs inherit these desirable properties, making them a versatile tool for Bayesian inference across various tasks.&lt;/p&gt;
+
+&lt;h3 id=&quot;variational-inference-vi-and-markov-chain-monte-carlo-mcmc&quot;&gt;Variational Inference (VI) and Markov Chain Monte Carlo (MCMC)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Variational Inference (VI):&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;VI approximates the posterior distribution by finding a tractable distribution that is close to the true posterior. This is done by optimizing the parameters of the approximate distribution to minimize the Kullback-Leibler (KL) divergence from the true posterior.&lt;/li&gt;
+      &lt;li&gt;The paper compares PFNs with stochastic variational inference (SVI), a specific VI method, highlighting the efficiency and accuracy improvements achieved by PFNs.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Markov Chain Monte Carlo (MCMC):&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;MCMC methods, such as the No-U-Turn Sampler (NUTS), generate samples from the posterior distribution by constructing a Markov chain that has the desired distribution as its equilibrium distribution.&lt;/li&gt;
+      &lt;li&gt;PFNs are shown to significantly outperform MCMC methods in terms of speed, achieving up to 8,000 times faster inference while maintaining comparable accuracy.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;proposed-solution-and-architectural-details&quot;&gt;Proposed Solution and Architectural Details&lt;/h3&gt;
+
+&lt;p&gt;The paper proposes using a Transformer-based architecture without positional encodings to maintain permutation invariance in the input dataset. Key details include:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Transformer Architecture:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;The model is a Transformer encoder with no positional encodings, ensuring invariance to the order of the dataset ( D ).&lt;/li&gt;
+      &lt;li&gt;Inputs and queries are fed as linear projections to the Transformer, which then outputs the PPD for each query based on the dataset and query.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Mathematical Formulation:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;The loss function used for training PFNs is the Prior-Data Negative Log-Likelihood (Prior-Data NLL):
+[
+\ell_\theta = \mathbb{E}&lt;em&gt;{D \cup {x,y} \sim p(D)} [-\log q&lt;/em&gt;\theta(y|x,D)]
+]&lt;/li&gt;
+      &lt;li&gt;This objective ensures that minimizing the loss yields an approximation of the PPD in terms of cross-entropy and KL-Divergence.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Training Process:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;PFNs are trained by sampling datasets from a prior distribution and fitting the model to predict hold-out examples.&lt;/li&gt;
+      &lt;li&gt;The model is optimized using stochastic gradient descent on the Prior-Data NLL.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Experiment Details and Performance:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;PFNs were evaluated on tasks such as GP regression, Bayesian neural networks, classification for small tabular datasets, and few-shot image classification.&lt;/li&gt;
+      &lt;li&gt;PFNs achieved over 200-fold speedups compared to traditional methods, with significant performance improvements demonstrated in various experiments.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;implementation-steps&quot;&gt;Implementation Steps&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Define Prior Distribution:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Sample datasets from a prior distribution ( p(D) ).&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Train the PFN:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Initialize the Transformer model.&lt;/li&gt;
+      &lt;li&gt;Train the model by minimizing the Prior-Data NLL using stochastic gradient descent.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Perform Inference:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;For a given dataset ( D ) and query ( x ), use the trained PFN to predict the PPD for ( x ).&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;experimental-results&quot;&gt;Experimental Results&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Performance Improvement:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;PFNs closely approximate the PPD of GPs, with results nearly indistinguishable from the exact PPD.&lt;/li&gt;
+      &lt;li&gt;Significant speedups were observed, with PFNs being 1,000 times faster than Bayes-by-Backprop SVI and up to 8,000 times faster than NUTS.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Implementation Steps:&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Train PFNs using large-scale datasets generated from priors.&lt;/li&gt;
+      &lt;li&gt;Fine-tune the model for specific tasks as needed, demonstrating flexibility and efficiency in practical applications.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;PFNs represent a significant advancement in leveraging deep learning techniques for Bayesian inference, offering a scalable and efficient alternative to traditional methods. With the ability to approximate GPs and handle diverse tasks, PFNs provide a versatile tool for Bayesian inference, achieving remarkable speed and performance improvements.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 15 May 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/214/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/214/</guid>
+        
+        
+        <category>A paper note</category>
         
       </item>
     
