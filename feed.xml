@@ -5,8 +5,8 @@
     <description>It's the niceties that make the difference fate gives us the hand, and we play the cards.</description>
     <link>https://nlgithubwp.github.io/tech-notebook/</link>
     <atom:link href="https://nlgithubwp.github.io/tech-notebook/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
-    <lastBuildDate>Sat, 25 May 2024 09:19:05 +0000</lastBuildDate>
+    <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
+    <lastBuildDate>Sat, 25 May 2024 09:21:51 +0000</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
     
       <item>
@@ -14,7 +14,7 @@
         <description>&lt;p&gt;This is the latest SOTA&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-199/</guid>
         
@@ -60,7 +60,7 @@
   &lt;/li&gt;
 &lt;/ol&gt;
 </description>
-        <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-18-198/</guid>
         
@@ -80,7 +80,7 @@
 &lt;/ol&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-197/</guid>
         
@@ -119,7 +119,7 @@
 &lt;/ul&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-195/</guid>
         
@@ -131,7 +131,7 @@
         <description>&lt;p&gt;It focus on developing efficient query evaluation techniques that increase the robustness of query plans.&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-14-194/</guid>
         
@@ -157,7 +157,7 @@
 
 &lt;p&gt;join orders selected by Balsa contribute more towards improved performance, making join order selection a critical contribution of&lt;/p&gt;
 </description>
-        <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-03-13-190/</guid>
         
@@ -176,96 +176,9 @@
 &lt;/ul&gt;
 
 </description>
-        <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
+        <pubDate>Sat, 25 May 2024 09:21:51 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-01-08-178/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-01-08-178/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title></title>
-        <description>&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
-
-&lt;p&gt;Parametric query optimization (PQO): queries that have identical SQL structure and only differ in the value of bound parameters&lt;/p&gt;
-
-&lt;h2 id=&quot;motivations&quot;&gt;Motivations&lt;/h2&gt;
-
-&lt;p&gt;Traditionally, PQO is studied from the perspective of reducing query planning time by avoiding re-optimization, etc. But those approaches still rely on the traditional query optimizers, and are thus sub-optimal.&lt;/p&gt;
-
-&lt;p&gt;ML-based approaches have those drawbacks:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Inference times are higher than traditional methods.&lt;/li&gt;
-  &lt;li&gt;inconsistent performance across dataset sizes and distributions.&lt;/li&gt;
-  &lt;li&gt;unclear query performance improvements.&lt;/li&gt;
-  &lt;li&gt;lack robustness.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;contributions&quot;&gt;Contributions&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Decoupled plan generation and learning-bsaed plan prediction architecture.
-    &lt;ul&gt;
-      &lt;li&gt;better candidate plan generation algorithms: Row count evolution: generate candidate plans by perturbing the optimizer’s cardinality estimates.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;It leverages actual query execution data to build a training dataset for best-plan prediction, avoiding the well-studied mismatch between cost models and execution latency.&lt;/li&gt;
-  &lt;li&gt;Robust neural network prediction techniques to reduce tail latency and reduce query regressions.
-    &lt;ul&gt;
-      &lt;li&gt;Use &lt;strong&gt;Spectral-normalized Neural Gaussian Processes&lt;/strong&gt; to accurately quantify how confident it is about a prediction.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;solutions&quot;&gt;Solutions&lt;/h1&gt;
-
-&lt;p&gt;&lt;strong&gt;Problem&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Candidate generation + best plan prediction.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Assumption&lt;/strong&gt;
-It assumes a fixed system state, including &lt;strong&gt;database configuration, optimizer implementation, and data distribution&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;the database is reconfigured infrequently, data distribution drifts slowly.&lt;/li&gt;
-  &lt;li&gt;when those things change, the model needs to re-train with new training data.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;System&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Planner: It proposes Row count evolutions, which is a computationally efficient algorithm that generates new plans by randomly perturbing the optimizer’s cardinality estimates.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Multiplicative perturbations: it is motivated by the standard metric of Q-error in cardinality estimation.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Models: each query template -&amp;gt; one ML model.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;encoding: it uses the parameter value as an input feature, each going through embeddings for strings integer features.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;training:&lt;/p&gt;
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;It forces the optimizer to produce a &lt;strong&gt;candidate plan by providing all join/scan methods and the join order via hints&lt;/strong&gt;&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;It trains the model based on a multiple-label classification problem.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;Objective function: regression is unstable and hard to train. multi-class classification is not suitable since multiple queries may be near-optimal.&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Sat, 25 May 2024 09:19:05 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-01-02-175/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-01-02-175/</guid>
         
         
       </item>
@@ -393,6 +306,36 @@ It assumes a fixed system state, including &lt;strong&gt;database configuration,
         <pubDate>Wed, 15 May 2024 00:00:00 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/214/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/214/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>ALECE An Attention-based Learned Cardinality Estimator for SPJ Queries on Dynamic Workloads (Extended)</title>
+        <description>&lt;p&gt;Query-driven and data-driven methods&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;query-driven: it basically train a model to predict CE.&lt;/li&gt;
+  &lt;li&gt;data-driven: it basically learn a join distribution among columns and then sampling bsaed on that, and use the sampled data to estimate the basic staisitcs. Default optimizer will then use those statistics to estimate CE.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Existing work:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cannot combine both query-driven and data-driven methods.&lt;/li&gt;
+  &lt;li&gt;Cannot handle dynamic workloads that mix queries and data manipulation statements including inserts, deletes and updates.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ALECE is less sensitive to data changes&lt;/p&gt;
+
+&lt;h1 id=&quot;techniques&quot;&gt;Techniques&lt;/h1&gt;
+
+</description>
+        <pubDate>Tue, 14 May 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/213/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/213/</guid>
         
         
         <category>A paper note</category>
