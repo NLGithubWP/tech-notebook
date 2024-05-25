@@ -8,15 +8,28 @@ def fix_md_format(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         content = file.readlines()
 
-    # Check if the front matter is missing
     content_str = ''.join(content)
+
     if not (content_str.startswith('---') and 'layout: post' in content_str and content_str.count('---') >= 2):
         title_line = next((line for line in content if line.startswith('title:')), None)
-        if title_line:
+        header_image_line = next((line for line in content if line.startswith('header-image:')), None)
+        categories_line = next((line for line in content if line.startswith('categories:')), None)
+
+        if title_line and header_image_line and categories_line:
             title_index = content.index(title_line)
-            content.insert(0, '---\n')
-            content.insert(title_index + 2, 'layout: post\n')
-            content.insert(title_index + 3, '---\n')
+            header_image_index = content.index(header_image_line)
+            categories_index = content.index(categories_line)
+
+            new_front_matter = [
+                '---\n',
+                title_line,
+                header_image_line,
+                categories_line,
+                'layout: post\n',
+                '---\n'
+            ]
+
+            content = new_front_matter + content[max(title_index, header_image_index, categories_index) + 1:]
 
     with open(file_path, 'w', encoding='utf-8') as file:
         file.writelines(content)
@@ -68,9 +81,11 @@ def main():
     readme_path = os.path.join(directory, 'README.md')
 
     for md_file in md_files:
+        print(f'Processing file: {md_file}')
         fix_md_format(md_file)
 
     update_readme(md_files, readme_path)
+    print('README.md updated successfully.')
 
 
 if __name__ == "__main__":
