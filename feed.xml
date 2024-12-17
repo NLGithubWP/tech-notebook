@@ -5,9 +5,1223 @@
     <description>It's the niceties that make the difference fate gives us the hand, and we play the cards.</description>
     <link>https://nlgithubwp.github.io/tech-notebook/</link>
     <atom:link href="https://nlgithubwp.github.io/tech-notebook/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 25 May 2024 09:50:23 +0000</pubDate>
-    <lastBuildDate>Sat, 25 May 2024 09:50:23 +0000</lastBuildDate>
+    <pubDate>Tue, 17 Dec 2024 09:23:50 +0000</pubDate>
+    <lastBuildDate>Tue, 17 Dec 2024 09:23:50 +0000</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;&lt;img src=&quot;../../img/a_img_store/image-20240604104259675.png&quot; alt=&quot;image-20240604104259675&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;This paper assumes&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;There are at most 30 nodes in a tree.&lt;/li&gt;
+  &lt;li&gt;There are at most 3 predictions for each column in a node.&lt;/li&gt;
+  &lt;li&gt;Only support operators such as&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The paper solves the problem of&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;existing encoding methods do not fully utilize readily available database statistics in the representation, which characterizes the data distribution.&lt;/li&gt;
+  &lt;li&gt;They typically have difficulty in modeling long paths of information flow in a query plan.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Contribution:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Tree-structured Transformer model to learn the representation of physical query plans. Thus &lt;strong&gt;Improves the generalization of the learned representation.&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;Capture node dependencies via self-attention.&lt;/li&gt;
+      &lt;li&gt;Integrate histograms into plan encoding.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;examine in cost estimation, cardinality estimation, index selection, and steering query optimizer.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Insights: Sec 4.2.1&lt;/p&gt;
+
+&lt;p&gt;‘one-hot’ encoding 
+(1) The dimension of the one-hot vector can easily blow up for large database schema.&lt;/p&gt;
+
+&lt;p&gt;(2) It is difficult to handle new categorical variables when the database updates. For example, when new columns are added, the encoding scheme has to reset to the required dimensions, and thus we have to retrain the whole machine-learning system.&lt;/p&gt;
+
+&lt;p&gt;To address these limitations, we propose to use a fixed-size, dense embedding to represent each categorical variable. These embeddings will be learned automatically through back-propagation when a machine-learning model is trained for a specific database task, such as cost estimation. As such, the important features that are relevant to the database task could be reflected in the embedding space [10].&lt;/p&gt;
+
+&lt;p&gt;This setting also naturally supports inserting new variables. To insert a new category (e.g., a new table) to the representation model, we simply add a new random-initialized embedding for the variable, without affecting other learned embeddings.&lt;/p&gt;
+
+&lt;p&gt;Details:&lt;/p&gt;
+
+&lt;p&gt;Node:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;type-&amp;gt; em0.   Join -&amp;gt; em1,   column -&amp;gt;em2,   table -&amp;gt; em3.&lt;/p&gt;
+
+    &lt;p&gt;cat(em0, em1, em2, em3) =&amp;gt; final em&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Node + hight e&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Position -&amp;gt; Embeddings.
+position_embd + atree_atten_bias.&lt;/li&gt;
+  &lt;li&gt;Hight -&amp;gt; Embeddings.&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Tue, 17 Dec 2024 09:23:50 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-06-04-220/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-06-04-220/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title></title>
+        <description>&lt;p&gt;It enhances the TPC-DS benchmark with complex data distribution and challenging yet semantically meaningful query templates&lt;/p&gt;
+
+&lt;p&gt;the joins in the TPC-DS benchmark are mostly between a primary key and a foreign key or between a primary key and another primary key.&lt;/p&gt;
+
+&lt;p&gt;Needs&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;distinct query instances&lt;/li&gt;
+  &lt;li&gt;the distribution of query templates&lt;/li&gt;
+  &lt;li&gt;more evaluation metrics&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;the paper preserves the realistic database schema from TPC-DS, and it enriches the TPC-DS benchmark in a number of ways:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;more skews and correlations to individual columns and multiple columns within a table and across table&lt;/li&gt;
+  &lt;li&gt;new and semantically meaningful query templates (non primary-key-foreign-key)&lt;/li&gt;
+  &lt;li&gt;fne-grained data slicing. This also increases the total number of distinct query instances&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Thus, the DSB benchmark enhances the data generation of the TPC-DS benchmark with additional skews and correlations&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 17 Dec 2024 09:23:50 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-05-30-217/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-05-30-217/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Dbinternal</title>
+        <description>&lt;h1 id=&quot;structure&quot;&gt;Structure&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tcop&lt;/code&gt; (Top-level Control Program)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;postgres.c&lt;/code&gt;&lt;/strong&gt;: main entry point for query execution. It handles the query lifecycle:
+accepts the query from the client (via the frontend-backend protocol), and coordinates the entire process:&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Parses the query using the parser.&lt;/li&gt;
+      &lt;li&gt;Uses the planner to generate an execution plan.&lt;/li&gt;
+      &lt;li&gt;Sends the plan to the executor for actual execution.&lt;/li&gt;
+      &lt;li&gt;Returns the results to the client.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;some-important-variables&quot;&gt;Some important variables&lt;/h1&gt;
+
+&lt;p&gt;A &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryDesc&lt;/code&gt; structure represents the state and details of the query being executed. It contains information like the query &lt;strong&gt;plan, execution context, snapshots, and parameters.&lt;/strong&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 02 Dec 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/DBInternal/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/DBInternal/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Lqo</title>
+        <description>&lt;h1 id=&quot;some-ideas&quot;&gt;Some Ideas&lt;/h1&gt;
+
+&lt;p&gt;Non-parametric model for model selection for query opt?&lt;/p&gt;
+
+&lt;p&gt;Dirichlet Process Mixture: It solves the problem of determining the number of mixture components by allowing the data to drive the complexity of the model.&lt;/p&gt;
+
+&lt;h2 id=&quot;settings&quot;&gt;Settings&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;config&lt;/th&gt;
+      &lt;th&gt;size&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;shared_buffers &amp;gt;= N * work_mem&lt;/td&gt;
+      &lt;td&gt;16GB&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;work_mem (sort/hash operation)&lt;/td&gt;
+      &lt;td&gt;4GB&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;effective_cache_size (affects whether to use index scans or sequential scans.)&lt;/td&gt;
+      &lt;td&gt;16GB&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;temp_buffers&lt;/td&gt;
+      &lt;td&gt;4GB&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;geqo&lt;/td&gt;
+      &lt;td&gt;off&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;AUTOVACUUM&lt;/td&gt;
+      &lt;td&gt;off&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;enable_bitmapscan&lt;/td&gt;
+      &lt;td&gt;on&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;enable_tidscan&lt;/td&gt;
+      &lt;td&gt;on&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;max_parallel_workers&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;max_parallel_workers_per_gather&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;max_worker_processes&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h1 id=&quot;templates&quot;&gt;Templates&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeawaysproblems&quot;&gt;TakeawaysProblems&lt;/h2&gt;
+
+&lt;h2 id=&quot;assumptions&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;h3 id=&quot;query-type&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;h3 id=&quot;model&quot;&gt;Model&lt;/h3&gt;
+
+&lt;h2 id=&quot;workloads&quot;&gt;Workloads&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;h3 id=&quot;dynamic-workload&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;h1 id=&quot;1-dsb-datasets&quot;&gt;1. DSB datasets&lt;/h1&gt;
+
+&lt;p&gt;Existing benchmarks lack of&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;more distinct query instances&lt;/li&gt;
+  &lt;li&gt;dynamic workloads&lt;/li&gt;
+  &lt;li&gt;guidance of comprehensively comparing the performance trade-offs for workload-driven and traditional database systems.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;shift&quot;&gt;Shift&lt;/h2&gt;
+
+&lt;p&gt;Skew&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Both exponential / Zipfian distributions are for those where the common value is more frequent&lt;/li&gt;
+  &lt;li&gt;The exponential distribution is often used for modeling &lt;strong&gt;time-related data&lt;/strong&gt; or “waiting times,” while Zipfian is used to model scenarios where there is a &lt;strong&gt;ranking or ordering of items&lt;/strong&gt;, such as popularity.Zipfian&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;workloads-1&quot;&gt;Workloads&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;skews and correlations, skews on individual columns, correlations between columns in the same table, and correlations of columns across multiple tables.&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;=&amp;gt; more skews and correlations to individual columns and multiple columns within a table and across tables.&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;more join patterns: including non-equi joins and cyclic join graphs.&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;=&amp;gt; new query templates to enrich the join patterns.&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;slice data at a fine granularity with multiple predicate filters on table columns.&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;=&amp;gt; fine-grained data slicing with additional predicate filters.&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;=&amp;gt; configurable parameterization to generate queries.&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;=&amp;gt; comprehensive user guidance.&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;experiments&quot;&gt;Experiments&lt;/h2&gt;
+
+&lt;h1 id=&quot;2-modeling-shifting-workloads-for-learned-database-systems&quot;&gt;2. Modeling Shifting Workloads for Learned Database Systems&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;h2 id=&quot;problems&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;The key question is when and how best to re-train the model.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Retraining within near queries =&amp;gt; catastrophic forgetting, large queries =&amp;gt; time-consuming.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Workload imbalance leads to poor performance.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;assumptions-1&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;p&gt;Assumes the &lt;strong&gt;underlying data&lt;/strong&gt; to be static.&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-1&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;h3 id=&quot;query-type-query-encoding&quot;&gt;Query Type, Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;As in other papers&lt;/p&gt;
+
+&lt;h3 id=&quot;model-1&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;distributed shift detector (per l query) =&amp;gt; train a new model/retrain the existing model with the importance of past/current queries.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;KS test for measuring the distribution of each feature of two samples.&lt;/li&gt;
+  &lt;li&gt;Bonferroni correction to adjust the significance level.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;online clustering algorithm (Bayesian non-parametric models) =&amp;gt; managing the replay buffer =&amp;gt; providing data to re-train.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;cluster based on the query feature encoding, other than learned embedding or gradients.&lt;/li&gt;
+  &lt;li&gt;propose DP-Medoides based K-Medoids, since it is more robust to outliers/supports customerize distnace computes.&lt;/li&gt;
+  &lt;li&gt;manage the reply buffer such that its balance, diversified.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;re-training: combined loss of pass and current queries.&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-2&quot;&gt;Workloads&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-1&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;IMDB with JOB&lt;/p&gt;
+
+&lt;p&gt;DSB (50GB)&lt;/p&gt;
+
+&lt;p&gt;the query join graph and/or the distribution of query &lt;strong&gt;predicates&lt;/strong&gt; may shift with time.&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-1&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Generate a query pool with each query classes having 200 queries.&lt;/li&gt;
+  &lt;li&gt;shifting workloads:
+    &lt;ol&gt;
+      &lt;li&gt;randomly pick three classes (fixed)&lt;/li&gt;
+      &lt;li&gt;for each class, randomly pick 100 queries&lt;/li&gt;
+      &lt;li&gt;concatenate those queries.&lt;/li&gt;
+      &lt;li&gt;repeate from 2-4 to form a workload with queries A(100), B(100), C(100), A(100)…&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;measure performance after retraining and evaluate in other classes (except the current one).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;3-balsa&quot;&gt;3. Balsa&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-1&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;Neo-impl is still not robust enough to generalize to unseen test queries and suffers from high variance.&lt;/p&gt;
+
+&lt;p&gt;Balsa’s better generalization is due to a &lt;strong&gt;broader state coverage&lt;/strong&gt; offered by simulation, &lt;strong&gt;on-policy learning&lt;/strong&gt;, and safe exploration&lt;/p&gt;
+
+&lt;p&gt;the main point of this paper is to learn without expert demonstrations.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-1&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;Existing RL-based methods assume the availability of a mature query optimizer to learn from.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-2&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;p&gt;the &lt;strong&gt;database content is kept static&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Updates to the schema, appends, or in-place updates can be handled by retraining.&lt;/p&gt;
+
+&lt;p&gt;This assumption implies that the agent need not solve a learning problem with a shifting distribution. Another assumption is that Balsa currently optimizes select-project-join (SPJ) blocks.&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-2&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;h3 id=&quot;formulation&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;query optimization as an MDP:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;state: partial query plan.&lt;/li&gt;
+  &lt;li&gt;action step in building a query plan in a &lt;strong&gt;bottom-up fashion&lt;/strong&gt;， either join two tables, or assign a scan method.&lt;/li&gt;
+  &lt;li&gt;a reward is given only at the final (terminal) state, each action only gets zero rewards&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;query-type-1&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-1&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;same as NEO&lt;/p&gt;
+
+&lt;h3 id=&quot;process&quot;&gt;Process&lt;/h3&gt;
+
+&lt;p&gt;learn to optimize queries without learning from an existing expert optimizer&lt;/p&gt;
+
+&lt;p&gt;Simulation and reality phases:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;simulation phase trains a value network based on the simple &lt;strong&gt;CE cost&lt;/strong&gt;, although this &lt;strong&gt;CE cost&lt;/strong&gt; is not accurate, it enables the agent to avoid the worst plans.&lt;/li&gt;
+  &lt;li&gt;reality phase finetunes the value network.&lt;/li&gt;
+  &lt;li&gt;during exploration, Balsa generates several best-predicted plans (instead of the best) and then picks the best unseen one out of them.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Generalization:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;train with high diversity, merge experiences with several independently agent with different seeds.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Some techniques&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;timeouts,&lt;/li&gt;
+  &lt;li&gt;exploration only on the best few plans.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;on-policy learning better than retraining.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;workloads-3&quot;&gt;Workloads&lt;/h2&gt;
+
+&lt;p&gt;TPCH&lt;/p&gt;
+
+&lt;h1 id=&quot;4-is-your-learned-query-optimizer-behaving-as-you-expect-a-machine-learning-perspective&quot;&gt;4. Is Your Learned Query Optimizer Behaving As You Expect? A Machine Learning Perspective&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-2&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;A number of join is an irrelevant proxy for execution time.&lt;/p&gt;
+
+&lt;p&gt;GEQO is used for large join number queries, which can be disabled to fairly compare.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-2&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;The absence of a &lt;strong&gt;unified reproducible framework&lt;/strong&gt; make it currently impossible to fairly compare the results of LQOs.&lt;/p&gt;
+
+&lt;p&gt;Many filter combinations result in the same selectivity. Hence, the model would potentially suffer from the mismatch between features and target variables and will only perform well if this inconsistency is mitigated.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-3&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques-3&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;h3 id=&quot;query-type--query-encoding&quot;&gt;Query Type &amp;amp; Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;All existing LQO are query-driven methods other than data-driven.&lt;/p&gt;
+
+&lt;p&gt;Encoding schema for a query should be both &lt;strong&gt;expressive and robust&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;roubust: unique 1-to-1 mapping between the feature variables and the latency or cost of a query and its given plan&lt;/li&gt;
+  &lt;li&gt;expressive: the encoding should clearly reflect both the global and local context.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Bao does not use talbes but only cardinalities and costs.&lt;/p&gt;
+
+&lt;p&gt;=&amp;gt; easier to retrain and schema-agnosticism.&lt;/p&gt;
+
+&lt;p&gt;=&amp;gt; not one-to-one mapping: different filters in a query has same cardinalities for the same table. ??&lt;/p&gt;
+
+&lt;p&gt;Bao deos not use query encoding =&amp;gt; increases the probability of converging to a local optimum.&lt;/p&gt;
+
+&lt;h3 id=&quot;model-2&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;An architecture that chains the ML models like in HybridQO, where different target variables are served to different models in the ML pipeline&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-4&quot;&gt;Workloads&lt;/h2&gt;
+
+&lt;h3 id=&quot;dataset&quot;&gt;Dataset&lt;/h3&gt;
+
+&lt;p&gt;JOB and STACK&lt;/p&gt;
+
+&lt;p&gt;We do not use the STATS-CEB benchmark, as it was originally developed for &lt;strong&gt;challenges&lt;/strong&gt; in cardinality estimation as opposed to end-to-end query optimization, which is the focus of this paper.&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-2&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;four worklods&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Leave One Out Sampling.&lt;/li&gt;
+  &lt;li&gt;Random Sampling.&lt;/li&gt;
+  &lt;li&gt;Base Query Sampling.&lt;/li&gt;
+  &lt;li&gt;Covariate Shift on JOB&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;5-neo&quot;&gt;5. NEO&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-3&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;h2 id=&quot;problems-3&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;However, none demonstrate that their improved cardinality estimations actually lead to better query plans.&lt;/p&gt;
+
+&lt;p&gt;Furthermore, unlike &lt;strong&gt;join order selection&lt;/strong&gt;, selecting &lt;strong&gt;join operators&lt;/strong&gt; (e.g., hash join, merge join) and choosing &lt;strong&gt;indexes&lt;/strong&gt; cannot be entirely reduced to cardinality estimation.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-4&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;p&gt;existence of a Sample Workload consisting of queries representative of the user’s total workload&lt;/p&gt;
+
+&lt;p&gt;existence of the underlying engine’s capabilities (i.e., exercising a representative set of operators).&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-4&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;end-to-end learning approach, including join order, index, and physical operator selection.&lt;/p&gt;
+
+&lt;h3 id=&quot;formulation-1&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;query optimization as an MDP:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;state: partial query plan.&lt;/li&gt;
+  &lt;li&gt;action step in building a query plan in a &lt;strong&gt;bottom-up fashion&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;a reward is given only at the final (terminal) state, each action only gets zero rewards&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;query-type-2&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-2&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;Query level information (&lt;strong&gt;join graph&lt;/strong&gt;) + plan level information (&lt;strong&gt;join order&lt;/strong&gt;).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;query-level:
+    &lt;ul&gt;
+      &lt;li&gt;treats the &lt;strong&gt;join graph as an adjacency matrix&lt;/strong&gt; and only encodes the &lt;strong&gt;upper triangular portion&lt;/strong&gt; into one dim vec.&lt;/li&gt;
+      &lt;li&gt;column predicates vector: 1-hot, hist, row-vector. row vector is to represent each row as a sentence.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;plan-level
+    &lt;ul&gt;
+      &lt;li&gt;plan as a tree, each node is a vector of size J+2R, J is a number of join types, and R is a number of relations. Each relation has two values: table use or not? scan type&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;model-3&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;Value Model (tree-convolution) to predict the final execution time for a &lt;strong&gt;partial or complete plan&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;value network does not predict the cost of a subplan, but rather the best possible latency achievable from an execution plan that includes a given subplan.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;best-first search + value network =&amp;gt; valuate iteration techniques to generate the final plan.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;init-state: every scan is unspecified and there are no joins.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;action: either (1) fusing together two roots with a join operator or (2) turning an unspecified scan into a table or index scan&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;not greedily follow the suggestions of the value network.&lt;/li&gt;
+  &lt;li&gt;with bootstrapping (warm-ups), it can avoid sample inefficiency problem&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;retraining from scratch other than fine-tuning.&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-5&quot;&gt;Workloads.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-2&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;JOB, TPCH, Corp&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-3&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;Train and test on various templates.&lt;/p&gt;
+
+&lt;h1 id=&quot;6lero&quot;&gt;6.Lero&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-4&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;The hint set-based strategy has some intrinsic limitations&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-4&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;existing methods are&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;unstable performance.&lt;/li&gt;
+  &lt;li&gt;high learning costs.&lt;/li&gt;
+  &lt;li&gt;slow model updating.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It is unncessary to estimate cost with model.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-5&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;p&gt;We assume &lt;strong&gt;constant resource budget per plan execution in this paper&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-5&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;Plan explorer + model two-class classification.&lt;/p&gt;
+
+&lt;h3 id=&quot;formulation-2&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;pair-wise classification problem&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-3&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-3&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;each node in the tree: join method, scane method, cardinality, row wideth, table used. (No estimated costs)&lt;/p&gt;
+
+&lt;h3 id=&quot;model-4&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;Pre-train on the synthetic workloads based on the &lt;strong&gt;estimated cost&lt;/strong&gt; in the postgresql.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;randomly generate a number of plans with different join orders and predicates on different tables,&lt;/li&gt;
+  &lt;li&gt;randomly set the cardinality for each sub-plan of each plan and feed them into the native cost model (without executing the plans) to derive the estimated plan costs as labels.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Online training&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;get the real execution latency and re-train the model.&lt;/li&gt;
+  &lt;li&gt;retrian every 100 queries on IMDB and STATS, every 30 queries on TPC-H and every 50 queries on TPC-DS.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;workloads-6&quot;&gt;Workloads.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-3&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;tpch, tpc-ds, stats, imdb.&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-4&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;“time series split” strategy, always evaluated on the new template.&lt;/p&gt;
+
+&lt;h1 id=&quot;7leon&quot;&gt;7.LEON&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-5&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;Theoretically, as long as the &lt;strong&gt;cardinality estimations and the cost model&lt;/strong&gt; are accurate, this architecture obtains the optimal query plan&lt;/p&gt;
+
+&lt;p&gt;The db query optimizer can do transformation for logical expression, such as&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;unnest an in/exists subquery to a semi-join query.&lt;/li&gt;
+  &lt;li&gt;subquery pushing involves &lt;strong&gt;evaluating a subquery earlier&lt;/strong&gt; in the execution process and “pushing” its results into the main query. This changes the order of operations to reduce computational cost or improve query performance.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Those rules cannot be used in ML-based method, and thus ML-basd method cannot conduct the plan enumeration completely.&lt;/p&gt;
+
+&lt;p&gt;DB can be extendend with new operators, while the ML-based model can only learn in trail-and-error manner.&lt;/p&gt;
+
+&lt;p&gt;cost model to initialize the model =&amp;gt; cold start problem.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-5&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;ML-based methods learn domain-specifc knowledge in a data-driven manner. Thus, it suffers from the following two fundamental limitations:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;only for spj query and cannot handle complicated query.&lt;/li&gt;
+  &lt;li&gt;cold-start problem&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Therefore, ML should aid the traiditonal query optimizer otherthan replacing it. And ML model should start from the traditional query optimizer.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-6&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques-6&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;start from current performance and self-adjust to a certain dataset or workload.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;cost estimation as a contextual parise-ranking problem.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;robust plan exploration strategy&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;a plan with a higher ranking position should be explored with a higher probability&lt;/li&gt;
+      &lt;li&gt;learned optimizer should correct its errors that lead to sub-optimal query plans&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;formulation-3&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;formalizes query optimization as a contextual pair-wise plan ranking problem&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-4&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-4&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;logical properties: output cardinality and join graph of the sub query.&lt;/p&gt;
+
+&lt;p&gt;physical properties: plan tree and the physical property of the whole plan. Each node is one-hot encoding representing the physical operators and sort order.&lt;/p&gt;
+
+&lt;h3 id=&quot;model-5&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;Intra-equivalent set Model: estimate the cost for each plan and uncertainty.&lt;/p&gt;
+
+&lt;p&gt;Inter-equivalent set Model: it is used to prune the redundant search space.&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-7&quot;&gt;Workloads.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-4&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;h3 id=&quot;dynamic-workload-5&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;h3 id=&quot;performance&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;p&gt;training efficiency and latency performance.&lt;/p&gt;
+
+&lt;h1 id=&quot;8-base&quot;&gt;8. BASE&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-6&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;transfer the model pre-trained on the cost and then to the latency sounds promising.&lt;/p&gt;
+
+&lt;p&gt;learn a mapping from cost to latency sounds promising.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-6&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;The DBMS cost model can estimate the cost for an execution plan, which is expected to reflect the latency of the plan, but they are not positively correlated in practice&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-7&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques-7&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;Two stage RL-based framework.&lt;/p&gt;
+
+&lt;p&gt;Stage 1: fit RL to chose the operation with leatest cost.&lt;/p&gt;
+
+&lt;p&gt;Stage 2: transfer a &lt;strong&gt;pre-trained policy based on the cost&lt;/strong&gt; to a &lt;strong&gt;better policy&lt;/strong&gt; based on latency&lt;/p&gt;
+
+&lt;p&gt;leverage cost as a trade-off to increase training efficiency and then transfer the pre-trained model based on the cost to a new model that can adapt to latency signals&lt;/p&gt;
+
+&lt;h3 id=&quot;formulation-4&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;BASE formulates the procedure of locating and filling the gap between cost and latency as a variant of IRL.&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-5&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;p&gt;SPJ&lt;/p&gt;
+
+&lt;h3 id=&quot;query-encoding-5&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;Same as NEO&lt;/p&gt;
+
+&lt;h3 id=&quot;model-6&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;In the 2nd stage, we use a calibrated reward function by applying a parameterized calibration function to the cost signals.&lt;/p&gt;
+
+&lt;p&gt;calibration function only makes the calibrated cost signals and the latency signals more correlated&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-8&quot;&gt;Workloads.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-5&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;STATS, IMDB.&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-6&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;None&lt;/p&gt;
+
+&lt;h3 id=&quot;performance-1&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;p&gt;Fast training&lt;/p&gt;
+
+&lt;h1 id=&quot;9reinforcement-learning-with-tree-lstm-for-join-order-selection&quot;&gt;9.Reinforcement Learning with Tree-LSTM for Join Order Selection&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-7&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;This handle the schema change by using dynamic pooling to map anylengthh input to a fixed sized vector.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-7&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;Existing work&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;fixed-length feature vectors cannot capture the structural information of a join tree, which may produce poor join plans.&lt;/li&gt;
+  &lt;li&gt;Moreover, it may also cause retraining the neural network when handling schema changes (e.g., adding tables/columns) or multialias table names that are common in SQL queries.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;assumptions-8&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques-8&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;Two stage RL-based framework.&lt;/p&gt;
+
+&lt;p&gt;Stage 1: pre-train the Deep Reinforcement Learning with cost,&lt;/p&gt;
+
+&lt;p&gt;Stage 2: finetune the model with the latency.&lt;/p&gt;
+
+&lt;h3 id=&quot;formulation-5&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;BASE formulates the procedure of locating and filling the gap between 푟휙and 푟(푙 )as a variant of IRL.&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-6&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;p&gt;SPJ&lt;/p&gt;
+
+&lt;h3 id=&quot;query-encoding-6&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;query  + data&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;query: contains join information in a query.
+i.e., matrix to represent all join relation, then flatten into one vector. Then it applies FC to get the final representation&lt;/li&gt;
+  &lt;li&gt;columns:
+    &lt;ul&gt;
+      &lt;li&gt;numertical value: vector of 4 value, if column is in join, is =? is&amp;gt;? is&amp;lt;?&lt;/li&gt;
+      &lt;li&gt;string value: only use the selectivity information and get the column representions.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;table: concatenate all columns representions.&lt;/li&gt;
+  &lt;li&gt;join tree: use tree-LSTM to learn a representation.
+    &lt;ul&gt;
+      &lt;li&gt;combine both Child-Sum Tree-LSTM and N-ar Tree LSTM.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;model-7&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;Representation: use a Tree-LSTM&lt;/p&gt;
+
+&lt;p&gt;RL: use DQN.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;cost training and latency tunning.&lt;/li&gt;
+  &lt;li&gt;not move target from cost to latecy directly, but instead treate them as multi task learning, where train two Q network but use the same input representation.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Handle the dynamic worklaod:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;use dynamic pooling to encoding any dynamic length query&lt;/li&gt;
+  &lt;li&gt;Adding columns also use dynamic pooling&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;workloads-9&quot;&gt;Workloads.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-6&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;tpch, imdb&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-7&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;insert/delete columns, add new tables etc.&lt;/p&gt;
+
+&lt;h3 id=&quot;performance-2&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;h1 id=&quot;10theoretical-analysis-of-learned-database-operations-under-distribution-shift-through-distribution-learnability&quot;&gt;10.Theoretical Analysis of Learned Database Operations under Distribution Shift through Distribution Learnability&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-8&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;h2 id=&quot;problems-8&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;no theoretical work shows any advantage in using the learned methods in dynamic datasets and under distribution shift.&lt;/p&gt;
+
+&lt;p&gt;The goal of this paper is to theoretically understand the capabilities of learned models for database operations, show why and when they outperform non-learned alternatives and provide theoretical guarantees on their performance&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-9&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques-9&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;indexing, cardinality estimation and sorting when presence of insertions from a possibly changing data distribution&lt;/p&gt;
+
+&lt;h3 id=&quot;formulation-6&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;data after inserting n times is D_n&lt;/p&gt;
+
+&lt;p&gt;its distribution is learnable with parameter T, S, B.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;T: the model can be evaluted in T operatios.&lt;/li&gt;
+  &lt;li&gt;take S to store.&lt;/li&gt;
+  &lt;li&gt;n*B to learn the model.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;11eraser-eliminating-performance-regression-on-learned-query-optimizer&quot;&gt;11.Eraser: Eliminating Performance Regression on Learned Query Optimizer&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-9&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;This is mainly focus on the dataset side other than model side, for any trained model, it filter the search spcae based on model performance to increate the effectiveness of the model.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-9&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;learned model has regression due to reasons like&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;inherent difficulty of the learning problem,&lt;/li&gt;
+  &lt;li&gt;the low generalization ability of the prediction model on new data,&lt;/li&gt;
+  &lt;li&gt;the under-fitting on training data due to insufficient training data,&lt;/li&gt;
+  &lt;li&gt;loss of features, noisy labels and inappropriate model training methods.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;assumptions-10&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;p&gt;Learned model has low generalizatin ability, thus has big regression problem.&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-10&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;Two stage RL-based framework.&lt;/p&gt;
+
+&lt;p&gt;Stage 1: coarse-grained filter to remove highly risky plans&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Insight: ML prediction model is likely to underperform due to encountering &lt;strong&gt;unseen feature values&lt;/strong&gt;, therefore &lt;strong&gt;unexpected plan space&lt;/strong&gt; into &lt;strong&gt;subspaces&lt;/strong&gt; based on unseen feature values. this is like data labelling process.&lt;/li&gt;
+  &lt;li&gt;train a model to predict &lt;strong&gt;precise&lt;/strong&gt; or &lt;strong&gt;imprecise&lt;/strong&gt; of each subspace.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Stage 2: cluster plans in fine-grained manner, evalutes each cluster based on the prediction result.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cluster the remaining precise plans into groups based on their feature values and the model’s reliability.&lt;/li&gt;
+  &lt;li&gt;Assign each cluster a &lt;strong&gt;reliability interval&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;formulation-7&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;A performance elimination method perf_elim such that benefits are maximum and loss is minimized.&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-7&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;p&gt;SPJ&lt;/p&gt;
+
+&lt;h3 id=&quot;query-encoding-7&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;plan-level features: join relations, filtering predicates and operator types&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;join: join type, scan type,&lt;/li&gt;
+  &lt;li&gt;filter: low and high value&lt;/li&gt;
+  &lt;li&gt;relation: 0/1 to indicate existance.&lt;/li&gt;
+  &lt;li&gt;structure: use a categorical variable to indicates it, bushy tree, left-deep and right-deep, on plans joining 4 tables&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;data-level features: estimated cardinality and data distribution&lt;/p&gt;
+
+&lt;h3 id=&quot;model-8&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;unexpected plan explorer filter bad plans based on the &lt;strong&gt;relability threshold.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;cluster the remining plans and use the &lt;strong&gt;segment model&lt;/strong&gt;, and also assign &lt;strong&gt;relability value&lt;/strong&gt; to reflect the quality.&lt;/p&gt;
+
+&lt;p&gt;Then filter again, and use &lt;strong&gt;plan selection method&lt;/strong&gt; to balance the benefit of &lt;strong&gt;improvements&lt;/strong&gt; and the &lt;strong&gt;risk of regression&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-10&quot;&gt;Workloads.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-7&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;tpch, imdb&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-8&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;trian on 25% etc and evaluate on the fixed test dataset.&lt;/p&gt;
+
+&lt;h3 id=&quot;performance-3&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;h1 id=&quot;12access-path-selection-in-a-relational-database-management-system&quot;&gt;12.Access Path Selection in a Relational Database Management System&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-10&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;This handle the schema change by using dynamic pooling to map anylengthh input to a fixed sized vector.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-10&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;This paper will address the issues of access path selection for queries&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;single table queries&lt;/li&gt;
+  &lt;li&gt;join&lt;/li&gt;
+  &lt;li&gt;nested queries&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;techniques-11&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;query processing are 4 phases:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;parsing:&lt;/li&gt;
+  &lt;li&gt;optimization:&lt;/li&gt;
+  &lt;li&gt;code generation:&lt;/li&gt;
+  &lt;li&gt;execution:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;13cardbench-a-benchmark-for-learned-cardinality-estimation-in-relational-databases&quot;&gt;13.CardBench: A Benchmark for Learned Cardinality Estimation in Relational Databases&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-11&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;learn from the transferable features, and not from the workload specific features such as table and attribute names.This approach enables learning of zero-shot CE models.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-11&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;Traditional CE techniques used in modern database systems have well-known limitations, as they &lt;strong&gt;make simplistic data modeling assumptions, such as data uniformity and independence of columns in the tables&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Learned CE have not been adapted in practice, due to their high training overheads.&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-12&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;zero-shot models are pre-trained on a &lt;strong&gt;broad spectrum of different datasets&lt;/strong&gt; and use &lt;strong&gt;transferable features (dataset-agnostic)&lt;/strong&gt;, such as table sizes, allowing them to generalize to unseen datasets.&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-8&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;p&gt;SPJ&lt;/p&gt;
+
+&lt;h3 id=&quot;model-9&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;GNN model to encode the query structure.&lt;/p&gt;
+
+&lt;p&gt;MLP-based cardinality model to get the final prediction.&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-11&quot;&gt;Workloads.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-8&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;tpch, imdb&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-9&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;h3 id=&quot;performance-4&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;h1 id=&quot;14loger-a-learned-optimizer-towards-generating-efficient-and-robust-query-execution-plans&quot;&gt;14.LOGER: A Learned Optimizer towards Generating Efficient and Robust Query Execution Plans&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-12&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;This work aims to change the search space compared with bao, but still use hint, it input action(disable a join algorithm) and input join order into the network to predict the latency.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-12&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;h2 id=&quot;assumptions-11&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques-13&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;reward weighting&lt;/strong&gt; to reduce the &lt;strong&gt;impact of previous poor operators&lt;/strong&gt; and make LOGER pay less attention to disastrous plans by log transformation.&lt;/p&gt;
+
+&lt;h3 id=&quot;formulation-8&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;RL to build a tree&lt;/p&gt;
+
+&lt;p&gt;state: subplan’s join order and operator&lt;/p&gt;
+
+&lt;p&gt;action: join table and with restricted operator (disable a join algorithm, like disable hash join)&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-9&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;p&gt;spj without sub-queries&lt;/p&gt;
+
+&lt;h3 id=&quot;query-encoding-8&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;Graph Transformer: GT not only efficiently captures relationships between table representations that include both table and predicate information, but also integrates global structural information of join graph into table representations.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;table: table-level learned embedding vector.&lt;/li&gt;
+  &lt;li&gt;column: column-level statistic vector with column type, proportion of unique values, unique value count, null values, index.&lt;/li&gt;
+  &lt;li&gt;predicts: join exist or not, selectivity (via approximation of DBMS cardinality estimator.)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;model-10&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;The value model &lt;strong&gt;evaluates state-action pair&lt;/strong&gt; candidates of subplans by predicting the reachable lowest latency among all plans that can be reached from the pair.&lt;/p&gt;
+
+&lt;p&gt;state network:&lt;/p&gt;
+
+&lt;p&gt;action network: take all join as input,&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-12&quot;&gt;&lt;strong&gt;Workloads&lt;/strong&gt;.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-9&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;h3 id=&quot;dynamic-workload-10&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;change schema.&lt;/p&gt;
+
+&lt;h3 id=&quot;performance-5&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;p&gt;2 hours of training, 2x speedup&lt;/p&gt;
+
+&lt;h1 id=&quot;15prestos-history-based-query-optimizer&quot;&gt;15.Presto’s History-based Query Optimizer&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-13&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;share-everything =&amp;gt; latency over scalability.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-13&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;learning based CE/cost method requires large trainng efforts, less robustness, and hard to debug.&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-14&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;HBO tracks q&lt;strong&gt;uery execution statistics&lt;/strong&gt; at the operator node, and &lt;strong&gt;uses those to predict future performance&lt;/strong&gt; for &lt;strong&gt;similar&lt;/strong&gt; queries.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Similary query fetching: only record the template,&lt;/li&gt;
+  &lt;li&gt;HBO is more powerful than CBO as it can store various runtime statistics related to scheduling as well&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;join reordering: HBO record the stats for some join order, and thus accurate. If not meet before, we use the CBO.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;16parqo-penalty-aware-robust-plan-selection-in-query-optimization&quot;&gt;16.PARQO: Penalty-Aware Robust Plan Selection in Query Optimization&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-14&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;h2 id=&quot;problems-14&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;Accurate estimation of the cardinality and cost comes at the cost of runtime monitoring and ongoing maintenance.&lt;/p&gt;
+
+&lt;p&gt;Therefore, how much influence of such uncertainty bring to the selectivity estimates still underexplored.&lt;/p&gt;
+
+&lt;p&gt;Robustness is tied to the uncertainty, and use the uncertainty in practise has challenges:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;errors distributed on data and query worklaod is not well utiized in exsting work.&lt;/li&gt;
+  &lt;li&gt;complex query has large cardinality estimate spaces, and thus&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;assumptions-12&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques-15&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;h3 id=&quot;formulation-9&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-type-10&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-9&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;h3 id=&quot;model-11&quot;&gt;Model&lt;/h3&gt;
+
+&lt;h2 id=&quot;workloads-13&quot;&gt;&lt;strong&gt;Workloads&lt;/strong&gt;.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-10&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;h3 id=&quot;dynamic-workload-11&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;h3 id=&quot;performance-6&quot;&gt;Performance&lt;/h3&gt;
+
+</description>
+        <pubDate>Thu, 08 Aug 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/LQO/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/LQO/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Distribution Shifts</title>
+        <description>&lt;p&gt;&lt;strong&gt;Covariate Shift&lt;/strong&gt;: P(X) changes, but P(Y∣X) stays the same.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Label Shift&lt;/strong&gt;: P(Y) changes, but P(X∣Y) stays the same.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Concept Shift&lt;/strong&gt;: P(Y∣X) changes.&lt;/p&gt;
+
+&lt;p&gt;I’m currently researching, where i need to use machine learning to enhance query optimizer.&lt;/p&gt;
+
+&lt;p&gt;My current plan is three steps&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;I learned from the paper “Bao: Learning to Steer Query Optimizers”, which uses a set of hints to generate a set of query plans, which I follow. From a Refincemenrt learning perspective, each query plan here is one action,&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;I then try to use a new model to predict which one is better. so I need to first feature the input and the model can predict which plan is better.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;if we use RL to model this, each hint in the hint set is one action, the state can be the input SQL, cpu/memory etc,. the reward can be the 1/latency.&lt;/p&gt;
+
+    &lt;p&gt;While in this situation, we simply can train the decision transformer, however, i basically do not use the query plan structure, which is generated by the database optimizer via the hint, is it?&lt;/p&gt;
+
+    &lt;p&gt;As for the query plan,&lt;/p&gt;
+
+    &lt;p&gt;i firstly use a paper’s method (queryFormer)  to convert a query plan tree into a fixed vector encoding of dimension (batch_size=1024, dimension=329).&lt;/p&gt;
+
+    &lt;p&gt;Then I wanna use the decision transformer to predict which one is the best action.&lt;/p&gt;
+
+    &lt;p&gt;while predicting the best hint is bascially find the query palan which has the mini exeucution latency,&lt;/p&gt;
+
+    &lt;p&gt;but not using anything from the query plan is a bad idea.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;how to use the query plan into my current setting? or ydo you have gbetter idea to add those information?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Mon, 03 Jun 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/219/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/219/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>Supervised Pretraining Can Learn In-Context Reinforcement Learning</title>
+        <description>
+</description>
+        <pubDate>Thu, 30 May 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/218/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/218/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
+    
+      <item>
+        <title>IN-CONTEXT EXPLORATION-EXPLOITATION FOR REINFORCEMENT LEARNING</title>
+        <description>
+</description>
+        <pubDate>Mon, 20 May 2024 00:00:00 +0000</pubDate>
+        <link>https://nlgithubwp.github.io/tech-notebook/journal/216/</link>
+        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/216/</guid>
+        
+        
+        <category>A paper note</category>
+        
+      </item>
     
       <item>
         <title>TABPFN A TRANSFORMER THAT SOLVES SMALL TABULAR CLASSIFICATION PROBLEMS IN A SECOND</title>
@@ -143,962 +1357,23 @@
         <description>&lt;p&gt;Query-driven and data-driven methods&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;query-driven: it basically train a model to predict CE.&lt;/li&gt;
-  &lt;li&gt;data-driven: it basically learn a join distribution among columns and then sampling bsaed on that, and use the sampled data to estimate the basic staisitcs. Default optimizer will then use those statistics to estimate CE.&lt;/li&gt;
+  &lt;li&gt;query-driven: it basically trains a model to predict CE.&lt;/li&gt;
+  &lt;li&gt;data-driven: it basically learns a join distribution among columns and then sampling based on that, and use the sampled data to estimate the basic statistics. The default optimizer will then use those statistics to estimate CE.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Existing work:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Cannot combine both query-driven and data-driven methods.&lt;/li&gt;
-  &lt;li&gt;Cannot handle dynamic workloads that mix queries and data manipulation statements including inserts, deletes and updates.&lt;/li&gt;
+  &lt;li&gt;Cannot handle dynamic workloads that mix queries and data manipulation statements including inserts, deletes, and updates.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;ALECE is less sensitive to data changes&lt;/p&gt;
-
-&lt;h1 id=&quot;techniques&quot;&gt;Techniques&lt;/h1&gt;
+&lt;p&gt;ALICE is less sensitive to data changes&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 14 May 2024 00:00:00 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/213/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/213/</guid>
-        
-        
-        <category>A paper note</category>
-        
-      </item>
-    
-      <item>
-        <title>PostgreSQL 14 Internals</title>
-        <description>&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;/h1&gt;
-
-&lt;p&gt;Buffer states retrieval UDF on page 171 could be used as states for RL.&lt;/p&gt;
-
-&lt;p&gt;pg_statio_all_tables on page 177 could show how many pages are read for a table into the buffer cache.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANALYZE big;&lt;/code&gt; updates the statistics of the table for the query planner. It is an essential step for PostgreSQL to make informed decisions about query execution plans.&lt;/p&gt;
-
-&lt;p&gt;Page 184 has an SQL to check what fraction of each relation is cached, and whether this data is hot (a page is considered hot here if its usage count is bigger than one.&lt;/p&gt;
-
-&lt;p&gt;enable &lt;strong&gt;debug_print_parse&lt;/strong&gt; parameter in PostgreSQL, we can view the full parse tree in the server log.&lt;/p&gt;
-
-&lt;p&gt;If you want to explore full plan trees, dump them into the server log by enabling the &lt;strong&gt;debug_print_plan&lt;/strong&gt; parameter. But in practice, it is usually enough to view the text representation of the plan displayed by the &lt;strong&gt;EXPLAIN&lt;/strong&gt; command.&lt;/p&gt;
-
-&lt;p&gt;Visibility of the table as on page 308 may be used.&lt;/p&gt;
-
-&lt;p&gt;SQL in 315 can update the default cardinalities.&lt;/p&gt;
-
-&lt;p&gt;The correlation field on page 323 introduces some methods to get column correlation related to the disk.&lt;/p&gt;
-
-&lt;p&gt;SQL on page 326 can show all statistics of the column for an expression.&lt;/p&gt;
-
-&lt;p&gt;Statistics dependence can be created (page 329), and is useful.&lt;/p&gt;
-
-&lt;p&gt;The query on page 349 will tell how to able or disable the query. force_parallel_mode&lt;/p&gt;
-
-&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
-
-&lt;h2 id=&quot;data-organization&quot;&gt;Data organization&lt;/h2&gt;
-
-&lt;p&gt;single Postgresql instance can serve several databases at a time. They are called database clusters.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Logical Storage&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;A catalog** in PostgreSQL is a set of system tables that store metadata about all database objects in a cluster, such as tables, indexes, functions, and schemas. This metadata includes details like object names, data types, and access permissions.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Catalog tables are all begin with pg_&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Schema&lt;/strong&gt; is a namespace with many objectives. predefined schemas:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;public (for user objectives), pg_catalog (system catalog tables), information_schema (view for system catalog), pg_toast, og_temp&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Relations&lt;/strong&gt;: all tables, indexes, and views are called relations.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;all data associated with a relation is stored in several forks, a fork is basically a single file of 1GB (can be configured), and the file is also named a &lt;strong&gt;segment&lt;/strong&gt;. The sequence number of the segment is added to the end of its filename.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Physical Storage&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;PGDATA&lt;/strong&gt; is a directory that contains all the files related to the database cluster, at the beginning, it contains&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;template0 database: is used for restoring data or creating a database with a different encoding.&lt;/li&gt;
-  &lt;li&gt;template1 database: is a template for all other databases that a user can create (by copying template1) in the cluster.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Tablespaces&lt;/strong&gt; is a physical data layout, it is a dir in the file system, database stores the data in several &lt;strong&gt;tablespaces&lt;/strong&gt;. During the database initialization, two tablespaces are created:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;pg_default:  default tablespace unless another tablespace is selected for this purpose.&lt;/li&gt;
-  &lt;li&gt;pg_global: system catalog objects common to the whole cluster.&lt;/li&gt;
-  &lt;li&gt;postgres database uses tablespace &lt;strong&gt;xyzzy&lt;/strong&gt; as the default one&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Pages&lt;/strong&gt;. To facilitate I/O, all files are logically split into pages (or blocks), which represent the minimum amount of data that can be read or written. Consequently, many internal PostgreSQL algorithms are tuned for page processing.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;TOAST&lt;/strong&gt;: Each row must fit a single page: there is no way to continue a row on the next page. To store long rows, PostgreSQL uses a special mechanism called TOAST (The Oversized Attributes Storage Technique).
-Long attribute values are separated into smaller chunks, which will be stored in the TOAST table. The chunk size is decided such that one page of the TOAST table can contain four rows.&lt;/p&gt;
-
-&lt;p&gt;Each TOAST table has three columns, chunk_id, chunk_seq, and length. columns&lt;/p&gt;
-
-&lt;p&gt;For index, the toast mechanism can offer only compression.&lt;/p&gt;
-
-&lt;p&gt;PostgreSQL supports a few strategies:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;plain means that ToAST is not used (this strategy is applied to data types that are known to be“short,” such as the integer type).&lt;/li&gt;
-  &lt;li&gt;extended allows both compressing attributes and storing them in a separate TOAST table.&lt;/li&gt;
-  &lt;li&gt;external implies that long attributes are stored in the ToAST table in an uncom- pressed state.&lt;/li&gt;
-  &lt;li&gt;main requires long attributes to be compressed first; they will be moved to the TOAST table only if compression does not help.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Due to TOAST, each table will have at least three files (or “forks”): &lt;strong&gt;the main data file, the TOAST data file, and the TOAST index file.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;process&quot;&gt;Process&lt;/h1&gt;
-
-&lt;p&gt;A PostgreSQL server instance consists of &lt;strong&gt;several interacting processes.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;postmaster&lt;/code&gt;: spawns all other processes and supervises them (restart the failed one if there is one).&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;startup&lt;/code&gt; restores the system after a failure.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;auto vacuum&lt;/code&gt; removes stale data from &lt;strong&gt;tables and indexes.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;checkpointer&lt;/code&gt; executes checkpoints.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;writer&lt;/code&gt; flushes dirty pages to the disk.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stats collector&lt;/code&gt; collects usage statistics for the instance.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wal writer&lt;/code&gt; writes WAL entries to disk.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wal sender&lt;/code&gt; sends WAL entries to a replica.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wal receiver&lt;/code&gt; gets WAL entries on a replica&lt;/p&gt;
-
-&lt;p&gt;Drawbacks:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;static shared memory allocation does not allow resizing structures like buffer cache on the fly;&lt;/li&gt;
-  &lt;li&gt;parallel algorithms are hard to implement and less efficient than they could be;  (due to inefficient sharing state via IPC.)&lt;/li&gt;
-  &lt;li&gt;sessions are tightly bound to processes.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;To enable &lt;strong&gt;process interaction&lt;/strong&gt;, the postmaster allocates shared memory, which is available to all the processes.&lt;/p&gt;
-
-&lt;p&gt;PostgreSQL uses a large portion of the shared memory for caching frequently accessed data.&lt;/p&gt;
-
-&lt;p&gt;One client connection will trigger spawning a new process, it is until the session continues or lost. This is inefficient and may cause problems when too many clients try to connect.&lt;/p&gt;
-
-&lt;p&gt;One solution is using the connection pool (PgBouncer or Odyssey), but this limits the maximum connection number.&lt;/p&gt;
-
-&lt;p&gt;Since the process uses MVCC in building various isolation levels, it will generate many old versions of data, which can be deleted by using a vacuum.&lt;/p&gt;
-
-&lt;h1 id=&quot;memory&quot;&gt;Memory&lt;/h1&gt;
-
-&lt;p&gt;Lots of shared memory is used to store the buffered cache.&lt;/p&gt;
-
-&lt;p&gt;In the buffer search and eviction, it uses a clock sweep algorithm, which goes around the buffer cache and reduces the usage count for each cached page by one as it passes.&lt;/p&gt;
-
-&lt;p&gt;The first unpinned buffer with the zero counts found by the clock hand will be cleared.&lt;/p&gt;
-
-&lt;p&gt;Thus, the usage count is incremented each time the buffer is accessed (that is, pinned), and reduced when the buffer manager is searching for pages to evict.
-As a result, the least recently used pages are evicted first, while those that have been accessed more often will remain in the cache longer.&lt;/p&gt;
-
-&lt;p&gt;Each process has its cache, which stores the &lt;strong&gt;Temporary Table.&lt;/strong&gt; e.g., CREATE TEMPORARY TABLE tmp AS SELECT 1;&lt;/p&gt;
-
-&lt;h1 id=&quot;query-execution&quot;&gt;Query Execution&lt;/h1&gt;
-
-&lt;p&gt;parsed, transformed, planned, executed.&lt;/p&gt;
-
-&lt;h2 id=&quot;parser-text--parse-tree&quot;&gt;Parser: Text =&amp;gt; Parse Tree&lt;/h2&gt;
-
-&lt;p&gt;It uses a &lt;strong&gt;lexer&lt;/strong&gt; (previously used in compilers, interpreters, and many types of text processing systems ) to split the query text into a set of lexemes (such as keywords, string literals, and numeric literals).&lt;/p&gt;
-
-&lt;p&gt;It then uses a &lt;strong&gt;parser&lt;/strong&gt; to validate this set against the SQL language grammar, and then build a &lt;strong&gt;Parse Tree&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Then it performs semantic analysis to determine whether whether the database contains any tables or other objects that this query refers to by name, and whether the user has permission to access these objects by checking the catalog.&lt;/p&gt;
-
-&lt;h2 id=&quot;transformation-parse-tree--rewriten-parse-tree&quot;&gt;Transformation: Parse Tree =&amp;gt; Rewriten Parse Tree&lt;/h2&gt;
-
-&lt;p&gt;This rewrites the query:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;replace the view in the parse tree with the subtree, security reason.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Transformation is based on the query rewrite rule system. https://www.postgresql.org/docs/14/rules.html&lt;/p&gt;
-
-&lt;h2 id=&quot;planningoptimizer-rewriten-parse-tree--plan-tree&quot;&gt;Planning/Optimizer: Rewriten Parse Tree =&amp;gt; Plan Tree&lt;/h2&gt;
-
-&lt;p&gt;Several join tables =&amp;gt; grow the plans, the optimal and non-optimal plans can differ by orders of magnitude.&lt;/p&gt;
-
-&lt;p&gt;Optimizer uses a &lt;strong&gt;dynamic programming algorithm combined with some heuristics&lt;/strong&gt; to reduce the search space.&lt;/p&gt;
-
-&lt;p&gt;A genetic algorithm** is used to optimize the query if &lt;strong&gt;geqo_threshold&lt;/strong&gt; is set, which defines the number of elements at one level to optimize. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;optimizer/gecko/&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Cost-based optimizer estimates the resources required for execution. (&lt;strong&gt;I/O operation CPU cycles&lt;/strong&gt;)&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Startup Cost: Prepare for the node execution.
-    &lt;ul&gt;
-      &lt;li&gt;The cost associated with setting up the necessary data structures, loading initial data into memory, and any other preparatory tasks required before actual data processing starts. For example, if a query involves a sequential scan of a table, the startup cost would include the &lt;strong&gt;time and resources&lt;/strong&gt; needed to locate the table on disk.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;total cost: comprises all the expenses incurred by fetching the result.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;If using the cursor, it reads data row by row, if not, it reads the whole result at once.  Different methods differ in plan generation.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;w cursor, it minimizes the total cost.&lt;/li&gt;
-  &lt;li&gt;w/o a cursor, it minimizes the cost of cursor_tuple_fraction.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The cardinality estimation calculations rely on the &lt;strong&gt;collected statistics&lt;/strong&gt;,  such as table sizes and data distribution in table columns.&lt;/p&gt;
-
-&lt;h3 id=&quot;cardinality-estimation&quot;&gt;Cardinality Estimation&lt;/h3&gt;
-
-&lt;p&gt;Steps:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Estimate the number of input rows of each node. =&amp;gt; 1&lt;/li&gt;
-  &lt;li&gt;Estimate the &lt;strong&gt;selectivity&lt;/strong&gt; of the node == the &lt;strong&gt;fraction of input rows&lt;/strong&gt; that will remain at the output. =&amp;gt; 2&lt;/li&gt;
-  &lt;li&gt;CE of a node = multiplying the &lt;strong&gt;=&amp;gt;1 by the =&amp;gt; 2&lt;/strong&gt; applied at that node.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Methods to compute CE:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;CE of filter condition: each column is considered independently. Thus the below functions may have errors.
-sel_{x and y} = sel_x*sel_y,&lt;/p&gt;
-
-    &lt;p&gt;sel_{x or y} = 1- (1-sel_x)(1-sel_y)&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;CE of join: Cartesian product. If the first dataset has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N&lt;/code&gt; rows and the second dataset has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;M&lt;/code&gt; rows, then their Cartesian product results in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N x M&lt;/code&gt; rows. (maximum possible number of rows that could result from a join)&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;cost-model&quot;&gt;Cost Model:&lt;/h3&gt;
-
-&lt;p&gt;disk I/o and CPU resources&lt;/p&gt;
-
-&lt;p&gt;cost =sF(CE)&lt;/p&gt;
-
-&lt;p&gt;some operation has no prerequisites, so their execution starts immediately. while other has. e.g., sort needs to wait to collect all other data. The startup cost of such nodes is usually higher than zero.&lt;/p&gt;
-
-&lt;h1 id=&quot;execution&quot;&gt;Execution&lt;/h1&gt;
-
-&lt;p&gt;executor opens a portal in backend memory, which keeps the state of the query currently being executed.&lt;/p&gt;
-
-&lt;p&gt;The execution process starts from the root,&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;nested loop join does not need to wait until all rows are received to start producing output. It processes and passes on rows as soon as they meet the join condition.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;As for the join operation, it uses a &lt;strong&gt;work_mem&lt;/strong&gt; to decide the maximum amount of memory that each database operation, such as sorting or hash joins, can use before spilling to disk.&lt;/p&gt;
-
-&lt;p&gt;PostgresoL has &lt;strong&gt;no global cache for queries&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;statistics-in-database&quot;&gt;Statistics in database&lt;/h1&gt;
-
-&lt;p&gt;During analysis, For analysis purposes, 300× 100 default_statistics_target random rows are sampled. The sample size required to build statistics of a particular accuracy has a low dependency on the volume of analyzed data, so the size of the table is not taken into account.&lt;/p&gt;
-
-&lt;p&gt;It uses &lt;strong&gt;default_statistics_target&lt;/strong&gt; to decide how many to use to decide the statistics for each column.&lt;/p&gt;
-
-&lt;h3 id=&quot;basic-statistics&quot;&gt;Basic Statistics&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Number of tuples in a relation (&lt;strong&gt;rel-tuples&lt;/strong&gt;)&lt;/li&gt;
-  &lt;li&gt;Relation size, in pages (&lt;strong&gt;replaces&lt;/strong&gt;)&lt;/li&gt;
-  &lt;li&gt;Number of pages tagged in the visibility map (&lt;strong&gt;relallvisible&lt;/strong&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;null-values&quot;&gt;Null values&lt;/h3&gt;
-
-&lt;h3 id=&quot;distinct-values&quot;&gt;Distinct values&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;There is a &lt;strong&gt;n_distinct&lt;/strong&gt; variable for each column&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;most-common-values&quot;&gt;Most common values&lt;/h3&gt;
-
-&lt;p&gt;each column has two features&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;most_common_vals&lt;/code&gt;&lt;/strong&gt;:&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;most_common_freqs&lt;/code&gt;&lt;/strong&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;histogram&quot;&gt;Histogram&lt;/h3&gt;
-
-&lt;p&gt;If distinct values are too many to be stored in an array, PostgresoL employs a histogram.&lt;/p&gt;
-
-&lt;p&gt;The histogram is divided into multiple small ranges, each with the same number of values.&lt;/p&gt;
-
-&lt;p&gt;The histogram is used for operations like estimating the selectivity of &lt;strong&gt;greater than and less than&lt;/strong&gt; conditions.&lt;/p&gt;
-
-&lt;h2 id=&quot;correlation&quot;&gt;Correlation&lt;/h2&gt;
-
-&lt;p&gt;correlation between the physical order of data and the logical order defined by comparison operations.&lt;/p&gt;
-
-&lt;p&gt;This is used for the cost estimation of index scans.&lt;/p&gt;
-
-&lt;h2 id=&quot;expression-statistics&quot;&gt;Expression Statistics&lt;/h2&gt;
-
-&lt;p&gt;For customer functions or transformations to a column in a SQL query, PostgreSQL’s query planner may struggle to accurately estimate the distribution of the data after the transformation. It uses default ones, 0.5%.&lt;/p&gt;
-
-&lt;p&gt;The 0.5% figure is a cautious estimate, assuming that any given transformed value (like extracting a month, converting strings, or applying mathematical operations) might only match a small fraction of total rows.&lt;/p&gt;
-
-&lt;p&gt;Therefore, we need to collect expression statistics ourselves.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Create extended-expression statistics by using CREATE STATISTICS.&lt;/li&gt;
-  &lt;li&gt;Statistics index for expression indexes. Which can update automatically.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;multivariate-statistics&quot;&gt;multivariate statistics&lt;/h2&gt;
-
-&lt;p&gt;span several table columns.&lt;/p&gt;
-
-&lt;p&gt;There is a &lt;strong&gt;well-known problem of correlated predicates&lt;/strong&gt;, planner assumes predicates do not depend on each other, so the selectivity is estimated as the product of the selectivities of filter conditions combined by logical &lt;strong&gt;and&lt;/strong&gt;.
-As a result, the planner will &lt;strong&gt;underestimate&lt;/strong&gt; the row number.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;plain index scan wins for fetching a small number of tuples,&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;bitmaps can win for a somewhat larger number of tuples,&lt;/li&gt;
-  &lt;li&gt;season wins if you’re fetching a large percentage of the whole table.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Dependence can be created between columns.&lt;/p&gt;
-
-&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
-
-&lt;p&gt;The statistics gathered by PostgreSQL’s query optimizer impact various parts of a query, particularly in the following areas:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;Where Conditions&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;strong&gt;Basic Statistics&lt;/strong&gt; such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rel-tuples&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;relpages&lt;/code&gt; help in estimating the overall size of the data and the amount of data to process, influencing whether a sequential scan or an index scan is more efficient.&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;Distinct Values (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n_distinct&lt;/code&gt;)&lt;/strong&gt; and &lt;strong&gt;Most Common Values (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;most_common_vals&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;most_common_freqs&lt;/code&gt;)&lt;/strong&gt; are crucial for estimating the selectivity of filters in the WHERE clause. These statistics determine how many rows are likely to match a given condition, especially when filtering on specific column values.&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;Histograms&lt;/strong&gt; are used to estimate the selectivity for range conditions (e.g., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;column &amp;gt; value&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;column &amp;lt; value&lt;/code&gt;). They help the optimizer understand the distribution of data within a column when exact matches are not feasible to calculate due to a high number of distinct values.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Join Conditions&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;strong&gt;Multivariate Statistics&lt;/strong&gt; play a significant role in join conditions by helping to estimate the selectivity and distribution of values that result from joining tables. These are particularly useful when columns from different tables are correlated, which might not be apparent through individual column statistics.&lt;/li&gt;
-      &lt;li&gt;&lt;strong&gt;Expression Statistics&lt;/strong&gt; and &lt;strong&gt;Correlation&lt;/strong&gt; data influence the optimizer’s decision on which type of join (nested loop, hash join, or merge join) is most efficient based on the expected size of join outputs and the physical order of data.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Index Scans&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;The &lt;strong&gt;correlation between physical and logical order of data&lt;/strong&gt; greatly affects whether an index scan is beneficial. High correlation means that the data is physically stored in a way that aligns well with the index, making index scans faster and more predictable.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;In essence, these statistics help PostgreSQL’s optimizer make informed decisions about every aspect of query execution—from choosing scan types to optimizing joins and applying filters—thereby enhancing performance by selecting the most efficient execution paths based on data distribution and query structure.&lt;/p&gt;
-
-&lt;h1 id=&quot;table-access-methods&quot;&gt;Table Access Methods&lt;/h1&gt;
-
-&lt;p&gt;Postgresql allows you to plug in various engines (pluggable storage engines).&lt;/p&gt;
-
-&lt;p&gt;Engine defines&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;tuple format and data structure&lt;/li&gt;
-  &lt;li&gt;table &lt;strong&gt;scan&lt;/strong&gt; implementation and cost estimation&lt;/li&gt;
-  &lt;li&gt;implementation of insert, delete, update, and lock operations&lt;/li&gt;
-  &lt;li&gt;visibility rules.&lt;/li&gt;
-  &lt;li&gt;vacuum and analysis procedures.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;A default storage engine is a &lt;strong&gt;heap&lt;/strong&gt;, optional ones are zheac and &lt;strong&gt;zedstore&lt;/strong&gt; (columnar storage).&lt;/p&gt;
-
-&lt;h2 id=&quot;sequential-scans&quot;&gt;Sequential scans.&lt;/h2&gt;
-
-&lt;p&gt;The scan process will use an extra buffer ring, which not affect the main buffer cache.&lt;/p&gt;
-
-&lt;p&gt;multiple processes can share the same buffer ring, thus reading the same data.&lt;/p&gt;
-
-&lt;h3 id=&quot;cost-estimate&quot;&gt;cost estimate&lt;/h3&gt;
-
-&lt;p&gt;disk I/o and CPU resources.&lt;/p&gt;
-
-&lt;p&gt;there are many default values for each operation. And they are defined based on the hardware. They can be updated via the tablespace level.&lt;/p&gt;
-
-&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#define DEFAULT_SEQ_PAGE_COST  1.0
-#define DEFAULT_RANDOM_PAGE_COST  4.0
-#define DEFAULT_CPU_TUPLE_COST 0.01
-#define DEFAULT_CPU_INDEX_TUPLE_COST 0.005
-#define DEFAULT_CPU_OPERATOR_COST  0.0025
-#define DEFAULT_PARALLEL_TUPLE_COST 0.1
-#define DEFAULT_PARALLEL_SETUP_COST  1000.0
-&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#define DEFAULT_EFFECTIVE_CACHE_SIZE  524288   &lt;/span&gt;&lt;span class=&quot;cm&quot;&gt;/* measured in pages */&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;i/o cost = cost of single page * number of page to read&lt;/p&gt;
-
-&lt;p&gt;The planner will not consider parallel execution at all if the estimated volume of heap data to be read does not exceed the 8MB &lt;strong&gt;min_parallel_table_scan_size&lt;/strong&gt; value.&lt;/p&gt;
-
-&lt;p&gt;Not all queries can be parallelized.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Query which modified or locked data UPDATE, DELETE, SELECT FOR UPDATE, and the like.&lt;/li&gt;
-  &lt;li&gt;Queries that can be paused. It applies to queries run within cursors, including FOR loops in PL/pgSQL&lt;/li&gt;
-  &lt;li&gt;Queries that call PARALLEL UNSAFE functions. By default, these are all user-defined functions and a few standard ones.&lt;/li&gt;
-  &lt;li&gt;Queries within functions if these functions are called from a parallelized query (to avoid recursive growth of the number of workers).&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;index-access-methods&quot;&gt;Index Access Methods&lt;/h1&gt;
-
-&lt;p&gt;PostgreSQL supports six built-in index access methods: btree, hash, gist, gin sexiest, brin&lt;/p&gt;
-
-&lt;p&gt;Tuples in Postgresql are referred to by six-byte tuple IDs. TIDS&lt;/p&gt;
-
-&lt;p&gt;Data amount &lt;strong&gt;vs&lt;/strong&gt; scan methods:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Select a large amount of data =&amp;gt; sequential scan&lt;/li&gt;
-  &lt;li&gt;Select a small amount of data =&amp;gt; index scan&lt;/li&gt;
-  &lt;li&gt;Select the mid-level amount of data =&amp;gt; bitmap scan&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;index-scans&quot;&gt;Index scans&lt;/h1&gt;
-
-&lt;h2 id=&quot;index-only-scan&quot;&gt;index-only scan&lt;/h2&gt;
-
-&lt;p&gt;the cost = estimated costs of index access operations and heap page reads.&lt;/p&gt;
-
-&lt;p&gt;I/o estimation depends on both the &lt;strong&gt;index scan selectivity&lt;/strong&gt; and the &lt;strong&gt;correlation&lt;/strong&gt; between the &lt;strong&gt;physical order of tuples on disk a&lt;/strong&gt;nd the &lt;strong&gt;order in which the access method returns their IDs.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;bitmap-scan&quot;&gt;Bitmap scan&lt;/h2&gt;
-
-&lt;p&gt;A Bitmap Index Scan is used to efficiently determine “where to look” in the table, and a Bitmap Heap Scan is used to actually “look” at the data and retrieve it.&lt;/p&gt;
-
-&lt;p&gt;Bitmap index scan is less dependent on the correlation.&lt;/p&gt;
-
-&lt;h1 id=&quot;join-methods&quot;&gt;Join methods&lt;/h1&gt;
-
-&lt;p&gt;Postgresql provides several join methods:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;a nested loop join&lt;/li&gt;
-  &lt;li&gt;a hash join&lt;/li&gt;
-  &lt;li&gt;a merge join&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;nested-loop-joins&quot;&gt;Nested Loop Joins&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;supports  (inner join + left outer join), not support right join and full join.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Traverse the outer set, for each record, it checks the inner set to see if there are matches, and it checks the inner set many times.&lt;/p&gt;
-
-&lt;p&gt;Therefore, the efficiency of nested loop joins depends on several factors:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The cardinality of the outer set of rows.&lt;/li&gt;
-  &lt;li&gt;Availability of an access method that can efficiently fetch the needed rows of the inner set.&lt;/li&gt;
-  &lt;li&gt;Recurrent access to the same rows of the inner set.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;A SQL could execute it in this way:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Scan the inner set and save data into a materialized file, then reuse it many times.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;CE: Cartesian product is estimated at the product of cardinalities of the joined data sets&lt;/p&gt;
-
-&lt;p&gt;Cost:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;start cost: sum of the child node’s start cost&lt;/li&gt;
-  &lt;li&gt;cost of fetching all rows in the outer set,&lt;/li&gt;
-  &lt;li&gt;the cost of a single retrieval of all the rows of the inner set&lt;/li&gt;
-  &lt;li&gt;the cost of processing each row to be returned&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;if the inner set is repeatedly scanned with the same parameter values, it can cache those rows, (page 407). However, since the data is too large, it can edit the caching results.&lt;/p&gt;
-
-&lt;h2 id=&quot;hash-joins&quot;&gt;Hash Joins&lt;/h2&gt;
-
-&lt;p&gt;Supports any type of join.&lt;/p&gt;
-
-&lt;p&gt;Suitable if the table can be accommodated in RAM. If not, two passes will be applied.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;The smaller set is usually used as the inner one, as it results in a smaller hash table.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;In the first stage, it builds a hash table by pulling the whole inner set of rows from its child node.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;columns references in the join condition are hash key, value is all queried fields of the inner set.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;In the second stage, it traverses the other table, computes the hash key, and searches.&lt;/p&gt;
-
-&lt;p&gt;Costs:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;build hash table: total cost of fetching inner set, calculate the hash function, insert rows into a hashtable.&lt;/li&gt;
-  &lt;li&gt;fetching the outer set of rows.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;If the data is too large to fit into the memory, the inner set is divided into many files, one is in memory while others are inside the disk.
-For the outer set, it first calculates the hash for each row key, and can directly decide which batch that row belongs to, if belongs to the current batch (the batch in memory), it performs join, otherwise, it waits for the second pass.&lt;/p&gt;
-
-&lt;p&gt;if some temp file is too large, it cannot fit well into the memory, So if the hash table being built turns out too big, the number of batches is increased (doubled) on the fly. Each batch is virtually split into two new ones: about half of the rows (assuming that the distribution is uniform) are left in the hash table, while the other half is saved into a new temporary file&lt;/p&gt;
-
-&lt;p&gt;In the case of non-uniform distribution, increasing the number of batches may not help. For example, if the key column contains the same value in all its rows, it will be placed into the same batch since the hash function will return the same value over and over again. Unfortunately, the hash table will continue growing in this case, regardless of the imposed restrictions.&lt;/p&gt;
-
-&lt;p&gt;In theory, this issue could be addressed by a multi-pass join, which would perform partial scans of the batch, but it is not supported.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;This problem is not solved yet?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;merge-join&quot;&gt;Merge Join&lt;/h2&gt;
-
-&lt;p&gt;The merge join algorithm can be used with any types of joins&lt;/p&gt;
-
-&lt;p&gt;sort data by join key and return results which are also sorted similarly.&lt;/p&gt;
-
-&lt;p&gt;If there is &lt;strong&gt;order by&lt;/strong&gt;, merge sort is used mostly.&lt;/p&gt;
-
-&lt;p&gt;Merge join requires the input tables to be sorted on the join keys. If the tables are not already sorted, PostgreSQL will sort them before performing the merge join. This sorting operation is represented in the plan by the Sort node.
-It only uses one pass over both data sets and does not take any additional memory. It uses two pointers to current rows.&lt;/p&gt;
-
-&lt;p&gt;PostgreSQL can decide to use to various sorting methods:  quicksort, external merge, top_N heapsort&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;If the data set to be sorted fits the 4MB work_mem chunk, the classic quicksort method is applied.&lt;/li&gt;
-  &lt;li&gt;If a data set needs to be sorted only &lt;strong&gt;partially&lt;/strong&gt; (as defined by the LIMIT clause), the heapsort method can be applied.&lt;/li&gt;
-  &lt;li&gt;If the scan shows that the data set is too big to be sorted in memory, the sorting node switches over to external merge sorting: all rows are written into several pre-sorted files, and rows inside each file are sorted, but across various files are not sorted. 
-Then it uses a merge sort algorithm to merge those files.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;comparison&quot;&gt;Comparison&lt;/h2&gt;
-
-&lt;h3 id=&quot;the-nested-loop-join&quot;&gt;The nested loop join&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;does not have any prerequisites and can start returning the first rows of the result set right away&lt;/li&gt;
-  &lt;li&gt;It is the only join method that does not have to fully scan the inner set (as long as index access is available for it).&lt;/li&gt;
-  &lt;li&gt;These properties make the nested loop algorithm (combined with indexes) an ideal choice for short &lt;strong&gt;OLTP&lt;/strong&gt; queries,which deal with rather small sets of rows.&lt;/li&gt;
-  &lt;li&gt;supports all join conditions&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;However&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Thus, the complexity of the nested loop algorithm often shows linear growth rather than quadratic one, even if with a high linear coefficient.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;a-hash-join&quot;&gt;A hash join&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;only one pass over two data sets. works best on large data sets.&lt;/li&gt;
-  &lt;li&gt;Combined with sequential table scans,this algorithm is typically used for &lt;strong&gt;OLAP&lt;/strong&gt; queries,which compute the result based on a large volume of data.&lt;/li&gt;
-  &lt;li&gt;However, if the response time is more important than throughput, a hash join is not the best choice: it will not start returning the resulting rows until the whole hash table is built&lt;/li&gt;
-  &lt;li&gt;response time in this context, we are referring to the time between sending a query and receiving the first row of the result set&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;merge-join-1&quot;&gt;Merge Join&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;A merge join can perfectly handle both short OLTP queries and long OLAP ones.&lt;/li&gt;
-  &lt;li&gt;An added bonus of a merge join is the equivalence of the inner and outer sets. The efficiency of both nested loop and hash joins is highly dependent on whether the planner can assign inner and outer sets correctly.&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Wed, 17 Apr 2024 00:00:00 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/212/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/212/</guid>
-        
-        
-        <category>A paper note</category>
-        
-      </item>
-    
-      <item>
-        <title>Efficient Memory Management for Large Language Model Serving with PagedAttention</title>
-        <description>&lt;p&gt;Throughput is important.&lt;/p&gt;
-
-&lt;p&gt;Batching requests can improve the throughput. The larger the batching size, the high throughput it is.&lt;/p&gt;
-
-&lt;p&gt;Use memory inefficiently lead to memory waste, and can thus store few requests, which leads low throughtput.&lt;/p&gt;
-
-&lt;p&gt;It’s challenging to manage memory efficiently. Existing system such as hugging face transformer. (20-40% used for store request)&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Internal fragmentation&lt;/strong&gt;: over-allocated (e.g., 2048 tokens) due to unknown &lt;strong&gt;output&lt;/strong&gt; length.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Reservation&lt;/strong&gt;: not used at the current step, but will use in future. This is a kind of waste in current.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;External fragmentation&lt;/strong&gt;: different sequence length =&amp;gt; this is many the external fragmentation of the virtual memory not the physical memory.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Only 20%of  memory is effectively used for the current system.&lt;/p&gt;
-
-&lt;h2 id=&quot;contributions&quot;&gt;Contributions&lt;/h2&gt;
-
-&lt;p&gt;Request =&amp;gt; process, Block -&amp;gt; page, Tokens =&amp;gt; bytes.&lt;/p&gt;
-
-&lt;p&gt;This paper divides the KV cache into blocks, such that the KV cache can be store in the non-continuous memory.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;blocks are not necessarily stored in contiguous space, so KV is a more flexible way.&lt;/li&gt;
-  &lt;li&gt;external fragmentation is also avoided.&lt;/li&gt;
-  &lt;li&gt;memory sharing can happen at the granularity of the block&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Then the paper proposes an attention algorithm based on such storage&lt;/p&gt;
-
-&lt;p&gt;Finally, the paper implements LLM based on such pageAttention.&lt;/p&gt;
-
-&lt;h3 id=&quot;methods&quot;&gt;Methods&lt;/h3&gt;
-
-&lt;p&gt;Logic &amp;amp; physical KV blocks&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Allocation is on-demand, every time it allocates a new block.&lt;/li&gt;
-  &lt;li&gt;memory sharing in block level, reduce memory usage&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Analysis:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;No internal fragmentation:  since it is on-demands, so only the last block has the internal fragmentation. Since each block has 16 or 32 tokens, thus internal fragmentation is small.&lt;/li&gt;
-  &lt;li&gt;No external fragmentation: blocks have same size, thus there any block can be used.&lt;/li&gt;
-  &lt;li&gt;Reduce memory usage, so we can store more requests.&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/211/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/211/</guid>
-        
-        
-        <category>A paper note</category>
-        
-      </item>
-    
-      <item>
-        <title>Decision Transformer Reinforcement Learning via Sequence Modeling</title>
-        <description>&lt;p&gt;This paper mainly casts the problem of RL as conditional sequence modeling.&lt;/p&gt;
-
-&lt;p&gt;Where they input the expected reward and predict the best action here.&lt;/p&gt;
-
-&lt;p&gt;One problem is how to define the expected rewards.&lt;/p&gt;
-
-&lt;p&gt;The experiments show that it should be within in training dataset, but I feel there is a problem.&lt;/p&gt;
-
-&lt;p&gt;How to decide the expected rewards if we cannot predict future rewards?&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 10 Apr 2024 00:00:00 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/210/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/210/</guid>
-        
-        
-        <category>A paper note</category>
-        
-      </item>
-    
-      <item>
-        <title>Summarize of RL paper I have learned</title>
-        <description>&lt;h1 id=&quot;rl-basic-category&quot;&gt;RL basic category&lt;/h1&gt;
-
-&lt;p&gt;Model-Free&lt;/p&gt;
-
-&lt;p&gt;Model-Base&lt;/p&gt;
-
-&lt;p&gt;Offline RL&lt;/p&gt;
-
-&lt;p&gt;Online RL&lt;/p&gt;
-
-&lt;h1 id=&quot;model-base--offline&quot;&gt;Model-Base + Offline&lt;/h1&gt;
-
-&lt;h1 id=&quot;model-base--online&quot;&gt;Model-Base + Online&lt;/h1&gt;
-
-&lt;h1 id=&quot;model-free--offline&quot;&gt;Model-Free + Offline&lt;/h1&gt;
-
-&lt;h2 id=&quot;decision-transformer-reinforcement-learning-via-sequence-modeling-2021&quot;&gt;Decision Transformer: Reinforcement Learning via Sequence Modeling (2021)&lt;/h2&gt;
-
-&lt;p&gt;Large models require few samples to reach the same performance.&lt;/p&gt;
-
-&lt;p&gt;(Desired return, past states, actions) =&amp;gt; sequence model (Decision Transformer) =&amp;gt; actions with desired return.&lt;/p&gt;
-
-&lt;p&gt;This work is on offline RL.&lt;/p&gt;
-
-&lt;p&gt;This work is given a reward, and it try to predict an action to achieve the desired return&lt;/p&gt;
-
-&lt;h1 id=&quot;model-free--online&quot;&gt;Model-Free + Online&lt;/h1&gt;
-
-&lt;p&gt;Large transformer models have shown strong generalization capability on language understanding when fine-tuned with limited data.&lt;/p&gt;
-
-</description>
-        <pubDate>Tue, 02 Apr 2024 00:00:00 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/209/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/209/</guid>
-        
-        
-        <category>A paper note</category>
-        
-      </item>
-    
-      <item>
-        <title>CS234 reinforcement learning</title>
-        <description>&lt;h3 id=&quot;markov-assumption&quot;&gt;Markov Assumption&lt;/h3&gt;
-
-&lt;p&gt;future is independent of the past given the present&lt;/p&gt;
-
-&lt;p&gt;Markov Process/Chain&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;sequence of random states with Markov property&lt;/li&gt;
-  &lt;li&gt;
-    &lt;table&gt;
-      &lt;tbody&gt;
-        &lt;tr&gt;
-          &lt;td&gt;no actions, rewards, only have transition model P(s_(t+1)&lt;/td&gt;
-          &lt;td&gt;s_t)&lt;/td&gt;
-        &lt;/tr&gt;
-      &lt;/tbody&gt;
-    &lt;/table&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Markov Reward Process&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;markov chian + rewards&lt;/li&gt;
-  &lt;li&gt;
-    &lt;table&gt;
-      &lt;tbody&gt;
-        &lt;tr&gt;
-          &lt;td&gt;no actions, transition model P(s_(t+1)&lt;/td&gt;
-          &lt;td&gt;s_t)&lt;/td&gt;
-        &lt;/tr&gt;
-      &lt;/tbody&gt;
-    &lt;/table&gt;
-  &lt;/li&gt;
-  &lt;li&gt;reward function R(s_t).&lt;/li&gt;
-  &lt;li&gt;has defined &lt;strong&gt;return and value functions&lt;/strong&gt;, 
-Return = sum of reward from time step t to the horizon. 
-Value function = expected &lt;strong&gt;return&lt;/strong&gt; from state s.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Markov Decision Process (S, A, P, R, \gama)&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Markov reward process + actions&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Definition:&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;table&gt;
-          &lt;tbody&gt;
-            &lt;tr&gt;
-              &lt;td&gt;Transition model P(s_(t+1)&lt;/td&gt;
-              &lt;td&gt;s_t, &lt;strong&gt;a_t&lt;/strong&gt;)&lt;/td&gt;
-            &lt;/tr&gt;
-          &lt;/tbody&gt;
-        &lt;/table&gt;
-      &lt;/li&gt;
-      &lt;li&gt;Reward function R(s_t, &lt;strong&gt;a_t&lt;/strong&gt;)&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Policy:&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;what actions to take at each state&lt;/li&gt;
-      &lt;li&gt;can be deterministic or stochastic&lt;/li&gt;
-      &lt;li&gt;
-        &lt;table&gt;
-          &lt;tbody&gt;
-            &lt;tr&gt;
-              &lt;td&gt;like conditional distribution, pi(a&lt;/td&gt;
-              &lt;td&gt;s) = P(a&lt;/td&gt;
-              &lt;td&gt;s)&lt;/td&gt;
-            &lt;/tr&gt;
-          &lt;/tbody&gt;
-        &lt;/table&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;MDP Policy Evaluation, Iterative Algorithm.&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;V=0 for all states s.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;for k=1 to converge, and for each state, calculate.
-\(V_k^\pi(s) = r(s, \pi(s)) + r\sum p(s'|s, \pi(s)) V_{k-1}^\pi(s')\)
-This is &lt;strong&gt;Bellman’s backup&lt;/strong&gt; for a policy.&lt;/p&gt;
-
-        &lt;p&gt;and the optimal policy is 
-\(\pi^*(s)=argmaxV^\pi(s)\)&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Policy iteration is efficient in &lt;strong&gt;guessing&lt;/strong&gt; the optimal policy.&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;define the &lt;strong&gt;Q function to measure&lt;/strong&gt; state-action value, and measure the improvement of a policy.
-\(Q^\pi(s, a) = R(s, a) + r\sum p(s'|s, a) V^\pi(s')\)&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;for all s and a, we compute the Q function, and then the new policy should be 
-\(\pi_{i+1}(s) = argmax_aQ^\pi_i(s, a)\)
-This is to find a such that the Q is max.&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;&lt;strong&gt;Monotonic improvement&lt;/strong&gt; in policy, the new policy is always better. (there is proof at this &lt;a href=&quot;https://www.youtube.com/watch?v=E3f2Camj0Is&amp;amp;list=PLoROMvodv4rOSOPzutgyCTapiGlY2Nd8u&amp;amp;index=2&amp;amp;ab_channel=StanfordOnline&quot;&gt;Link&lt;/a&gt;)&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Value iteration is another way to compute it.&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;maintain the optimal value of starting in a state.&lt;/li&gt;
-      &lt;li&gt;Bellman Equation, and Bellman Backup operators.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;rl-algorithm-components&quot;&gt;RL Algorithm Components&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Model&lt;/strong&gt;: representation of how the world changes in response to agent’s action.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Transition model: predict next agent state, s_t + a_t =&amp;gt; s_(t+1)&lt;/li&gt;
-  &lt;li&gt;Reward model: predict immediate rewards, r(s_t, a_t)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Policy&lt;/strong&gt;: function mapping agent’s stats to action. S -&amp;gt; A,&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Determinsitc policy: pi(s) = a&lt;/li&gt;
-  &lt;li&gt;
-    &lt;table&gt;
-      &lt;tbody&gt;
-        &lt;tr&gt;
-          &lt;td&gt;Stochastic policy: pi(a&lt;/td&gt;
-          &lt;td&gt;s) = Pr(a_t = a&lt;/td&gt;
-          &lt;td&gt;s_t = s)&lt;/td&gt;
-        &lt;/tr&gt;
-      &lt;/tbody&gt;
-    &lt;/table&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Value Function&lt;/strong&gt;: &lt;strong&gt;future&lt;/strong&gt; rewards from being in a stats and action when following a policy&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;table&gt;
-      &lt;tbody&gt;
-        &lt;tr&gt;
-          &lt;td&gt;V(s_t) = E(r_t + r_(t+1) + r_(t+2)…&lt;/td&gt;
-          &lt;td&gt;s_t)&lt;/td&gt;
-        &lt;/tr&gt;
-      &lt;/tbody&gt;
-    &lt;/table&gt;
-  &lt;/li&gt;
-  &lt;li&gt;quantify goodness/badness of states and actions.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;rl-agent&quot;&gt;&lt;strong&gt;RL agent:&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;Model-based/Model-free: the difference is whether they can model the environment。&lt;/p&gt;
-
-&lt;h3 id=&quot;model-free&quot;&gt;Model-Free&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Monte Carlo Policy Evaluation:&lt;/strong&gt; Policy evaluation when we don’t have dynamics and reward model.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;no bootstrapping&lt;/li&gt;
-  &lt;li&gt;does not assume state is Markov&lt;/li&gt;
-  &lt;li&gt;Can only be applied to episodic MPDs.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;###&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/208/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/208/</guid>
-        
-        
-        <category>A paper note</category>
-        
-      </item>
-    
-      <item>
-        <title>An End-to-End Automatic Cloud Database Tuning System Using Deep Reinforcement Learning</title>
-        <description>&lt;p&gt;This paper proposes an end-to-end automatic CDB tuning system, which&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;uses the deep deterministic policy gradient method to find the optimal configurations in high-dimensional continuous space.&lt;/li&gt;
-  &lt;li&gt;adopts a &lt;strong&gt;try-and-error strategy&lt;/strong&gt; to learn knob settings with a limited number of samples to accomplish the initial training&lt;/li&gt;
-  &lt;li&gt;adopts the reward-feedback mechanism in RL instead of traditional regression, which enables end-to-end learning and accelerates the convergence speed&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;rl-for-tunning&quot;&gt;RL for tunning&lt;/h3&gt;
-
-&lt;p&gt;State: Got from the “show status”.&lt;/p&gt;
-
-&lt;p&gt;Reward: performance changed (latency/throughput)&lt;/p&gt;
-
-&lt;p&gt;Action: change tunable knobs&lt;/p&gt;
-
-&lt;p&gt;Policy: a DNN, db status =&amp;gt; DNN =&amp;gt; recommended knobs.&lt;/p&gt;
-
-&lt;p&gt;Training data:&lt;/p&gt;
-
-&lt;p&gt;(q, a, s, r), q is a set of query workloads, a is the knobs and values, s is the db status, and r is the performance when processing q.&lt;/p&gt;
-
-&lt;h3 id=&quot;insights&quot;&gt;Insights:&lt;/h3&gt;
-
-&lt;p&gt;value-based and policy-based,&lt;/p&gt;
-
-&lt;p&gt;Q-learning is effective in a relatively small state space. However, it is hard to solve the problem of a large state&lt;/p&gt;
-
-&lt;p&gt;DQN can model the states, but DQN is a discrete-oriented control algorithm, which means the actions of output are discrete&lt;/p&gt;
-
-&lt;p&gt;It uses Deep Deterministic Policy Gradient&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/207/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/207/</guid>
-        
-        
-        <category>A paper note</category>
-        
-      </item>
-    
-      <item>
-        <title>Lero A Learning-to-Rank Query Optimizer</title>
-        <description>&lt;p&gt;###&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
-        <link>https://nlgithubwp.github.io/tech-notebook/journal/205/</link>
-        <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/205/</guid>
         
         
         <category>A paper note</category>

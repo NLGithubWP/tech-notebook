@@ -162,20 +162,18 @@
              <p>Query-driven and data-driven methods</p>
 
 <ul>
-  <li>query-driven: it basically train a model to predict CE.</li>
-  <li>data-driven: it basically learn a join distribution among columns and then sampling bsaed on that, and use the sampled data to estimate the basic staisitcs. Default optimizer will then use those statistics to estimate CE.</li>
+  <li>query-driven: it basically trains a model to predict CE.</li>
+  <li>data-driven: it basically learns a join distribution among columns and then sampling based on that, and use the sampled data to estimate the basic statistics. The default optimizer will then use those statistics to estimate CE.</li>
 </ul>
 
 <p>Existing work:</p>
 
 <ul>
   <li>Cannot combine both query-driven and data-driven methods.</li>
-  <li>Cannot handle dynamic workloads that mix queries and data manipulation statements including inserts, deletes and updates.</li>
+  <li>Cannot handle dynamic workloads that mix queries and data manipulation statements including inserts, deletes, and updates.</li>
 </ul>
 
-<p>ALECE is less sensitive to data changes</p>
-
-<h1 id="techniques">Techniques</h1>
+<p>ALICE is less sensitive to data changes</p>
 
 
 
