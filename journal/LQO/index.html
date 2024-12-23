@@ -136,7 +136,7 @@
 
 
 <i class="fa fa-clock-o"></i>&nbsp;
-20 minute read
+25 minute read
 
 
 
@@ -1119,6 +1119,16 @@ i.e., matrix to represent all join relation, then flatten into one vector. Then 
 
 <h2 id="takeaways-14">Takeaways</h2>
 
+<p>This paper mentioned that some CE is sensitive while other are not.</p>
+
+<p>The whole paper based on the probability of f(s∣s′):</p>
+
+<ul>
+  <li>It starts as an error distribution estimated from historical data.</li>
+  <li>It drives sensitivity analysis by identifying critical dimensions.</li>
+  <li>It enables robust plan selection by sampling likely true selectivities and guiding the optimizer to focus on realistic scenarios.</li>
+</ul>
+
 <h2 id="problems-14">Problems</h2>
 
 <p>Accurate estimation of the cardinality and cost comes at the cost of runtime monitoring and ongoing maintenance.</p>
@@ -1129,29 +1139,257 @@ i.e., matrix to represent all join relation, then flatten into one vector. Then 
 
 <ul>
   <li>errors distributed on data and query worklaod is not well utiized in exsting work.</li>
-  <li>complex query has large cardinality estimate spaces, and thus</li>
+  <li>complex query has large cardinality estimate spaces, and thus has overhead to evaluate all other competing plans.</li>
+  <li>support learned optimzier at scale and in efficient way.</li>
 </ul>
 
 <h2 id="assumptions-12">Assumptions</h2>
 
 <h2 id="techniques-15">Techniques</h2>
 
+<table>
+  <tbody>
+    <tr>
+      <td>getting the distribution of f(s</td>
+      <td>s`), where s` is estimated cardinalities, and s is the true selectivities.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>based on the distribution, find the <strong>sensitive</strong> dimensions for a given query plan got from estimates s`.</p>
+
+<ul>
+  <li>identify the dimensions with biggest impact on the user-defined penalty function.</li>
+  <li>using sobol method</li>
+</ul>
+
+<p>build a pool of candidate plan by sampling from the distribution of true selectivities conditioned on their estimates, then select one with lowest penalty.</p>
+
+<ol>
+  <li>
+    <p>Error profling:</p>
+
+    <table>
+      <tbody>
+        <tr>
+          <td>build a model to estimate  f(s</td>
+          <td>s`) given Q and s`</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>break the query into querylet, which is a subquery pattern. like join with local selection.</p>
+
+    <p>for each querlet in (single-table querylet, two table querley, three-table querylet with fixed pattern), measure the true cardinalities and estimated cardinalities.</p>
+
+    <p>one model for low-selectivity, one model for hight selectivity.</p>
+  </li>
+  <li>
+    <p>Sensitive analysis</p>
+
+    <p>it uses <strong>sobol sensitiity</strong> to identify the sensitive selectivity dimensions for a given plan.</p>
+  </li>
+  <li>
+    <p>Plan selection
+use sampling to sample a pool of plans based on the probability f(s, s`),
+estimate the cost</p>
+  </li>
+</ol>
+
 <h3 id="formulation-9">Formulation</h3>
+
+<p>No</p>
 
 <h3 id="query-type-10">Query Type</h3>
 
+<p>No</p>
+
 <h3 id="query-encoding-9">Query Encoding</h3>
 
+<p>No</p>
+
 <h3 id="model-11">Model</h3>
+
+<p>KDE</p>
 
 <h2 id="workloads-13"><strong>Workloads</strong>.</h2>
 
 <h3 id="datasets-10">Datasets</h3>
 
+<p>IMDB, DSB, STATS</p>
+
 <h3 id="dynamic-workload-11">Dynamic Workload</h3>
+
+<p>split database into multiple instance in time series manner.</p>
 
 <h3 id="performance-6">Performance</h3>
 
+<h1 id="17plaque-automated-predicate-learning-at-query-time">17.PLAQUE: Automated Predicate Learning at Query Time</h1>
+
+<h2 id="takeaways-15">Takeaways</h2>
+
+<p>Discovering the proper predicates is also important to improve the efficiency.</p>
+
+<h2 id="problems-15">Problems</h2>
+
+<p>Predicates pushdown is useful in speeding up the query processing, but query optimzier only pushdown the predictes exist in the query. However, tables with no predicated also has a chance to prune.</p>
+
+<p>Therefore, this paper try to discover the predicates and add that to the query in query execution.</p>
+
+<h1 id="18-fastgres-making-learned-query-optimizer-hinting-effective">18. FASTgres: Making Learned Query Optimizer Hinting Effective</h1>
+
+<h2 id="takeaways-16">Takeaways</h2>
+
+<p>This paper learn multiple GB models for each context, reduing the model complexity and training inefficiency. But not quite handle the change of data or query ? data is not changed in this setting.</p>
+
+<h2 id="problems-16">Problems</h2>
+
+<p>bao cannot achieve the potetial to the full extent.</p>
+
+<h2 id="assumptions-13">Assumptions</h2>
+
+<h2 id="techniques-16">Techniques</h2>
+
+<p>Divide and conquer approach.</p>
+
+<ul>
+  <li>workload -&gt; partitioned into query groups, each with different join tables and join predicates -&gt; context.</li>
+  <li>learn a separate and context-sensitive ML model for each context.
+here since the partition is based on join pattern, join is not required to learn, we can only learn to map the filter predicates to the hint set.</li>
+</ul>
+
+<h3 id="formulation-10">Formulation</h3>
+
+<p>Divide and conquer approach.</p>
+
+<h3 id="query-type-11">Query Type</h3>
+
+<h3 id="query-encoding-10">Query Encoding</h3>
+
+<p>predicate-based encoding</p>
+
+<h3 id="model-12">Model</h3>
+
+<p>GB models</p>
+
+<h2 id="workloads-14"><strong>Workloads</strong>.</h2>
+
+<h3 id="datasets-11">Datasets</h3>
+
+<p>Stack [18], JOB [13], and TPC-H</p>
+
+<h3 id="dynamic-workload-12">Dynamic Workload</h3>
+
+<p><strong>randonmly</strong> sample training query</p>
+
+<h3 id="performance-7">Performance</h3>
+
+<h1 id="19os-pre-trained-transformer-predicting-query-latencies-across-changing-system-contexts">19.OS Pre-trained Transformer: Predicting Query Latencies across Changing System Contexts</h1>
+
+<h2 id="takeaways-17">Takeaways</h2>
+
+<p>This paper propose to train a generatl embedding to ecndoe the informatin of the system envs, such as cpu, memory etc, and finally combine the result of this and instance-specifc embedding together to predict the final result of the task.</p>
+
+<h2 id="problems-17">Problems</h2>
+
+<p>Model leared in one context fail when tested on a new system context. Thus, there is a generalization gap.</p>
+
+<p>Therefore, existing work cannot utilize the interaction of different resources to accurately predict query performance.</p>
+
+<h2 id="assumptions-14">Assumptions</h2>
+
+<p>system state does not change drastically just before and during query execution.</p>
+
+<h2 id="techniques-17">Techniques</h2>
+
+<h3 id="formulation-11">Formulation</h3>
+
+<p>query plan, OS logs -&gt; query latency.</p>
+
+<h3 id="query-type-12">Query Type</h3>
+
+<h3 id="query-encoding-11">Query Encoding</h3>
+
+<p>GCN for query plans, the model should produce an embedding vector with all query specifc properties to predict the latency.</p>
+
+<h3 id="model-13">Model</h3>
+
+<ol>
+  <li>
+    <p>Database specifialized query plan model: encoding the plan into a vecotr. like using <strong>GCN</strong>.</p>
+  </li>
+  <li>
+    <p><strong>A universal (i.e., applicable to any workload) transformer model</strong> which takes as input recent OS logs, and produces an embedding vector that captures the system state.</p>
+  </li>
+  <li>Embedding vectors are used as input to a universal Multi Layer Perceptron (MLP) module to produce the latency prediction.</li>
+  <li>When in new datasets, it fix the Osprey model and prediction head, and only update the query embedding model, the GCN.</li>
+</ol>
+
+<h2 id="workloads-15"><strong>Workloads</strong>.</h2>
+
+<h3 id="datasets-12">Datasets</h3>
+
+<p>150k PostgreSQL query execution plans and corresponding linux system logs for over 2500 unique queries from 14 database workloads executed on 10 AWS instance types, and under various system loads</p>
+
+<h3 id="dynamic-workload-13">Dynamic Workload</h3>
+
+<h3 id="performance-8">Performance</h3>
+
+<h1 id="20-zero-shot-cost-models-for-out-of-the-box-learned-cost-prediction">20. Zero-Shot Cost Models for Out-of-the-box Learned Cost Prediction</h1>
+
+<h2 id="takeaways-18">Takeaways</h2>
+
+<h2 id="problems-18">Problems</h2>
+
+<p>training data collection is high cost.</p>
+
+<p>simply model often under/over-estimates the true costs of queries, since they cannot capture complex interactions in the query plan and data.</p>
+
+<h2 id="assumptions-15">Assumptions</h2>
+
+<p>we only focus on the transfer of <strong>learned cost models</strong> across databases for a <strong>single database system on a fixed hardware.</strong></p>
+
+<h2 id="techniques-18">Techniques</h2>
+
+<p>New query and data representation that allows zero-shot cost models to be pre-trained across databases.</p>
+
+<h3 id="formulation-12">Formulation</h3>
+
+<p>The goal of <strong>zero-shot cost estimation</strong> is to predict query latencies (i.e., runtimes) on an <strong>unseen database</strong> without having observed any query on this <strong>unseen database</strong>.</p>
+
+<h3 id="query-type-13">Query Type</h3>
+
+<h3 id="query-encoding-12">Query Encoding</h3>
+
+<p>A new representation of <strong>queries</strong> that can generalize across databases.</p>
+
+<p>Encoded information:</p>
+
+<ul>
+  <li>physical plan operators as nodes.</li>
+  <li>input columns, tables, predicate information.</li>
+</ul>
+
+<p>Encoded in transferable way:</p>
+
+<ul>
+  <li>predicate structure: data types of columns/operators, intermediate cardinalities</li>
+  <li></li>
+</ul>
+
+<h3 id="model-14">Model</h3>
+
+<p>a database-agnostic model to <strong>estimate the runtime cost</strong> and a databasedependent model (e.g., histograms) to capture data characteristics.</p>
+
+<p>database-agnostic cost model: feed with both estimated cardinalities and output of database-dependent model, it generates a cost.</p>
+
+<h2 id="workloads-16"><strong>Workloads</strong></h2>
+
+<h3 id="datasets-13">Datasets</h3>
+
+<h3 id="dynamic-workload-14">Dynamic Workload</h3>
+
+<h3 id="performance-9">Performance</h3>
 
 
                 <br>

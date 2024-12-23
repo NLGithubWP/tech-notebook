@@ -5,8 +5,8 @@
     <description>It's the niceties that make the difference fate gives us the hand, and we play the cards.</description>
     <link>https://nlgithubwp.github.io/tech-notebook/</link>
     <atom:link href="https://nlgithubwp.github.io/tech-notebook/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 17 Dec 2024 09:23:50 +0000</pubDate>
-    <lastBuildDate>Tue, 17 Dec 2024 09:23:50 +0000</lastBuildDate>
+    <pubDate>Mon, 23 Dec 2024 06:30:34 +0000</pubDate>
+    <lastBuildDate>Mon, 23 Dec 2024 06:30:34 +0000</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
     
       <item>
@@ -72,7 +72,7 @@ position_embd + atree_atten_bias.&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
-        <pubDate>Tue, 17 Dec 2024 09:23:50 +0000</pubDate>
+        <pubDate>Mon, 23 Dec 2024 06:30:34 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-06-04-220/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-06-04-220/</guid>
         
@@ -104,7 +104,7 @@ position_embd + atree_atten_bias.&lt;/li&gt;
 &lt;p&gt;Thus, the DSB benchmark enhances the data generation of the TPC-DS benchmark with additional skews and correlations&lt;/p&gt;
 
 </description>
-        <pubDate>Tue, 17 Dec 2024 09:23:50 +0000</pubDate>
+        <pubDate>Mon, 23 Dec 2024 06:30:34 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-05-30-217/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-05-30-217/</guid>
         
@@ -1106,6 +1106,16 @@ i.e., matrix to represent all join relation, then flatten into one vector. Then 
 
 &lt;h2 id=&quot;takeaways-14&quot;&gt;Takeaways&lt;/h2&gt;
 
+&lt;p&gt;This paper mentioned that some CE is sensitive while other are not.&lt;/p&gt;
+
+&lt;p&gt;The whole paper based on the probability of f(s∣s′):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It starts as an error distribution estimated from historical data.&lt;/li&gt;
+  &lt;li&gt;It drives sensitivity analysis by identifying critical dimensions.&lt;/li&gt;
+  &lt;li&gt;It enables robust plan selection by sampling likely true selectivities and guiding the optimizer to focus on realistic scenarios.&lt;/li&gt;
+&lt;/ul&gt;
+
 &lt;h2 id=&quot;problems-14&quot;&gt;Problems&lt;/h2&gt;
 
 &lt;p&gt;Accurate estimation of the cardinality and cost comes at the cost of runtime monitoring and ongoing maintenance.&lt;/p&gt;
@@ -1116,29 +1126,257 @@ i.e., matrix to represent all join relation, then flatten into one vector. Then 
 
 &lt;ul&gt;
   &lt;li&gt;errors distributed on data and query worklaod is not well utiized in exsting work.&lt;/li&gt;
-  &lt;li&gt;complex query has large cardinality estimate spaces, and thus&lt;/li&gt;
+  &lt;li&gt;complex query has large cardinality estimate spaces, and thus has overhead to evaluate all other competing plans.&lt;/li&gt;
+  &lt;li&gt;support learned optimzier at scale and in efficient way.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;assumptions-12&quot;&gt;Assumptions&lt;/h2&gt;
 
 &lt;h2 id=&quot;techniques-15&quot;&gt;Techniques&lt;/h2&gt;
 
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;getting the distribution of f(s&lt;/td&gt;
+      &lt;td&gt;s`), where s` is estimated cardinalities, and s is the true selectivities.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;based on the distribution, find the &lt;strong&gt;sensitive&lt;/strong&gt; dimensions for a given query plan got from estimates s`.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;identify the dimensions with biggest impact on the user-defined penalty function.&lt;/li&gt;
+  &lt;li&gt;using sobol method&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;build a pool of candidate plan by sampling from the distribution of true selectivities conditioned on their estimates, then select one with lowest penalty.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Error profling:&lt;/p&gt;
+
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;build a model to estimate  f(s&lt;/td&gt;
+          &lt;td&gt;s`) given Q and s`&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;p&gt;break the query into querylet, which is a subquery pattern. like join with local selection.&lt;/p&gt;
+
+    &lt;p&gt;for each querlet in (single-table querylet, two table querley, three-table querylet with fixed pattern), measure the true cardinalities and estimated cardinalities.&lt;/p&gt;
+
+    &lt;p&gt;one model for low-selectivity, one model for hight selectivity.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Sensitive analysis&lt;/p&gt;
+
+    &lt;p&gt;it uses &lt;strong&gt;sobol sensitiity&lt;/strong&gt; to identify the sensitive selectivity dimensions for a given plan.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Plan selection
+use sampling to sample a pool of plans based on the probability f(s, s`),
+estimate the cost&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
 &lt;h3 id=&quot;formulation-9&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;No&lt;/p&gt;
 
 &lt;h3 id=&quot;query-type-10&quot;&gt;Query Type&lt;/h3&gt;
 
+&lt;p&gt;No&lt;/p&gt;
+
 &lt;h3 id=&quot;query-encoding-9&quot;&gt;Query Encoding&lt;/h3&gt;
 
+&lt;p&gt;No&lt;/p&gt;
+
 &lt;h3 id=&quot;model-11&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;KDE&lt;/p&gt;
 
 &lt;h2 id=&quot;workloads-13&quot;&gt;&lt;strong&gt;Workloads&lt;/strong&gt;.&lt;/h2&gt;
 
 &lt;h3 id=&quot;datasets-10&quot;&gt;Datasets&lt;/h3&gt;
 
+&lt;p&gt;IMDB, DSB, STATS&lt;/p&gt;
+
 &lt;h3 id=&quot;dynamic-workload-11&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;split database into multiple instance in time series manner.&lt;/p&gt;
 
 &lt;h3 id=&quot;performance-6&quot;&gt;Performance&lt;/h3&gt;
 
+&lt;h1 id=&quot;17plaque-automated-predicate-learning-at-query-time&quot;&gt;17.PLAQUE: Automated Predicate Learning at Query Time&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-15&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;Discovering the proper predicates is also important to improve the efficiency.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-15&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;Predicates pushdown is useful in speeding up the query processing, but query optimzier only pushdown the predictes exist in the query. However, tables with no predicated also has a chance to prune.&lt;/p&gt;
+
+&lt;p&gt;Therefore, this paper try to discover the predicates and add that to the query in query execution.&lt;/p&gt;
+
+&lt;h1 id=&quot;18-fastgres-making-learned-query-optimizer-hinting-effective&quot;&gt;18. FASTgres: Making Learned Query Optimizer Hinting Effective&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-16&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;This paper learn multiple GB models for each context, reduing the model complexity and training inefficiency. But not quite handle the change of data or query ? data is not changed in this setting.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-16&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;bao cannot achieve the potetial to the full extent.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-13&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;h2 id=&quot;techniques-16&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;Divide and conquer approach.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;workload -&amp;gt; partitioned into query groups, each with different join tables and join predicates -&amp;gt; context.&lt;/li&gt;
+  &lt;li&gt;learn a separate and context-sensitive ML model for each context.
+here since the partition is based on join pattern, join is not required to learn, we can only learn to map the filter predicates to the hint set.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;formulation-10&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;Divide and conquer approach.&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-11&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-10&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;predicate-based encoding&lt;/p&gt;
+
+&lt;h3 id=&quot;model-12&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;GB models&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-14&quot;&gt;&lt;strong&gt;Workloads&lt;/strong&gt;.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-11&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;Stack [18], JOB [13], and TPC-H&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-12&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;randonmly&lt;/strong&gt; sample training query&lt;/p&gt;
+
+&lt;h3 id=&quot;performance-7&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;h1 id=&quot;19os-pre-trained-transformer-predicting-query-latencies-across-changing-system-contexts&quot;&gt;19.OS Pre-trained Transformer: Predicting Query Latencies across Changing System Contexts&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-17&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;This paper propose to train a generatl embedding to ecndoe the informatin of the system envs, such as cpu, memory etc, and finally combine the result of this and instance-specifc embedding together to predict the final result of the task.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems-17&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;Model leared in one context fail when tested on a new system context. Thus, there is a generalization gap.&lt;/p&gt;
+
+&lt;p&gt;Therefore, existing work cannot utilize the interaction of different resources to accurately predict query performance.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-14&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;p&gt;system state does not change drastically just before and during query execution.&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-17&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;h3 id=&quot;formulation-11&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;query plan, OS logs -&amp;gt; query latency.&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-12&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-11&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;GCN for query plans, the model should produce an embedding vector with all query specifc properties to predict the latency.&lt;/p&gt;
+
+&lt;h3 id=&quot;model-13&quot;&gt;Model&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Database specifialized query plan model: encoding the plan into a vecotr. like using &lt;strong&gt;GCN&lt;/strong&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;A universal (i.e., applicable to any workload) transformer model&lt;/strong&gt; which takes as input recent OS logs, and produces an embedding vector that captures the system state.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Embedding vectors are used as input to a universal Multi Layer Perceptron (MLP) module to produce the latency prediction.&lt;/li&gt;
+  &lt;li&gt;When in new datasets, it fix the Osprey model and prediction head, and only update the query embedding model, the GCN.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;workloads-15&quot;&gt;&lt;strong&gt;Workloads&lt;/strong&gt;.&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-12&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;150k PostgreSQL query execution plans and corresponding linux system logs for over 2500 unique queries from 14 database workloads executed on 10 AWS instance types, and under various system loads&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-13&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;h3 id=&quot;performance-8&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;h1 id=&quot;20-zero-shot-cost-models-for-out-of-the-box-learned-cost-prediction&quot;&gt;20. Zero-Shot Cost Models for Out-of-the-box Learned Cost Prediction&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-18&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;h2 id=&quot;problems-18&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;training data collection is high cost.&lt;/p&gt;
+
+&lt;p&gt;simply model often under/over-estimates the true costs of queries, since they cannot capture complex interactions in the query plan and data.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-15&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;p&gt;we only focus on the transfer of &lt;strong&gt;learned cost models&lt;/strong&gt; across databases for a &lt;strong&gt;single database system on a fixed hardware.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-18&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;New query and data representation that allows zero-shot cost models to be pre-trained across databases.&lt;/p&gt;
+
+&lt;h3 id=&quot;formulation-12&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;The goal of &lt;strong&gt;zero-shot cost estimation&lt;/strong&gt; is to predict query latencies (i.e., runtimes) on an &lt;strong&gt;unseen database&lt;/strong&gt; without having observed any query on this &lt;strong&gt;unseen database&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-13&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-12&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;p&gt;A new representation of &lt;strong&gt;queries&lt;/strong&gt; that can generalize across databases.&lt;/p&gt;
+
+&lt;p&gt;Encoded information:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;physical plan operators as nodes.&lt;/li&gt;
+  &lt;li&gt;input columns, tables, predicate information.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Encoded in transferable way:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;predicate structure: data types of columns/operators, intermediate cardinalities&lt;/li&gt;
+  &lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;model-14&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;a database-agnostic model to &lt;strong&gt;estimate the runtime cost&lt;/strong&gt; and a databasedependent model (e.g., histograms) to capture data characteristics.&lt;/p&gt;
+
+&lt;p&gt;database-agnostic cost model: feed with both estimated cardinalities and output of database-dependent model, it generates a cost.&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-16&quot;&gt;&lt;strong&gt;Workloads&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-13&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;h3 id=&quot;dynamic-workload-14&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;h3 id=&quot;performance-9&quot;&gt;Performance&lt;/h3&gt;
 </description>
         <pubDate>Thu, 08 Aug 2024 00:00:00 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/LQO/</link>
