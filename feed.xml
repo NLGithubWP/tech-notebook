@@ -5,8 +5,8 @@
     <description>It's the niceties that make the difference fate gives us the hand, and we play the cards.</description>
     <link>https://nlgithubwp.github.io/tech-notebook/</link>
     <atom:link href="https://nlgithubwp.github.io/tech-notebook/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 23 Dec 2024 06:30:34 +0000</pubDate>
-    <lastBuildDate>Mon, 23 Dec 2024 06:30:34 +0000</lastBuildDate>
+    <pubDate>Sat, 22 Feb 2025 10:24:33 +0000</pubDate>
+    <lastBuildDate>Sat, 22 Feb 2025 10:24:33 +0000</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
     
       <item>
@@ -72,7 +72,7 @@ position_embd + atree_atten_bias.&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
-        <pubDate>Mon, 23 Dec 2024 06:30:34 +0000</pubDate>
+        <pubDate>Sat, 22 Feb 2025 10:24:33 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-06-04-220/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-06-04-220/</guid>
         
@@ -104,7 +104,7 @@ position_embd + atree_atten_bias.&lt;/li&gt;
 &lt;p&gt;Thus, the DSB benchmark enhances the data generation of the TPC-DS benchmark with additional skews and correlations&lt;/p&gt;
 
 </description>
-        <pubDate>Mon, 23 Dec 2024 06:30:34 +0000</pubDate>
+        <pubDate>Sat, 22 Feb 2025 10:24:33 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/2024-05-30-217/</link>
         <guid isPermaLink="true">https://nlgithubwp.github.io/tech-notebook/journal/2024-05-30-217/</guid>
         
@@ -1211,6 +1211,29 @@ estimate the cost&lt;/p&gt;
 
 &lt;h3 id=&quot;performance-6&quot;&gt;Performance&lt;/h3&gt;
 
+&lt;h3 id=&quot;implementation-details&quot;&gt;Implementation details&lt;/h3&gt;
+
+&lt;p&gt;ok, so from the beginning of the execution, i think this is the overall logic&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;it pre-defines some query templates, and then run lots of queries and collect 
+(target dimension (which is only base table + number of join between any two pairs), estimate seleivity, and real seleivity.)&lt;/li&gt;
+  &lt;li&gt;given a query, it will first fit a kde model for the error of each target dimension based on this datasets, and get a list of kde for each target dimension, then it sample 1000 points and get mean selectivity error value as the so called real error.&lt;/li&gt;
+  &lt;li&gt;it then perform sensitive analysis. it first get the all predefined possible sensitive dims, named as pre_defined_querylet_dims,which may not exactly the same the target dimensions. (from the paper the thoery, if the dimensions in the target dimention has no selection, then we don;t care it, it’s CE in pg is accurate)&lt;/li&gt;
+  &lt;li&gt;It get optimizaion plan fisrt (this is by feeding the optimzier with the real cardinalities and selectivility), 
+then it get the hint to generate this plan in later. 
+in the adjust_selectivity process, it first update selective of the the target_dimensions and update by provided error_samples, which can be inaccurate, since it is to measure the influence, is it?
+And then it updates all others dimensiton which is not in the target_dimensions but in the sampled_real_sel_err_mean_list, 
+each key in the sampled_real_sel_err_mean_list is actually the predefined possible sensitives, we make all those who are not in the target as accurate as possible, so it will not casuing any influence in later. 
+therefore, those dimens are update based on the sampled_real_sel_err_mean_list, while the target is based on the error_samples.
+finally all changes are updated to the updated_join_sel, which is a litst of original q_card_info.est_join_sel and note, this incldue all the join imforamtions, not one-to-one join, but one-to-multiple joins.
+here is a questions, the code after “what the fk is this” feels like has not effetc, is it?&lt;/li&gt;
+  &lt;li&gt;it also get the default execution plan, which is the postgresql plan&lt;/li&gt;
+  &lt;li&gt;then it generate sampels from joint error dist , name is joint error dist, but actually it sampled indenpendently. gfinally it get A and B sampels.&lt;/li&gt;
+  &lt;li&gt;then it generates a problem, which is basiclaly for the sobol.&lt;/li&gt;
+  &lt;li&gt;then i think i’m not familiart with the implementatin of the sobol, what is tht following do? in the theory, i think i just need to estimate ethe improtance of reach dimension by computing s = var()/Var(Y), is it? and we use MC sampling to do that, so we need A, B , and mc smapling also change the computing method of s. i only know htose&lt;/li&gt;
+&lt;/ol&gt;
+
 &lt;h1 id=&quot;17plaque-automated-predicate-learning-at-query-time&quot;&gt;17.PLAQUE: Automated Predicate Learning at Query Time&lt;/h1&gt;
 
 &lt;h2 id=&quot;takeaways-15&quot;&gt;Takeaways&lt;/h2&gt;
@@ -1361,7 +1384,6 @@ here since the partition is based on join pattern, join is not required to learn
 
 &lt;ul&gt;
   &lt;li&gt;predicate structure: data types of columns/operators, intermediate cardinalities&lt;/li&gt;
-  &lt;li&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;model-14&quot;&gt;Model&lt;/h3&gt;
@@ -1377,6 +1399,85 @@ here since the partition is based on join pattern, join is not required to learn
 &lt;h3 id=&quot;dynamic-workload-14&quot;&gt;Dynamic Workload&lt;/h3&gt;
 
 &lt;h3 id=&quot;performance-9&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;h1 id=&quot;21-rethinking-learned-cost-models-why-start-from-scratch&quot;&gt;21. Rethinking Learned Cost Models: Why Start from Scratch?&lt;/h1&gt;
+
+&lt;h2 id=&quot;takeaways-19&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;h2 id=&quot;problems-19&quot;&gt;Problems&lt;/h2&gt;
+
+&lt;p&gt;end to end learning based cost model is hard to interpret and use, and retraining is costly.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;learning-based models are trained on a specific database with specific hardware and software configurations. retraining is costly.&lt;/li&gt;
+  &lt;li&gt;data collection is time-consuming and expensive process.&lt;/li&gt;
+  &lt;li&gt;no insight of how the cost estimate was generated compared with the rules-based cost model.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;learned cost model should be easy to train, hight transferability, and interpretabe.&lt;/p&gt;
+
+&lt;h2 id=&quot;assumptions-16&quot;&gt;Assumptions&lt;/h2&gt;
+
+&lt;p&gt;we assume that the formula-based cost model can provide a good estimation, if all R-params in Table 1 are set correctly.&lt;/p&gt;
+
+&lt;h2 id=&quot;techniques-19&quot;&gt;Techniques&lt;/h2&gt;
+
+&lt;p&gt;Two stage offlien training stage and online refinement stage.&lt;/p&gt;
+
+&lt;p&gt;Static and Dynamic C parameters:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;hardware, OS, database can be &lt;strong&gt;static configuration parameters.&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;data type and column correlation are dynamic configuration parameters.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Data collection:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Execute queries on different CPU, memory, SSDs, HDDs, operating systems, etc&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Offline phase: capature relations between hyperparamers and static configuration parameters.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;pre-train a decision tree for each of 8 operator, there are totally 8 trees.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Online phase: adaptively tune each tree for the dynamic query/data factors.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;hundreds of dynamic configuration parameters, such as query related, data related and 97 configuration parameters.&lt;/li&gt;
+  &lt;li&gt;online phase invoked when the cost model cannot provide a precise estimation for more than K queries.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;few-show recommendatin model&lt;/strong&gt; to rank all candidate parameters based on the effects on cost estimations.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;formulation-13&quot;&gt;Formulation&lt;/h3&gt;
+
+&lt;p&gt;based on the system and workload configutaion, it learn a mapping from the those configutaion to the hyperparameter of the cost function, i.e., determine optimal choices of R-params in the built-in cost formulas of major database.&lt;/p&gt;
+
+&lt;p&gt;G: C -&amp;gt; R&lt;/p&gt;
+
+&lt;p&gt;The total operators considered are 8.&lt;/p&gt;
+
+&lt;h3 id=&quot;query-type-14&quot;&gt;Query Type&lt;/h3&gt;
+
+&lt;h3 id=&quot;query-encoding-13&quot;&gt;Query Encoding&lt;/h3&gt;
+
+&lt;h3 id=&quot;model-15&quot;&gt;Model&lt;/h3&gt;
+
+&lt;p&gt;decision tree model.&lt;/p&gt;
+
+&lt;h2 id=&quot;workloads-17&quot;&gt;&lt;strong&gt;Workloads&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;datasets-14&quot;&gt;Datasets&lt;/h3&gt;
+
+&lt;p&gt;IMDB, TPC-H and TPC-DS&lt;/p&gt;
+
+&lt;h3 id=&quot;dynamic-workload-15&quot;&gt;Dynamic Workload&lt;/h3&gt;
+
+&lt;h3 id=&quot;performance-10&quot;&gt;Performance&lt;/h3&gt;
+
+&lt;p&gt;###&lt;/p&gt;
 </description>
         <pubDate>Thu, 08 Aug 2024 00:00:00 +0000</pubDate>
         <link>https://nlgithubwp.github.io/tech-notebook/journal/LQO/</link>

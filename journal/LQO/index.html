@@ -136,7 +136,7 @@
 
 
 <i class="fa fa-clock-o"></i>&nbsp;
-25 minute read
+30 minute read
 
 
 
@@ -1224,6 +1224,29 @@ estimate the cost</p>
 
 <h3 id="performance-6">Performance</h3>
 
+<h3 id="implementation-details">Implementation details</h3>
+
+<p>ok, so from the beginning of the execution, i think this is the overall logic</p>
+
+<ol>
+  <li>it pre-defines some query templates, and then run lots of queries and collect 
+(target dimension (which is only base table + number of join between any two pairs), estimate seleivity, and real seleivity.)</li>
+  <li>given a query, it will first fit a kde model for the error of each target dimension based on this datasets, and get a list of kde for each target dimension, then it sample 1000 points and get mean selectivity error value as the so called real error.</li>
+  <li>it then perform sensitive analysis. it first get the all predefined possible sensitive dims, named as pre_defined_querylet_dims,which may not exactly the same the target dimensions. (from the paper the thoery, if the dimensions in the target dimention has no selection, then we don;t care it, it’s CE in pg is accurate)</li>
+  <li>It get optimizaion plan fisrt (this is by feeding the optimzier with the real cardinalities and selectivility), 
+then it get the hint to generate this plan in later. 
+in the adjust_selectivity process, it first update selective of the the target_dimensions and update by provided error_samples, which can be inaccurate, since it is to measure the influence, is it?
+And then it updates all others dimensiton which is not in the target_dimensions but in the sampled_real_sel_err_mean_list, 
+each key in the sampled_real_sel_err_mean_list is actually the predefined possible sensitives, we make all those who are not in the target as accurate as possible, so it will not casuing any influence in later. 
+therefore, those dimens are update based on the sampled_real_sel_err_mean_list, while the target is based on the error_samples.
+finally all changes are updated to the updated_join_sel, which is a litst of original q_card_info.est_join_sel and note, this incldue all the join imforamtions, not one-to-one join, but one-to-multiple joins.
+here is a questions, the code after “what the fk is this” feels like has not effetc, is it?</li>
+  <li>it also get the default execution plan, which is the postgresql plan</li>
+  <li>then it generate sampels from joint error dist , name is joint error dist, but actually it sampled indenpendently. gfinally it get A and B sampels.</li>
+  <li>then it generates a problem, which is basiclaly for the sobol.</li>
+  <li>then i think i’m not familiart with the implementatin of the sobol, what is tht following do? in the theory, i think i just need to estimate ethe improtance of reach dimension by computing s = var()/Var(Y), is it? and we use MC sampling to do that, so we need A, B , and mc smapling also change the computing method of s. i only know htose</li>
+</ol>
+
 <h1 id="17plaque-automated-predicate-learning-at-query-time">17.PLAQUE: Automated Predicate Learning at Query Time</h1>
 
 <h2 id="takeaways-15">Takeaways</h2>
@@ -1374,7 +1397,6 @@ here since the partition is based on join pattern, join is not required to learn
 
 <ul>
   <li>predicate structure: data types of columns/operators, intermediate cardinalities</li>
-  <li></li>
 </ul>
 
 <h3 id="model-14">Model</h3>
@@ -1390,6 +1412,85 @@ here since the partition is based on join pattern, join is not required to learn
 <h3 id="dynamic-workload-14">Dynamic Workload</h3>
 
 <h3 id="performance-9">Performance</h3>
+
+<h1 id="21-rethinking-learned-cost-models-why-start-from-scratch">21. Rethinking Learned Cost Models: Why Start from Scratch?</h1>
+
+<h2 id="takeaways-19">Takeaways</h2>
+
+<h2 id="problems-19">Problems</h2>
+
+<p>end to end learning based cost model is hard to interpret and use, and retraining is costly.</p>
+
+<ul>
+  <li>learning-based models are trained on a specific database with specific hardware and software configurations. retraining is costly.</li>
+  <li>data collection is time-consuming and expensive process.</li>
+  <li>no insight of how the cost estimate was generated compared with the rules-based cost model.</li>
+</ul>
+
+<p>learned cost model should be easy to train, hight transferability, and interpretabe.</p>
+
+<h2 id="assumptions-16">Assumptions</h2>
+
+<p>we assume that the formula-based cost model can provide a good estimation, if all R-params in Table 1 are set correctly.</p>
+
+<h2 id="techniques-19">Techniques</h2>
+
+<p>Two stage offlien training stage and online refinement stage.</p>
+
+<p>Static and Dynamic C parameters:</p>
+
+<ul>
+  <li>hardware, OS, database can be <strong>static configuration parameters.</strong></li>
+  <li>data type and column correlation are dynamic configuration parameters.</li>
+</ul>
+
+<p>Data collection:</p>
+
+<ul>
+  <li>Execute queries on different CPU, memory, SSDs, HDDs, operating systems, etc</li>
+</ul>
+
+<p>Offline phase: capature relations between hyperparamers and static configuration parameters.</p>
+
+<ul>
+  <li>pre-train a decision tree for each of 8 operator, there are totally 8 trees.</li>
+</ul>
+
+<p>Online phase: adaptively tune each tree for the dynamic query/data factors.</p>
+
+<ul>
+  <li>hundreds of dynamic configuration parameters, such as query related, data related and 97 configuration parameters.</li>
+  <li>online phase invoked when the cost model cannot provide a precise estimation for more than K queries.</li>
+  <li><strong>few-show recommendatin model</strong> to rank all candidate parameters based on the effects on cost estimations.</li>
+</ul>
+
+<h3 id="formulation-13">Formulation</h3>
+
+<p>based on the system and workload configutaion, it learn a mapping from the those configutaion to the hyperparameter of the cost function, i.e., determine optimal choices of R-params in the built-in cost formulas of major database.</p>
+
+<p>G: C -&gt; R</p>
+
+<p>The total operators considered are 8.</p>
+
+<h3 id="query-type-14">Query Type</h3>
+
+<h3 id="query-encoding-13">Query Encoding</h3>
+
+<h3 id="model-15">Model</h3>
+
+<p>decision tree model.</p>
+
+<h2 id="workloads-17"><strong>Workloads</strong></h2>
+
+<h3 id="datasets-14">Datasets</h3>
+
+<p>IMDB, TPC-H and TPC-DS</p>
+
+<h3 id="dynamic-workload-15">Dynamic Workload</h3>
+
+<h3 id="performance-10">Performance</h3>
+
+<p>###</p>
 
 
                 <br>
@@ -1703,7 +1804,7 @@ superSearch({
 <!--                        </a>-->
 <!--                    </li>-->
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; NoteBook 2024</p>
+                <p class="copyright text-muted">Copyright &copy; NoteBook 2025</p>
 <center><h6><p>Powered by <a href="https://github.com/jekyll/">Jekyll</a>.</p></h6></center>
             </div>
         </div>
